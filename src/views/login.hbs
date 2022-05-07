@@ -1,0 +1,89 @@
+      <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css">
+      <link rel="stylesheet" href="/boxicons/boxicons.min.css" type="text/css">
+      <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
+
+      <link rel="stylesheet" href="/css/login.min.css" type="text/css">
+
+   </head>
+
+	<body>
+      {{> loader}}
+
+      <div class="contenedor-login">
+         <!--Slider-->
+         <div class="contenedor-slider">
+            <div class="slider">
+               <!--Slide 1-->
+               <div class="slide fades">
+                  <img src="/img/combo.jpg" alt="">
+               </div>
+      
+               <!--Slide 2-->
+               <div class="slide fades">
+                  <img src="img/combo.jpg" alt="">
+               </div>
+            </div>
+      
+            <!--Botones next y prev-->
+            <a href="#" class="prev"><i class='bx bxs-chevron-left' ></i></a>
+            <a href="#" class="next"><i class='bx bxs-chevron-right' ></i></a>
+      
+            <!--dots-->
+            <div class="dots">
+               <!--<span class="dot active"></span>-->
+            </div>
+         </div>
+      
+         <!--Formularios-->
+      
+         <div class="contenedor-texto">
+            <div class="contenedor-form">
+               <h1 class="titutlo">Parrillada COCON</h1>
+
+               <p class="descripcion">Ingrese a su cuenta para disfrutar de tus beneficios
+                  y de las mejores promociones que tenemos para tí</p>
+      
+               <!--Tabs-->
+               <ul class="tabs-links">
+                  <li class="tab-link active">Iniciar Sesión</li>
+                  {{!-- <li class="tab-link ">Registrate</li> --}}
+               </ul>
+      
+               <!--Formulario de login-->
+               <form action="" method="POST" id="formLogin" class="formulario active">
+                  <div class="error-text">
+                     <p>aqui los errores del formulario</p>
+                  </div>
+      
+                  <input type="text" placeholder="Cédula" class="input-text" name="username" id="username" autocomplete="off">
+
+                  <div class="grupo-input">
+                     <input type="password" placeholder="Contraseña" name="password" class="input-text clave">
+                     <button type="button" class="icono bx bx-show-alt mostrarClave"></button>
+                  </div>
+      
+                  <a href="#" class="link">¿Olvidaste la Contraseña?</a>
+
+                  <button class="btn" id="btnLogin" type="button">Iniciar Sesión</button>
+               </form>     
+            </div>
+         </div>
+      </div>
+
+      <script src="/JQuery/jquery.min.js"></script>
+      <script src="/bootstrap/js/bootstrap.min.js"></script>
+      <script src="/sweetalert2/sweetalert2.min.js"></script>
+      <script src="/imaskJS/imask.min.js"></script>
+
+      <script src="/js/login.min.js"></script>
+
+      <script>
+         {{> notifications}}
+
+         IMask(
+            document.getElementById('username'),
+            {
+               mask: /^[0-9]{0,10}$/
+            }
+         );
+      </script>

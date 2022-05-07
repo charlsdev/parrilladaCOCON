@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <meta name="theme-color" content="#f5d07b"/>
+      <meta name="author" content="Carlos VP (CharlsDEV)"/>
+      <meta name="copyright" content="Copyright (c) 2022 - InnovaTech'S"/>
+      <meta name="description" content="Parrilladas COCON, es un local donde se vende parriladas de distintos precios y de un buen sabor."/>
+      <meta name="keywords" content="Parrillada, COCON, Portoviejo, Familiar"/>
+      
+      <title>Parrilladas COCON</title>
+      
+      <link rel="shortcut icon" href="/img/parilladaCOCON.ico" type="image/x-icon">
+
+      <link rel="stylesheet" href="/css/general.min.css">
+      <link rel="stylesheet" href="/css/allColors.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/scrollDesing.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/loader.min.css" type="text/css">
+
+      {{{body}}}
+
+      <script src="/blockUI/jquery.blockUI.js"></script>
+
+      <script>
+         bloqueointerface = function(){
+            $.blockUI({
+               message: `<div class="contentLoader">
+                           <div class="loader">
+                              <div class="face face1">
+                                 <div class="circle"></div>
+                              </div>
+                              <div class="face face2">
+                                 <div class="circle"></div>
+                              </div>
+                           </div>
+                        </div>`,
+               css: {
+                  'z-index': '1200',
+                  'position': 'fixed'
+               }
+            });
+         };
+         desbloqueointerface = function(){
+            $.unblockUI();
+         };
+         
+         console.log("%c%s", "color: red; background: #38ef7d; font-size: 25px; font-weight: 600; padding: 3px 20px;", "ESTÁS SIENDO HACKEADO 🐸!");
+
+         $(document).ready(function() {
+            $('.contentLoader').fadeOut('slow');
+         });
+      </script>
+
+   </body>
+</html>
