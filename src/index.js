@@ -1,5 +1,10 @@
 require('dotenv').config();
 
+/** 
+ * @description Modulo de la conexion a la DB 
+ */
+require('./database');
+
 /**
  * @description Configuración del servidor
  */

@@ -13,3 +13,7 @@ p {
 a {
    text-decoration: none !important;
 }
+
+.close {
+   text-shadow: none !important;
+}

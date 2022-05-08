@@ -12,13 +12,12 @@
       <div class="contenedor-login">
          <!--Slider-->
          <div class="contenedor-slider">
+            <!--Slide-->
             <div class="slider">
-               <!--Slide 1-->
                <div class="slide fades">
                   <img src="/img/combo.jpg" alt="">
                </div>
       
-               <!--Slide 2-->
                <div class="slide fades">
                   <img src="img/combo.jpg" alt="">
                </div>
@@ -40,8 +39,9 @@
             <div class="contenedor-form">
                <h1 class="titutlo">Parrillada COCON</h1>
 
-               <p class="descripcion">Ingrese a su cuenta para disfrutar de tus beneficios
-                  y de las mejores promociones que tenemos para tí</p>
+               <p class="descripcion">
+                  Disfrute de la mejor parrilla dentro de nuestro local, echa con amor y de buena calidad en Parrilladas COCON.
+               </p>
       
                <!--Tabs-->
                <ul class="tabs-links">
@@ -50,7 +50,9 @@
                </ul>
       
                <!--Formulario de login-->
-               <form action="" method="POST" id="formLogin" class="formulario active">
+               <form action="/login" method="POST" id="formLogin" class="formulario active">
+                  {{> notifications}}
+
                   <div class="error-text">
                      <p>aqui los errores del formulario</p>
                   </div>
@@ -62,9 +64,9 @@
                      <button type="button" class="icono bx bx-show-alt mostrarClave"></button>
                   </div>
       
-                  <a href="#" class="link">¿Olvidaste la Contraseña?</a>
+                  {{!-- <a href="#" class="link">¿Olvidaste la Contraseña?</a> --}}
 
-                  <button class="btn" id="btnLogin" type="button">Iniciar Sesión</button>
+                  <button class="btn" id="btnLogin" type="submit">Iniciar Sesión</button>
                </form>     
             </div>
          </div>
