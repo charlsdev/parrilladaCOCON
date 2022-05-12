@@ -3,13 +3,15 @@ const localStrategy = require('passport-local').Strategy;
 
 const UsersModel = require('../models/Users');
 
+let user;
+
 passport.use('local.login', new localStrategy({
    usernameField: 'username',
    passwordField: 'password',
    passReqToCallback: true,
    // session: false
 }, async (req, cedula, password, done) => {
-   const user = await UsersModel
+   user = await UsersModel
       .findOne({
          cedula
       });
@@ -38,7 +40,9 @@ passport
 
 passport
    .deserializeUser(async (id, done) => {
-      await UsersModel.findById(id, (err, user) => {
-         done(err, user);
-      }).clone();
+      // await UsersModel.findById(id, (err, user) => {
+      //    done(err, user);
+      // }).clone();
+      
+      done(null, user);
    });
