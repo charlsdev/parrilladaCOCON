@@ -1,59 +1,80 @@
+
+const Toast = Swal.mixin({
+   toast: true,
+   position: 'top-end',
+   showConfirmButton: false,
+   {{!-- showCloseButton: true, --}}
+   timer: 5000,
+   timerProgressBar: false,
+   {{!-- iconColor: 'white', --}}
+   customClass: {
+      popup: 'colored-toast'
+   },
+   didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+   }
+})
+
 {{#if success_msg}}
-   <div class="alert alert-success alert-dismissible fade show" role="alert">
-      <strong>Aviso</strong>
-      <p style="text-align: left; font-size: 0.8em; color: #333;">{{success_msg}}</p>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-         <span aria-hidden="true">&times;</span>
-      </button>
-   </div>
+   $(document).ready(function() {
+      Toast.fire({
+         icon: 'success',
+         title: '{{success_msg}}'
+      })
+   })
 {{/if}}
 
 {{#if error_msg}}
-   <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <strong>Aviso</strong>
-      <p style="text-align: left; font-size: 0.8em; color: #333;">{{error_msg}}</p>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-         <span aria-hidden="true">&times;</span>
-      </button>
-   </div>
+   $(document).ready(function() {
+      Toast.fire({
+         icon: 'error',
+         title: '{{error_msg}}'
+      })
+   })
 {{/if}}
 
 {{#if error}}
-   <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <strong>Aviso</strong>
-      <p style="text-align: left; font-size: 0.8em; color: #333;">{{error}}</p>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-         <span aria-hidden="true">&times;</span>
-      </button>
-   </div>
+   $(document).ready(function() {
+      Toast.fire({
+         icon: 'error',
+         title: '{{error}}'
+      })
+   })
+
 {{/if}}
 
 {{#if warning_msg}}
-   <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      <strong>Aviso</strong>
-      <p style="text-align: left; font-size: 0.8em; color: #333;">{{warning_msg}}</p>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-         <span aria-hidden="true">&times;</span>
-      </button>
-   </div>
+   $(document).ready(function() {
+      Toast.fire({
+         icon: 'warning',
+         title: '{{warning_msg}}'
+      })
+   })
 {{/if}}
 
 {{#if info_msg}}
-   <div class="alert alert-info alert-dismissible fade show" role="alert">
-      <strong>Aviso</strong>
-      <p style="text-align: left; font-size: 0.8em; color: #333;">{{info_msg}}</p>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-         <span aria-hidden="true">&times;</span>
-      </button>
-   </div>
+   $(document).ready(function() {
+      Toast.fire({
+         icon: 'info',
+         title: '{{info_msg}}'
+      })
+   })
 {{/if}}
 
 {{#each errors}}
-   <div class="alert alert-{{info}} alert-dismissible fade show" role="alert">
+   {{!-- <div class="alert alert-{{info}} alert-dismissible fade show" role="alert">
       <strong>{{title}}</strong>
       <p style="text-align: left; font-size: 0.8em; color: #333;">{{text}}</p>
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
          <span aria-hidden="true">&times;</span>
       </button>
-   </div>
+   </div> --}}
+
+   $(document).ready(async function() {
+      await Toast.fire({
+         icon: '{{info}}',
+         title: '{{text}}'
+      })
+   })
 {{/each}}

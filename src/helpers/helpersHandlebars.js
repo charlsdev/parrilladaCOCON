@@ -30,4 +30,16 @@ helpersHandlebars.timeago = (timestamp) => {
    return format(timestamp, 'es_ES');
 };
 
+helpersHandlebars.isCajero = (priv, opts) => {
+   return priv == 'Cajero' ? opts.fn(this) : opts.inverse(this);
+};
+
+helpersHandlebars.isGerente = (priv, opts) => {
+   return priv == 'Gerente' ? opts.fn(this) : opts.inverse(this);
+};
+
+helpersHandlebars.isAdmin = (priv, opts) => {
+   return priv == 'Administrador' ? opts.fn(this) : opts.inverse(this);
+};
+
 module.exports = helpersHandlebars;

@@ -1,0 +1,159 @@
+.imgTrans {
+   display: flex;
+   height: 100%;
+   align-items: center;
+   justify-content: center;
+}
+.containerImg {
+   width: 100%;
+   position: relative;
+}
+.containerImg .wrapperImg {
+   position: relative;
+   height: 275px;
+   width: 100%;
+   border-radius: 10px;
+   border: 2px dashed var(--graOrange);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   overflow: hidden;
+   background: 
+      linear-gradient(90deg, var(--grey-l-1) 31px, transparent 3px) 50%,
+      linear-gradient(180deg, var(--grey-l-1) 31px, var(--graOrange) 3px) 50%;
+   background-size: 32px 32px;
+}
+.wrapperImg.active {
+   border: none;
+}
+.wrapperImg.active .image {
+   border: 2px dashed var(--rojoCereza);
+}
+.wrapperImg.active .content {
+   display: none;
+}
+.wrapperImg .image {
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+.wrapperImg .content {
+   text-align: center;
+}
+.wrapperImg img {
+   height: 100%;
+   width: 100%;
+   object-fit: contain;
+   border-radius: 10px;
+}
+.wrapperImg .icon {
+   font-size: 100px;
+   color: var(--graYellow);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+.wrapperImg .text {
+   font-size: .95rem;
+   font-weight: 500;
+   color: #5b5b7b;
+}
+.wrapperImg #cancel-btn i {
+   position: absolute;
+   font-size: 2.5rem;
+   right: 10px;
+   top: 10px;
+   color: var(--graYellow);
+   cursor: pointer;
+   display: none;
+}
+.wrapperImg.active:hover #cancel-btn i {
+   display: block;
+}
+.wrapperImg #cancel-btn i:hover {
+   color: #e74c3c;
+}
+.wrapperImg .file-name {
+   position: absolute;
+   bottom: 0px;
+   width: 100%;
+   padding: 8px 0;
+   font-size: 18px;
+   color: var(--blanco);
+   display: none;
+   background: linear-gradient(to left, var(--graOrange), var(--graYellow));
+   text-align: center;
+}
+.wrapperImg.active:hover .file-name {
+   display: block;
+}
+.containerImg #custom-btn {
+   margin-top: 10px;
+   display: none;
+   width: 60%;
+   border: none;
+   outline: none;
+   border-radius: 10px;
+   color: var(--blanco);
+   font-size: 1rem;
+   font-weight: 500;
+   letter-spacing: 1px;
+   text-transform: uppercase;
+   cursor: pointer;
+   background: linear-gradient(to left, var(--graOrange), var(--graYellow));
+   padding: 7px 18px;
+}
+
+.header__modal {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin: 2px 20px;
+}
+
+.header__modal .tittle__modal {
+   font-size: 1.15rem;
+   font-weight: 600;
+   color: var(--title-color);
+   text-transform: uppercase;
+}
+
+.footer__modal {
+   font-size: .8rem;
+   font-weight: 600;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+.footer__modal .btn__Send,
+.footer__modal .btn__Close {
+   font-weight: 600;
+   border-radius: .5rem;
+   text-transform: uppercase;
+   background: transparent;
+   cursor: pointer;
+   padding: 5px 25px;
+   transition: .5s;
+}
+
+.footer__modal .btn__Send {
+   border: 1px solid var(--graOrange);
+}
+.footer__modal .btn__Send:hover {
+   background: var(--graOrange);
+   color: var(--blanco);
+   transition: .5s;
+}
+
+.footer__modal .btn__Close {
+   border: 1px solid var(--grey-d-1);
+}
+.footer__modal .btn__Close:hover {
+   background: var(--grey-d-1);
+   color: var(--blanco);
+   transition: .5s;
+}

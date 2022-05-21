@@ -5,6 +5,11 @@ const {
    welcome
 } = require('../controllers/cajero.controllers');
 
-router.get('/', welcome);
+const {
+   isAuthenticated,
+   isAuthenticatedCajero
+} = require('../global/middleware');
+
+router.get('/', isAuthenticated, isAuthenticatedCajero, welcome);
 
 module.exports = router;

@@ -7,14 +7,23 @@ const {
 
    verification,
 
+   renderProfile,
+
    exitLogout
 } = require('../controllers/index.controllers');
 
-router.get('/', login);
+const {
+   isAuthenticated,
+   isNotAuthenticated
+} = require('../global/middleware');
+
+router.get('/', isNotAuthenticated, login);
 router.post('/login', loginAuth);
 
-router.get('/verification', verification);
+router.get('/verification', isAuthenticated, verification);
 
-router.get('/exit', exitLogout);
+router.get('/profile', isAuthenticated, renderProfile);
+
+router.get('/exit', isAuthenticated, exitLogout);
 
 module.exports = router;

@@ -3,6 +3,18 @@
       <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
 
       <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/welcome.min.css" type="text/css">
+
+      <style>
+         .contentView {
+            height: 100vh;
+            margin-bottom: 0 !important;
+            top: 0 !important;
+            display: flex;
+            align-items: center;
+         }
+      </style>
 
    </head>
 
@@ -10,9 +22,41 @@
       {{> loader}}
       {{> navbarC}}
 
-      <div class="container" style="background: #866985;">
-         <div class="__tittle">
-            Welcome
+      <div class="contentView">
+         <div class="container justify-content-center">
+            <div class="row">
+               <div class="col-md-12 text-center">
+                  <div class="lettersTittle">
+                     <span>B</span>
+                     <span>I</span>
+                     <span>E</span>
+                     <span>N</span>
+                     <span>V</span>
+                     <span>E</span>
+                     <span>N</span>
+                     <span>I</span>
+                     <span>D</span>
+                     <span>O</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-12 text-center">
+                  <img src="/img/atm.png" alt="Welcome ATM" class="img__welcome">
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-12 text-center">
+                  <div class="text__name">
+                     {{apellidos}} {{nombres}}
+                  </div>
+                  <div class="text__privilegio">
+                     {{privilegio}}
+                  </div>
+               </div>
+            </div>
          </div>
       </div>
 

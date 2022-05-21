@@ -16,6 +16,7 @@ require('./config/passport');
 
 //Configuraciones
 app.set('port', process.env.PORT || 3000);
+
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.hbs', engine({
    extname: '.hbs',
@@ -24,7 +25,6 @@ app.engine('.hbs', engine({
    helpers: require('./helpers/helpersHandlebars'),
    defaultLayout: 'main'
 }));
-
 app.set('view engine', '.hbs');
 
 //Middlewares

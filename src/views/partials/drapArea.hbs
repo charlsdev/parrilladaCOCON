@@ -1,0 +1,49 @@
+<div class="modal fade" id="modalChangePhoto" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+         <div class="modal-header header__modal">
+            <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+               Cambiar foto de perfil
+            </h5>
+         </div>
+
+         <form enctype="multipart/form-data" action="/changePhotoProfile?_method=PUT" method="POST">
+            <div class="modal-body body__modal">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="containerImg">
+                        <div class="wrapperImg">
+                           <div class="image">
+                              <img class="imgTrans"/>
+                           </div>
+                           <div class="content">
+                              <div class="icon">
+                                 <i class='bx bx-cloud-upload' ></i>
+                              </div>
+                              <div class="text">¡Aún no se ha elegido ningún archivo!</div>
+                           </div>
+                           <div id="cancel-btn">
+                              <i class='bx bx-x' ></i>
+                           </div>
+                           <div class="file-name">Nombre de archivo aquí</div>
+                        </div>
+                        
+                        <button type="button" onclick="defaultBtnActive()" id="custom-btn">
+                           Buscar archivo
+                        </button>
+
+                        <input id="default-btn" name="photo" type="file" accept="image/*" hidden required/>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div class="modal-footer footer__modal">
+               <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+
+               <button type="submit" class="btn__Send">Actualizar</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>

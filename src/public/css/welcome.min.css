@@ -1,0 +1,27 @@
+.img__welcome {
+   width: 350px;
+}
+
+.text__name {
+   margin-top: 25px;
+   font-size: 1.8rem;
+}
+
+.text__privilegio {
+   margin-top: 5px;
+   font-size: 1.2rem;
+}
+
+@media (max-width: 450px) {
+   .img__welcome {
+      width: 250px;
+   }
+
+   .text__name {
+      font-size: 1.4rem;
+   }
+
+   .text__privilegio {
+      font-size: 1rem;
+   }
+}

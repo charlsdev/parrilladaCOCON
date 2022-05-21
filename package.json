@@ -10,7 +10,6 @@
    "author": "CharlsDEV",
    "license": "ISC",
    "dependencies": {
-      "@urql/core": "^2.4.4",
       "bcryptjs": "^2.4.3",
       "connect-flash": "^0.1.1",
       "connect-mongo": "^4.6.0",
@@ -20,9 +19,7 @@
       "express-handlebars": "^6.0.5",
       "express-session": "^1.17.2",
       "fs-extra": "^10.1.0",
-      "graphql": "^16.4.0",
       "handlebars": "^4.7.7",
-      "isomorphic-unfetch": "^3.1.0",
       "method-override": "^3.0.0",
       "moment": "^2.29.3",
       "mongoose": "^6.3.1",

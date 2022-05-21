@@ -1,0 +1,42 @@
+/* @import url('../letterTeko.min.css'); */
+
+.lettersTittle {
+   margin: 0;
+   padding: 1rem 10px;
+   font-size: 2.8rem;
+   text-transform: uppercase;
+   animation: glow 2s ease-in-out infinite alternate;
+   text-align: center;
+   font-family: 'Teko', sans-serif;
+   font-weight: bold;
+}
+.lettersTittle.CP {
+   font-size: 1.8rem !important;
+   padding: 0 10px !important;
+}
+@keyframes glow {
+   from {
+      text-shadow: 0 0 20px #ff7676;
+   }
+   to {
+      text-shadow: 0 0 30px var(--warning), 0 0 10px var(--success);
+   }
+}
+@media (max-width: 900px) {
+   .lettersTittle {
+      font-size: 2.5rem;
+   }
+}
+@media (max-width: 550px) {
+   .lettersTittle {
+      font-size: 2rem;
+   }
+   .lettersTittle.CP {
+      font-size: 1.4rem !important;
+   }
+}
+@media (max-width: 450px) {
+   .lettersTittle {
+      font-size: 1.7rem;
+   }
+}

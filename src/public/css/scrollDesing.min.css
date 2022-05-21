@@ -6,16 +6,16 @@
 
 /* *Estilos barra (thumb) de scroll */
 *::-webkit-scrollbar-thumb {
-   background: var(--verdeEsmeralda);
+   background: var(--info);
    border-radius: 4px;
 }
 
 *::-webkit-scrollbar-thumb:active {
-   background-color: var(--plomoPerla);
+   background-color: var(--color-negro);
 }
 
 *::-webkit-scrollbar-thumb:hover {
-   background: var(--rojoRosaBajo);
+   background: var(--success);
    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
 }
 
