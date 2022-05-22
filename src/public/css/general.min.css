@@ -2,7 +2,7 @@
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
-	font-weight: bold !important;
+	/* font-weight: bold !important; */
    font-family: 'Poppins', sans-serif !important;
 }
 
@@ -87,6 +87,7 @@ a {
    cursor: pointer;
    transition: .5s;
 }
+
 .btnGeneral:hover {
    background: var(--color-rgb-celeste);
    transition: .5s;

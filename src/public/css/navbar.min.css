@@ -52,6 +52,7 @@
 }
 .nav__toggle:hover {
    background-color: #575757;
+   color: #fff;
 }
 .nav__link {
    display: flex;
@@ -72,6 +73,9 @@
    margin-right: 1rem;
    font-weight: 400 !important;
 }
+.nav__link span:hover {
+   font-weight: 600 !important;
+}
 .nav__link .nav__text {
    font-weight: 400 !important;
 }
@@ -84,13 +88,14 @@
 .profil__img img {
    margin-right: 1rem;
    width: 40px;
+   border-radius: 50px;
 }
-.profil__desc a {
+.profil__desc p {
    color: #afafaf;
-   font-size: 0.75rem;
-   font-weight: 300;
+   font-size: 0.9rem;
+   font-weight: 600;
 }
-.profil__desc a:hover {
+.profil__desc p:hover {
    color: #fff;
 }
 .showModal {

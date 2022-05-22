@@ -8,7 +8,7 @@
    animation: glow 2s ease-in-out infinite alternate;
    text-align: center;
    font-family: 'Teko', sans-serif;
-   font-weight: bold;
+   font-weight: 600;
 }
 .lettersTittle.CP {
    font-size: 1.8rem !important;

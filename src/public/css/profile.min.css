@@ -2,6 +2,7 @@ label {
    font-size: .9rem;
    text-transform: uppercase;
    letter-spacing: .5px;
+   font-weight: 600;
 }
 
 label.required::after {
@@ -18,16 +19,19 @@ label.required::after {
 .form-title {
    font-size: 1.8rem;
    text-transform: uppercase;
+   font-weight: 600;
 }
 
 .btnChangeProfile,
-.btnUpdateDates {
+.btnUpdateDates,
+.btnRModal {
    border: 1px solid var(--burning) !important;
    color: var(--color-negro) !important;
 }
 
 .btnChangeProfile:hover,
-.btnUpdateDates:hover {
+.btnUpdateDates:hover,
+.btnRModal:hover {
    background: #ff3c69;
    color: var(--blanco) !important;
    transition: .5s;

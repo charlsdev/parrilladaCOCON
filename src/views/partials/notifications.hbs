@@ -1,44 +1,39 @@
 
-const Toast = Swal.mixin({
-   toast: true,
-   position: 'top-end',
-   showConfirmButton: false,
-   {{!-- showCloseButton: true, --}}
-   timer: 5000,
-   timerProgressBar: false,
-   {{!-- iconColor: 'white', --}}
-   customClass: {
-      popup: 'colored-toast'
-   },
-   didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
-   }
-})
-
 {{#if success_msg}}
    $(document).ready(function() {
-      Toast.fire({
+      $.toast({
+         position: 'top-right',
+         heading: 'Aviso',
+         text: '{{success_msg}}',
          icon: 'success',
-         title: '{{success_msg}}'
+         showHideTransition: 'plain',
+         hideAfter: 5000
       })
    })
 {{/if}}
 
 {{#if error_msg}}
    $(document).ready(function() {
-      Toast.fire({
+      $.toast({
+         position: 'top-right',
+         heading: 'Aviso',
+         text: '{{error_msg}}',
          icon: 'error',
-         title: '{{error_msg}}'
+         showHideTransition: 'plain',
+         hideAfter: 5000
       })
    })
 {{/if}}
 
 {{#if error}}
    $(document).ready(function() {
-      Toast.fire({
+      $.toast({
+         position: 'top-right',
+         heading: 'Aviso',
+         text: '{{error}}',
          icon: 'error',
-         title: '{{error}}'
+         showHideTransition: 'plain',
+         hideAfter: 5000
       })
    })
 
@@ -46,35 +41,39 @@ const Toast = Swal.mixin({
 
 {{#if warning_msg}}
    $(document).ready(function() {
-      Toast.fire({
+      $.toast({
+         position: 'top-right',
+         heading: 'Aviso',
+         text: '{{warning_msg}}',
          icon: 'warning',
-         title: '{{warning_msg}}'
+         showHideTransition: 'plain',
+         hideAfter: 5000
       })
    })
 {{/if}}
 
 {{#if info_msg}}
    $(document).ready(function() {
-      Toast.fire({
+      $.toast({
+         position: 'top-right',
+         heading: 'Aviso',
+         text: '{{info_msg}}',
          icon: 'info',
-         title: '{{info_msg}}'
+         showHideTransition: 'plain',
+         hideAfter: 5000
       })
    })
 {{/if}}
 
 {{#each errors}}
-   {{!-- <div class="alert alert-{{info}} alert-dismissible fade show" role="alert">
-      <strong>{{title}}</strong>
-      <p style="text-align: left; font-size: 0.8em; color: #333;">{{text}}</p>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-         <span aria-hidden="true">&times;</span>
-      </button>
-   </div> --}}
-
-   $(document).ready(async function() {
-      await Toast.fire({
+   $(document).ready(function() {
+      $.toast({
+         position: 'top-right',
+         heading: '{{title}}',
+         text: '{{text}}',
          icon: '{{info}}',
-         title: '{{text}}'
+         showHideTransition: 'plain',
+         hideAfter: 5000
       })
    })
 {{/each}}

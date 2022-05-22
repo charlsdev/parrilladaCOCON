@@ -7,7 +7,7 @@
             </h5>
          </div>
 
-         <form enctype="multipart/form-data" action="/changePhotoProfile?_method=PUT" method="POST">
+         <form id="dataForm" enctype="multipart/form-data" method="POST">
             <div class="modal-body body__modal">
                <div class="row">
                   <div class="col-md-12">
@@ -32,16 +32,16 @@
                            Buscar archivo
                         </button>
 
-                        <input id="default-btn" name="photo" type="file" accept="image/*" hidden required/>
+                        <input id="default-btn" name="photoProfile" type="file" accept="image/*" hidden required/>
                      </div>
                   </div>
                </div>
             </div>
 
             <div class="modal-footer footer__modal">
-               <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+               <button type="button" class="btnGeneral" data-dismiss="modal">Cerrar</button>
 
-               <button type="submit" class="btn__Send">Actualizar</button>
+               <button type="submit" class="btnGeneral btnRModal">Actualizar</button>
             </div>
          </form>
       </div>

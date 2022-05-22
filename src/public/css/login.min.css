@@ -179,6 +179,7 @@ ol {
 .contenedor-form .descripcion {
    font-size: 15px;
    color: var(--color-texto);
+   font-weight: 500;
 }
 
 /* Estilos Tabs */
@@ -233,6 +234,7 @@ ol {
    outline: 0;
    font-size: 14px;
    color: var(--color-texto);
+   font-weight: 600;
 }
 
 .formulario .grupo-input {
@@ -258,6 +260,7 @@ ol {
    color: var(--color-texto);
    right: 0;
    outline: 0;
+   font-weight: 500;
 }
 
 .formulario .grupo-input .icono.active {
@@ -291,6 +294,7 @@ ol {
    outline: 0;
    cursor: pointer;
    display: block;
+   font-weight: 600;
 }
 
 .formulario .btn:hover {

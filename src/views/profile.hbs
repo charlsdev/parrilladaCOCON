@@ -1,6 +1,7 @@
       <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css">
       <link rel="stylesheet" href="/boxicons/boxicons.min.css" type="text/css">
       <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
+      <link rel="stylesheet" href="/toastJS/jquery.toast.min.css" type="text/css">
 
       <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
       <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
@@ -112,7 +113,7 @@
 
                <div class="row">
                   <div class="col-md-12 text-right">
-                     <button type="button" class="btnGeneral btnUpdateDates" onclick="updateData('{{dataUser.nombres}} {{dataUser.apellidos}}');">Actualizar datos</button>
+                     <button type="button" class="btnGeneral btnUpdateDates" onclick="updateData('{{nombres}} {{apellidos}}');">Actualizar datos</button>
                   </div>
                </div>
             </div>
@@ -128,6 +129,7 @@
       <script src="/bootstrap/js/bootstrap.min.js"></script>
       <script src="/sweetalert2/sweetalert2.min.js"></script>
       <script src="/imaskJS/imask.min.js"></script>
+      <script src="/toastJS/jquery.toast.min.js"></script>
       <script src="/js/validationsFront.min.js"></script>
 
       <script src="/js/navbar.min.js"></script>
@@ -156,6 +158,269 @@
          );
 
          const changeProfile = () => {
+            clearImage();
             $("#modalChangePhoto").modal('show');
+         }
+
+         const clearImage = () => {
+            $('.wrapperImg').removeClass('active');
+            document.querySelector('.image').innerHTML = `<img class="imgTrans"/>`;
+            document.querySelector('.file-name').innerHTML = ``;
+         }
+
+         $("#dataForm").on("submit", function(e) {
+            e.preventDefault();
+            
+            imagen = $.trim($('#default-btn').val());
+
+            Swal.fire({
+               title: 'Actualizar Foto de Perfil!',
+               html: `Deseas actualizar la foto de perfil del sistema COCON?`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, actualizar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value == true) {
+                  if (
+                     imagen == ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     var formData = new FormData($(this)[0]);
+
+                     $.ajax({
+                        url: "/photoProfile",
+                        type: "POST",
+                        datatype: "json",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCOn',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 clearImage();
+                                 $("#modalChangePhoto").modal("hide");
+                                 location.reload();
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 location.reload();
+                              }
+                           })
+                        }
+                        
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               } else {
+                  desbloqueointerface();
+               }
+            })
+         });
+
+         const updateData = (nomApe) => {
+            apellidos = $.trim($('#apellidos').val());
+            nombres = $.trim($('#nombres').val());
+            fechaNacimiento = $.trim($('#fechaNacimiento').val());
+            genero = $.trim($('#genero').val());
+            direccion = $.trim($('#direccion').val());
+            telefono = $.trim($('#telefono').val());
+            email = $.trim($('#email').val());
+
+            Swal.fire({
+               title: 'ACTUALIZAR DATOS PERSONALES',
+               html: `<p style="font-size: 1rem;"><b>${nomApe}</b> ¿Deseas actualizar los datos personales de tu cuenta?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, actualizar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value == true) {
+                  if (
+                     apellidos == '' || 
+                     nombres == '' || 
+                     fechaNacimiento == '' || 
+                     genero == '' || 
+                     direccion == '' || 
+                     telefono == '' || 
+                     email == ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/profile`,
+                        type: 'PUT',
+                        dataType: 'json',
+                        data: {
+                           apellidos,
+                           nombres,
+                           fechaNacimiento,
+                           genero,
+                           direccion,
+                           telefono,
+                           email
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+
+                           toastList.forEach(toastDes => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toastDes.tittle}`,
+                                    text: `${toastDes.description}`,
+                                    icon: `${toastDes.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              })
+                           });
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
          }
       </script>

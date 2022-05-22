@@ -13,21 +13,21 @@
    height: 275px;
    width: 100%;
    border-radius: 10px;
-   border: 2px dashed var(--graOrange);
+   border: 2px dashed var(--info);
    display: flex;
    align-items: center;
    justify-content: center;
    overflow: hidden;
-   background: 
+   /* background: 
       linear-gradient(90deg, var(--grey-l-1) 31px, transparent 3px) 50%,
-      linear-gradient(180deg, var(--grey-l-1) 31px, var(--graOrange) 3px) 50%;
+      linear-gradient(180deg, var(--grey-l-1) 31px, var(--info) 3px) 50%; */
    background-size: 32px 32px;
 }
 .wrapperImg.active {
    border: none;
 }
 .wrapperImg.active .image {
-   border: 2px dashed var(--rojoCereza);
+   border: 2px dashed var(--burning);
 }
 .wrapperImg.active .content {
    display: none;
@@ -51,7 +51,7 @@
 }
 .wrapperImg .icon {
    font-size: 100px;
-   color: var(--graYellow);
+   color: var(--burning);
    display: flex;
    align-items: center;
    justify-content: center;
@@ -66,7 +66,7 @@
    font-size: 2.5rem;
    right: 10px;
    top: 10px;
-   color: var(--graYellow);
+   color: var(--success);
    cursor: pointer;
    display: none;
 }
@@ -84,7 +84,7 @@
    font-size: 18px;
    color: var(--blanco);
    display: none;
-   background: linear-gradient(to left, var(--graOrange), var(--graYellow));
+   background: linear-gradient(to left, var(--info), var(--success));
    text-align: center;
 }
 .wrapperImg.active:hover .file-name {
@@ -103,7 +103,7 @@
    letter-spacing: 1px;
    text-transform: uppercase;
    cursor: pointer;
-   background: linear-gradient(to left, var(--graOrange), var(--graYellow));
+   background: linear-gradient(to left, var(--info), var(--success));
    padding: 7px 18px;
 }
 
@@ -117,7 +117,7 @@
 .header__modal .tittle__modal {
    font-size: 1.15rem;
    font-weight: 600;
-   color: var(--title-color);
+   color: var(--color-negro);
    text-transform: uppercase;
 }
 
@@ -141,19 +141,19 @@
 }
 
 .footer__modal .btn__Send {
-   border: 1px solid var(--graOrange);
+   border: 1px solid var(--info);
 }
 .footer__modal .btn__Send:hover {
-   background: var(--graOrange);
+   background: var(--info);
    color: var(--blanco);
    transition: .5s;
 }
 
 .footer__modal .btn__Close {
-   border: 1px solid var(--grey-d-1);
+   border: 1px solid var(--color-rgb-celeste);
 }
 .footer__modal .btn__Close:hover {
-   background: var(--grey-d-1);
+   background: var(--color-rgb-celeste);
    color: var(--blanco);
    transition: .5s;
 }
