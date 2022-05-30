@@ -8,6 +8,7 @@ const fse = require('fs-extra');
 const {
    nanoid
 } = require('nanoid');
+const nodemailer = require('nodemailer');
 
 const VerificationModel = require('../models/Verifications');
 const UsersModel = require('../models/Users');
@@ -320,6 +321,199 @@ indexControllers.updateDataProfile = async (req, res) => {
                res.json({
                   tittle: 'Datos no actualizados',
                   description: 'No se ha podido actualizar los datos de la cuenta!!!',
+                  icon: 'error',
+                  res: 'false'
+               });
+            }
+         } catch (e) {
+            console.log(e);
+
+            res.json({
+               tittle: 'Problemas',
+               description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+               icon: 'error',
+               res: 'error'
+            });
+         }
+      }
+   }
+};
+
+indexControllers.renderChangePassword = async (req, res) => {
+   var
+      date = new Date(),
+      d = date.getDate(),
+      m = date.getMonth() + 1,
+      a = date.getFullYear();
+
+   const {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      fechaNacimiento,
+      genero,
+      direccion,
+      telefono,
+      email,
+      privilegio,
+      estado,
+      profile
+   } = req.user;
+
+   res.render('password', {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      fechaNacimiento,
+      genero,
+      direccion,
+      telefono,
+      email,
+      privilegio,
+      estado,
+      profile,
+      d, m, a
+   });
+};
+
+indexControllers.changePassword = async (req, res) => {
+   const toast = [];
+
+   const {
+      oldPassword,
+      newPassword,
+      confNewPassword
+   } = req.body;
+
+   let oldPasswordN = oldPassword.trim(),
+      newPasswordN = newPassword.trim(),
+      confNewPasswordN = confNewPassword.trim();
+   
+   if (
+      oldPasswordN === '' ||
+      newPasswordN === '' ||
+      confNewPasswordN === ''
+   ) {
+      toast.push({
+         tittle: 'Campos vacios',
+         icon: 'error',
+         description: 'Los campos no pueden ir vacíos o con espacios...'
+      });
+   }
+
+   if (
+      newPasswordN != confNewPasswordN
+   ) {
+      toast.push({
+         tittle: 'Contraseña no coincide',
+         icon: 'warning',
+         description: 'La nueva contraseña no coincide con la confirmada...'
+      });
+   }
+
+   if (toast.length > 0) {
+      res.json({
+         toast,
+         res: 'toast'
+      });
+   } else {
+      const user = await UsersModel
+         .findOne({
+            cedula: req.user.cedula
+         });
+
+      const passCompare = await user.matchPassword(newPasswordN);
+         
+      if (passCompare) {
+         toast.push({
+            tittle: 'Contraseñas iguales',
+            icon: 'info',
+            description: 'La nueva contraseña debe de ser diferente a la actual...'
+         });
+      } else {
+         const comparePassAnt = await user.matchPassword(oldPasswordN, user.password);
+         
+         if (!comparePassAnt) {
+            toast.push({
+               tittle: 'Contraseña incorrecta',
+               icon: 'info',
+               description: 'La contraseña actual no coincide o es incorrecta...'
+            });
+         }
+      }
+      
+      if (toast.length > 0) {
+         res.json({
+            toast,
+            res: 'toast'
+         });
+      } else {
+         const passNewEncrypt = await user.encryptPassword(newPasswordN);
+
+         try {
+            const updatePass = await UsersModel
+               .updateOne({
+                  cedula: req.user.cedula
+               }, {
+                  $set: {
+                     password: passNewEncrypt
+                  }
+               });
+            console.log(updatePass);
+      
+            if (updatePass.modifiedCount >= 1) {
+               try {
+                  const verificado = await VerificationModel
+                     .deleteOne({
+                        _idUser: req.user.id
+                     });
+                  console.log(verificado);
+               } catch (e) {
+                  console.log(e);
+               }
+
+               try {
+                  const transporte = nodemailer
+                     .createTransport({
+                        host: 'mail.privateemail.com',
+                        port: 587,
+                        secure: false,
+                        auth: {
+                           user: `${process.env.userMail}`,
+                           pass: `${process.env.passMail}`
+                        },
+                        tls: {
+                           rejectUnauthorized: false
+                        }
+                     });
+                  const info = await transporte
+                     .sendMail({
+                        from: `'Rudebalsa COOP' <${process.env.userMail}>`,
+                        to: req.user.email,
+                        subject: 'Contraseña Actualizada',
+                        html: require('../template/emails/changePass.tmp')({
+                           nameUser: `${req.user.nombres} ${req.user.apellidos}`
+                        })
+                     });
+                  console.log(info.response);
+               } catch (e) {
+                  console.log(e);
+               }
+               
+               req.logout();
+
+               res.json({
+                  tittle: 'Contraseña actualizada',
+                  description: 'Se ha actualizado la contraseña de la cuenta con exito!!!',
+                  icon: 'success',
+                  res: 'true'
+               });
+            } else {
+               res.json({
+                  tittle: 'Contraseña no actualizada',
+                  description: 'No se ha podido actualizar la contraseña de la cuenta!!!',
                   icon: 'error',
                   res: 'false'
                });

@@ -76,8 +76,8 @@ app.use('/c', require('./routes/cajero.routes'));
 app.use(express.static(path.join(__dirname + '/public')));
 
 // Error 404 - Not Found
-// app.get('*', (req, res) => {
-//    res.status(404).render('404');
-// });
+app.get('*', (req, res) => {
+   res.status(404).render('404');
+});
 
 module.exports = app;

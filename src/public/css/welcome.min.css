@@ -1,3 +1,7 @@
+body{
+   background: var(--bodyColor);
+}
+
 .img__welcome {
    width: 350px;
 }

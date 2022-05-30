@@ -15,23 +15,30 @@ const {
    updateDataProfile,
    changePhotoProfile,
 
+   renderChangePassword,
+   changePassword,
+
    exitLogout
 } = require('../controllers/index.controllers');
 
 const {
    isAuthenticated,
-   isNotAuthenticated
+   isNotAuthenticated,
+   isAuthenticatedAllPriv
 } = require('../global/middleware');
 
 router.get('/', isNotAuthenticated, login);
 router.post('/login', loginAuth);
 
-router.get('/verification', isAuthenticated, verification);
+router.get('/verification', isAuthenticated, isAuthenticatedAllPriv, verification);
 
-router.get('/profile', isAuthenticated, renderProfile);
-router.put('/profile', isAuthenticated, updateDataProfile);
-router.post('/photoProfile', isAuthenticated, tempFolder.single('photoProfile'), changePhotoProfile);
+router.get('/profile', isAuthenticated, isAuthenticatedAllPriv, renderProfile);
+router.put('/profile', isAuthenticated, isAuthenticatedAllPriv, updateDataProfile);
+router.post('/photoProfile', isAuthenticated, isAuthenticatedAllPriv, tempFolder.single('photoProfile'), changePhotoProfile);
 
-router.get('/exit', isAuthenticated, exitLogout);
+router.get('/password', isAuthenticated, isAuthenticatedAllPriv, renderChangePassword);
+router.post('/password', isAuthenticated, isAuthenticatedAllPriv, changePassword);
+
+router.get('/exit', isAuthenticated, isAuthenticatedAllPriv, exitLogout);
 
 module.exports = router;

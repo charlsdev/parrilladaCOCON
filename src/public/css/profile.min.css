@@ -5,14 +5,21 @@ label {
    font-weight: 600;
 }
 
+div.required::after,
 label.required::after {
    content: " *";
    color: var(--red);
 }
 
+.form-sms {
+   font-size: .725rem;
+   text-align: justify;
+}
+
 .form-imgP {
-   border-radius: 50px;
+   border-radius: 50px !important;
    width: 170px !important;
+   height: 170px !important;
    margin: 18px 5px;
 }
 
