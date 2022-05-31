@@ -461,15 +461,13 @@ indexControllers.changePassword = async (req, res) => {
                      password: passNewEncrypt
                   }
                });
-            console.log(updatePass);
       
             if (updatePass.modifiedCount >= 1) {
                try {
-                  const verificado = await VerificationModel
+                  await VerificationModel
                      .deleteOne({
                         _idUser: req.user.id
                      });
-                  console.log(verificado);
                } catch (e) {
                   console.log(e);
                }
@@ -490,7 +488,7 @@ indexControllers.changePassword = async (req, res) => {
                      });
                   const info = await transporte
                      .sendMail({
-                        from: `'Rudebalsa COOP' <${process.env.userMail}>`,
+                        from: `'Parrillada COCON' <${process.env.userMail}>`,
                         to: req.user.email,
                         subject: 'Contraseña Actualizada',
                         html: require('../template/emails/changePass.tmp')({
