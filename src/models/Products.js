@@ -1,15 +1,15 @@
 const { Schema, model } = require('mongoose');
 
-const verificationSchema = new Schema ({
-   nomProducto: {
+const platosSchema = new Schema ({
+   _idCategoría: {
+      type: Schema.Types.ObjectId,
+      ref: 'Categoria'
+   },
+   nomPlato: {
       type: String,
       required: true
    },
-   categoria: {
-      type: String,
-      required: true
-   },
-   descripcion: {
+   acompañado: {
       type: String,
       required: true
    },
@@ -28,4 +28,4 @@ const verificationSchema = new Schema ({
    versionKey: false
 });
 
-module.exports = model('Productos', verificationSchema);
+module.exports = model('Platos', platosSchema);

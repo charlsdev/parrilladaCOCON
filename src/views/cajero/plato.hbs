@@ -1,0 +1,284 @@
+      <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css">
+      <link rel="stylesheet" href="/boxicons/boxicons.min.css" type="text/css">
+      <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
+      <link rel="stylesheet" href="/toastJS/jquery.toast.min.css" type="text/css">
+
+      <link rel="stylesheet" href="/dataTables/dataTable.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/datatables.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/theme/dataTables.bootstrap4.min.css" type="text/css"/>
+
+      <link rel="stylesheet" href="/select2/select2.min.css" type="text/css">
+      <link rel="stylesheet" href="/select2/select2-bootstrap.min.css" type="text/css">
+
+      <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/products.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/modal.min.css" type="text/css">
+
+   </head>
+
+	<body>
+      {{> loader}}
+      {{> navbarC}}
+
+      <div class="contentView">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12 text-center">
+                  <div class="lettersTittle">
+                     <span>P</span>
+                     <span>L</span>
+                     <span>A</span>
+                     <span>T</span>
+                     <span>O</span>
+                     <span>S</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row mb-4">
+               <div class="col-md-12">
+                  <button type="button" class="btnGeneral btnRModal" onclick="openModal();">
+                     <i class='bx bx-add-to-queue bx-tada' ></i> Añadir
+                  </button>
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-12">
+                  <table id="listPlatos" class="table is-striped table-striped">
+                     <thead class="table-primary">
+                        <tr>
+                           <th nowrap scope="col">Categoría</th>
+                           <th nowrap scope="col">Tipo</th>
+                           <th nowrap scope="col">Acompañado</th>
+                           <th nowrap scope="col">Precio</th>
+                           <th nowrap scope="col">Estado</th>
+                           <th nowrap scope="col">Options</th>
+                        </tr>
+                     </thead>
+   
+                  </table>
+               </div>
+            </div>
+
+         </div>
+      </div>
+
+      <br>
+
+      {{> drapArea}}
+
+      <script src="/JQuery/jquery.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/bootstrap/js/bootstrap.min.js"></script>
+      <script src="/sweetalert2/sweetalert2.min.js"></script>
+      <script src="/imaskJS/imask.min.js"></script>
+      <script src="/toastJS/jquery.toast.min.js"></script>
+
+      <script src="/dataTables/jquery.dataTables.min.js"></script>
+      <script src="/dataTables/datatables.min.js"></script>
+      <script src="/dataTables/theme/dataTables.bootstrap4.min.js"></script>
+
+      <script src="/select2/select2.min.js"></script>
+
+      <script src="/js/navbar.min.js"></script>
+
+      {{!-- Modal Products --}}
+      <div class="modal fade" id="modalProducts" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header modalHeader">
+                  {{!-- Header del Modal --}}
+               </div>
+
+               <div class="modal-body body__modal" style="padding: 0 1rem; !important">
+                  <div class="row mt-3 mb-3">
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Categoría</label>
+                        <select style="width: 100%" class="form-control" id="categoria" name="categoria" >
+                           {{!-- Data --}}
+                        </select>
+                     </div>
+
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Tipo</label>
+                        <input type="text" class="form-control" id="tipoPlato" name="tipoPlato" placeholder="Ingrese el tipo de presa: Ej. Pollo" >
+                     </div>
+
+                     <div class="form-group col-md-12">
+                        <label for="" class="">Acompañado con</label>
+                        <textarea class="form-control textarea" name="acompañadoPlato" id="acompañadoPlato" placeholder="Escribir el nombre del plato principal..." required></textarea>
+                     </div>
+
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Precio</label>
+                        <input type="text" class="form-control" id="precioPlato" name="precioPlato" placeholder="Ingreses el precio del plato: Ej. 4,50" >
+                     </div>
+
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Estado</label>
+                        <select class="form-control" id="estado" name="estado">
+                           <option class="opt" value="" selected disabled>Seleccionar...</option>
+                           <option value="Stock">Stock</option>
+                           <option value="Sin Stock">Sin Stock</option>
+                        </select>
+                     </div>
+                  </div>
+                  
+               </div>
+
+               <div class="modal-footer modalFooter">
+                  {{!-- Footer del Modal --}}
+               </div>
+               
+            </div>
+         </div>
+      </div>
+
+      <script src="/js/validationsFront.min.js"></script>
+
+      <script>
+         {{> notifications}}
+
+         const textarea = document.querySelector("textarea");
+         textarea.addEventListener("keyup", e => {
+            textarea.style.height = "35px";
+            let scHeight = e.target.scrollHeight;
+            textarea.style.height = `${scHeight}px`;
+         });
+
+         $(document).ready(function() {
+            listPlatos = $('#listPlatos').DataTable({
+               destroy: true,
+               "ajax": {
+                  "url": '/c/allProducts',
+                  "dataSrc":""
+               },
+               "columns": [
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.nomCategoria;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.nomPlato;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.acompañado;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.precio;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return result = (row.estado === 'Stock') ? '<span class="mode badge badge-pill badge-success">Stock</span>' : '<span class="mode badge badge-pill badge-danger">Sin Stock</span>';
+                        }
+                  },
+                  
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<button type="button" class="btnPoint btn btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"> <i class='bx bx-dots-vertical ' ></i> </button> 
+                           <div class="dropdown-menu 1 menuD"> 
+                              <a class="dropdown-item" onclick="description('${row.categoria}', '${row.categoria}', '${row.categoria}', '${row.categoria}')"> 
+                                 <i class='bx bx-info-circle bx-tada' ></i>
+                                 Información 
+                              </a>
+                           </div>`;
+                        }
+                  },
+               ],
+               responsive: true,
+               language: idioma,
+            });
+
+         });
+
+         var idioma = {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+               "sFirst":    "Primero",
+               "sLast":     "Último",
+               "sNext":     "Siguiente",
+               "sPrevious": "Anterior"
+            },
+            "oAria": {
+               "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+               "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+               "copy": "Copiar",
+               "colvis": "Visibilidad"
+
+            }
+         }
+
+         const dataCategoria = () => {
+            $.ajax({
+               url: "/c/allCategorias",
+               type: "GET",
+               datatype: "json",
+            })
+            .done(function(res) {
+               document.getElementById('categoria').innerHTML = `<option></option>`;
+
+               if(res.length > 0) {
+                  res.forEach(data => {
+                     document.getElementById('categoria').innerHTML += `
+                           <option value="${data._id}">
+                              ${data.nomCategoria}
+                           </option>
+                        `;
+                  });
+               }
+            })
+            .fail(function() {
+               console.log("Error");
+            });
+         }
+         
+         const openModal = () => {
+            document.querySelector('.modalHeader').innerHTML = `
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Nuevo Producto
+                  </h5>`;
+
+            document.querySelector('.modalFooter').innerHTML = `
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn__Send" onclick="saveUser();">Guardar</button>`;
+            
+            $('#categoria').val('').trigger('change');
+            $('#tipoPlato').val('');
+            $('#acompañadoPlato').val('');
+            $('#precioPlato').val('');
+            $('#estado').val('').trigger('change');
+
+            dataCategoria();
+            $('#categoria').select2({
+               dropdownParent: $("#modalProducts"),
+               theme: "bootstrap",
+               placeholder: "Seleccionar...",
+               allowClear: true
+            });
+
+            $("#modalProducts").modal("show");
+         }
+
+      </script>

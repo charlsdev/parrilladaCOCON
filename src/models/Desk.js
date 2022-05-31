@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const verificationSchema = new Schema ({
+const mesaSchema = new Schema ({
    numMesa: {
       type: Number,
       required: true
@@ -20,4 +20,4 @@ const verificationSchema = new Schema ({
    versionKey: false
 });
 
-module.exports = model('Mesa', verificationSchema);
+module.exports = model('Mesa', mesaSchema);

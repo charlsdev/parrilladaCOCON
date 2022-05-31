@@ -1,0 +1,652 @@
+      <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css">
+      <link rel="stylesheet" href="/boxicons/boxicons.min.css" type="text/css">
+      <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
+      <link rel="stylesheet" href="/toastJS/jquery.toast.min.css" type="text/css">
+
+      <link rel="stylesheet" href="/dataTables/dataTable.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/datatables.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/theme/dataTables.bootstrap4.min.css" type="text/css"/>
+
+      <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/products.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/modal.min.css" type="text/css">
+
+   </head>
+
+	<body>
+      {{> loader}}
+      {{> navbarC}}
+
+      <div class="contentView">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12 text-center">
+                  <div class="lettersTittle">
+                     <span>C</span>
+                     <span>A</span>
+                     <span>T</span>
+                     <span>E</span>
+                     <span>G</span>
+                     <span>O</span>
+                     <span>R</span>
+                     <span>Í</span>
+                     <span>A</span>
+                     <span>S</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row mb-4">
+               <div class="col-md-12">
+                  <button type="button" class="btnGeneral btnRModal" onclick="openModal();">
+                     <i class='bx bx-add-to-queue bx-tada' ></i> Añadir
+                  </button>
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-12">
+                  <table id="listCategorias" class="table is-striped table-striped table-bordered table-sm">
+                     <thead class="table-primary">
+                        <tr>
+                           <th nowrap scope="col">ID</th>
+                           <th nowrap scope="col">Categoría</th>
+                           <th nowrap scope="col">Editar</th>
+                           <th nowrap scope="col">Eliminar</th>
+                        </tr>
+                     </thead>
+   
+                  </table>
+               </div>
+            </div>
+
+         </div>
+      </div>
+
+      <br>
+
+      {{> drapArea}}
+
+      <script src="/JQuery/jquery.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/bootstrap/js/bootstrap.min.js"></script>
+      <script src="/sweetalert2/sweetalert2.min.js"></script>
+      <script src="/imaskJS/imask.min.js"></script>
+      <script src="/toastJS/jquery.toast.min.js"></script>
+
+      <script src="/dataTables/jquery.dataTables.min.js"></script>
+      <script src="/dataTables/datatables.min.js"></script>
+      <script src="/dataTables/theme/dataTables.bootstrap4.min.js"></script>
+
+      <script src="/js/navbar.min.js"></script>
+
+      {{!-- Modal Products --}}
+      <div class="modal fade" id="modalCategorias" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header modalHeader">
+                  {{!-- Header del Modal --}}
+               </div>
+
+               <div class="modal-body body__modal" style="padding: 0 1rem; !important">
+                  <div class="row mt-3 mb-3">
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Nombre de Categoría</label>
+                        <textarea class="form-control textarea" name="nomCategoria" id="nomCategoria" placeholder="Escribir el nombre del plato principal..." required></textarea>
+                     </div>
+                  </div>
+                  
+               </div>
+
+               <div class="modal-footer modalFooter">
+                  {{!-- Footer del Modal --}}
+               </div>
+               
+            </div>
+         </div>
+      </div>
+
+      <script src="/js/validationsFront.min.js"></script>
+
+      <script>
+         {{> notifications}}
+
+         const textarea = document.querySelector("textarea");
+         textarea.addEventListener("keyup", e => {
+            textarea.style.height = "35px";
+            let scHeight = e.target.scrollHeight;
+            textarea.style.height = `${scHeight}px`;
+         });
+
+         $(document).ready(function() {
+            listCategorias = $('#listCategorias').DataTable({
+               destroy: true,
+               "ajax": {
+                  "url": '/c/allCategorias',
+                  "dataSrc":""
+               },
+               "columns": [
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row._id;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.nomCategoria;
+                        }
+                  },                  
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<button type="button" class="btnBootstrap btn btn-outline-info" onclick="editCategory('${row._id}')">
+                              <i class='bx bx-edit-alt' ></i>
+                              Editar
+                           </button>`;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<button type="button" class="btnBootstrap btn btn-outline-danger" onclick="deleteCategory('${row._id}')">
+                              <i class='bx bx-trash' ></i>
+                              Eliminar
+                           </button>`;
+                        }
+                  },
+               ],
+               responsive: true,
+               language: idioma,
+            });
+
+         });
+
+         var idioma = {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+               "sFirst":    "Primero",
+               "sLast":     "Último",
+               "sNext":     "Siguiente",
+               "sPrevious": "Anterior"
+            },
+            "oAria": {
+               "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+               "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+               "copy": "Copiar",
+               "colvis": "Visibilidad"
+
+            }
+         }
+
+         const openModal = () => {
+            document.querySelector('.modalHeader').innerHTML = `
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Nueva Categoría
+                  </h5>`;
+
+            document.querySelector('.modalFooter').innerHTML = `
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn__Send" onclick="saveCategory();">Guardar</button>`;
+
+            $("#nomCategoria").val("");
+            $("#modalCategorias").modal("show");
+         }
+
+         const saveCategory = () => {
+            nomCategoria = $.trim($('#nomCategoria').val());
+
+            Swal.fire({
+               title: 'GUARDAR CATEGORÍA',
+               html: `<p style="font-size: 1rem;">¿Deseas añadir esta nueva categoría?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, guardar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value == true) {
+                  if (
+                     nomCategoria == ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/saveCategory`,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                           nomCategoria
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    listCategorias.ajax.reload(null, false);
+                                    $("#modalCategorias").modal("hide");
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         }
+
+         const editCategory = (idCategory) => {
+            idCategory = $.trim(idCategory);
+
+            Swal.fire({
+               title: 'EDITAR CATEGORÍA',
+               html: `<p style="font-size: 1rem;">¿Deseas editar esta categoría?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, editar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value === true) {
+                  if (
+                     idCategory === ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/searchCategory`,
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                           idCategory
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           document.querySelector('.modalHeader').innerHTML = `
+                                 <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                                    Editar Categoría
+                                 </h5>`;
+
+                           document.querySelector('.modalFooter').innerHTML = `
+                                 <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                                 <button type="button" class="btn__Send" onclick="updateCategory('${res.data._id}');">Actualizar</button>`;
+
+                           $("#nomCategoria").val(`${res.data.nomCategoria}`);
+                           $("#modalCategorias").modal("show");
+
+                           desbloqueointerface();
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         }
+
+         const updateCategory = (idCategory) => {
+            idCategory = $.trim(idCategory);
+            nomCategoria = $.trim($('#nomCategoria').val());
+
+            Swal.fire({
+               title: 'ACTUALIZAR CATEGORÍA',
+               html: `<p style="font-size: 1rem;">¿Deseas actualizar y guardar la categoría?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, actualizar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value === true) {
+                  if (
+                     idCategory === '' ||
+                     nomCategoria === ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/updateCategory`,
+                        type: 'PUT',
+                        dataType: 'json',
+                        data: {
+                           idCategory,
+                           nomCategoria
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    listCategorias.ajax.reload(null, false);
+                                    $("#modalCategorias").modal("hide");
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         }
+
+         const deleteCategory = (idCategory) => {
+            idCategory = $.trim(idCategory);
+
+            Swal.fire({
+               title: 'ElIMINAR CATEGORÍA',
+               html: `<p style="font-size: 1rem;">¿Deseas eliminar la categoría? Esta opción es irreversible.</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, eliminar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value === true) {
+                  if (
+                     idCategory === ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/deleteCategory`,
+                        type: 'DELETE',
+                        dataType: 'json',
+                        data: {
+                           idCategory
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    listCategorias.ajax.reload(null, false);
+                                    $("#modalCategorias").modal("hide");
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         }
+
+      </script>

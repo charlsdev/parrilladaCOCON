@@ -1,0 +1,45 @@
+.modalHeader {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin: 2px 20px;
+}
+.modalHeader .tittle__modal {
+   font-size: 1.15rem;
+   font-weight: 600;
+   color: var(--navColor);
+   text-transform: uppercase;
+}
+.modalFooter {
+   font-size: .8rem;
+   font-weight: 600;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+.modalFooter .btn__Send,
+.modalFooter .btn__Close {
+   font-weight: 600;
+   border-radius: .5rem;
+   text-transform: uppercase;
+   background: transparent;
+   cursor: pointer;
+   padding: 5px 25px;
+   transition: .5s;
+}
+.modalFooter .btn__Send {
+   border: 1px solid var(--burning);
+}
+.modalFooter .btn__Send:hover {
+   background: var(--burning);
+   color: var(--blanco);
+   transition: .5s;
+}
+.modalFooter .btn__Close {
+   border: 1px solid var(--navColor);
+}
+.modalFooter .btn__Close:hover {
+   background: var(--navColor);
+   color: var(--blanco);
+   transition: .5s;
+}

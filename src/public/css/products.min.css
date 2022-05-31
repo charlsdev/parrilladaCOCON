@@ -29,24 +29,21 @@ label.required::after {
    font-weight: 600;
 }
 
-.btnChangeProfile,
-.btnUpdateDates,
 .btnRModal {
    border: 1px solid var(--burning) !important;
-   color: var(--color-negro) !important;
+   color: var(--navColor) !important;
 }
 
-.btnChangeProfile:hover,
-.btnUpdateDates:hover,
 .btnRModal:hover {
-   background: #ff3c69;
+   background: var(--burning);
    color: var(--blanco) !important;
    transition: .5s;
 }
 
 input,
 select,
-option {
+option,
+.select2-results__option {
    font-weight: 400 !important;
    font-size: .886rem !important;
 }
@@ -60,6 +57,18 @@ option {
    border: 2px double var(--citrica) !important;
    padding: 20px 25px;
    border-radius: 1rem;
+}
+
+.textarea {
+   resize: none;
+   font-size: .8rem !important;
+}
+
+.btnBootstrap {
+   font-size: .75rem;
+   font-weight: 600;
+   padding: 5px 15px;
+   cursor: pointer;
 }
 
 @media (max-width: 610px) {

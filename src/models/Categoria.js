@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const verificationSchema = new Schema ({
+const categoriaSchema = new Schema ({
    nomCategoria: {
       type: String,
       required: true
@@ -10,4 +10,4 @@ const verificationSchema = new Schema ({
    versionKey: false
 });
 
-module.exports = model('Categoria', verificationSchema);
+module.exports = model('Categoria', categoriaSchema);

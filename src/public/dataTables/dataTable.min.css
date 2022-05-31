@@ -1,0 +1,169 @@
+.select:not(.is-multiple):not(.is-loading)::after {
+   display: none;
+}
+.dataTables_info,
+.dataTables_length label {
+   font-size: 0.85rem;
+   font-weight: 600 !important;
+}
+.dataTables_filter {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   padding: 0px 4px;
+}
+.dataTables_filter:after {
+   font-family: 'FontAwesome';
+   color: #d4d4d4;
+   position: relative;
+   content: "\f002";
+   right: 25px;
+   bottom: 4px;
+}
+.dataTables_filter label {
+   font-weight: 600 !important;
+}
+.dataTables_filter label .form-control-sm {
+   border: 1px solid var(--navColor) !important;
+   border-radius: 50px !important;
+   margin-left: 8px;
+   height: 34px;
+   width: 100%;
+   padding: 0px 25px 0px 10px;
+   transition: all .6s ease;
+   font-size: 0.95rem;
+   font-size: .8rem !important;
+}
+
+.dataTables_filter::after {
+   color: var(--burning);
+}
+div.dataTables_wrapper div.dataTables_length select {
+   border: 1px solid var(--navColor);
+}
+.select select::after {
+   display: none;
+}
+div.dataTables_wrapper div.dataTables_length label,
+div.dataTables_wrapper div.dataTables_filter,
+div.dataTables_wrapper div.dataTables_info,
+.pagination {
+   font-size: .8rem !important;
+}
+.pagination .previous a,
+.pagination .next a {
+   border-radius: 15px !important;
+   border: 1px solid var(--navColor) !important;
+}
+.pagination li a,
+.pagination li span {
+   border-radius: 25%;
+   font-weight: 600;
+}
+
+div.dataTables_wrapper div.dataTables_length select {
+   width: 55px !important;
+   padding-left: 10px !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+   padding: .5em .2em !important;
+   border: none !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+   background: transparent !important;
+   border: none !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button a:focus {
+   outline: none;
+   box-shadow: none;
+   border: none !important;
+}
+
+.table {
+   border-radius: .3rem;
+}
+.table thead {
+   text-transform: uppercase;
+   text-align: center;
+   font-size: .9rem;
+}
+.table tbody {
+   font-size: 0.82rem;
+   background: var(--bodyColor);
+}
+.table tbody td {
+   padding-left: 18px;
+   padding-right: 18px;
+   letter-spacing: .2px;
+   vertical-align: unset !important;
+   text-align: center;
+}
+.table tbody td img {
+   width: 35px;
+   height: 35px;
+   border-radius: 50%;
+   object-fit: cover;
+   overflow: hidden;
+}
+.table tbody td button {
+   margin-left: 5px;
+   margin-right: 5px;
+}
+.table tbody td button:focus {
+   outline: none;
+   box-shadow: none;
+}
+
+table.dataTable.no-footer {
+   border-bottom: none !important;
+}
+table.dataTable thead th,
+table.dataTable thead td {
+   border-bottom: none !important;
+}
+
+.mode {
+   padding: 4px 10px;
+   line-height: 13px;
+   color: #fff;
+   font-weight: 500;
+   border-radius: 1rem;
+   -webkit-border-radius: 1rem;
+   font-size: 11px;
+   letter-spacing: 0.4px;
+   width: 95px;
+}
+
+.menuD {
+   border: 1px solid var(--navColor);
+   font-size: .95rem;
+}
+.menuD .dropdown-item {
+   display: flex;
+   align-items: center;
+   padding: 0.25rem 1.1rem !important;
+}
+.menuD .dropdown-item:hover {
+   font-weight: 800;
+   background: var(--burning);
+   cursor: pointer;
+   transition: .5s;
+}
+.menuD .dropdown-item i {
+   font-size: 1.15rem;
+   margin-right: 5px;
+}
+
+.btnPoint i {
+   font-size: 1.5rem;
+}
+.dropdown-toggle::after  {
+   display: none;
+}
+
+@media screen and (max-width: 990px) {
+   .table tbody td {
+      text-align: left !important;
+   }
+}

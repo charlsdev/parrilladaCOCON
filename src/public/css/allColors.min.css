@@ -11,6 +11,11 @@
 
    --burning: #FF416C;
    --color-main: #004880;
+   --citrica: #FFBE73;
+   --navColor: #2D3E50;
+   
+   --san: #C47F7A;
+   --dia: #ff8b6b;
 
    --color-negro:#364E65;
    --color-texto:#727C77;
@@ -19,6 +24,8 @@
    --color-rgb-celeste:rgba(55,147,246,.27);
    --color-celeste:#3793F6;
    --color-input:#EEF5F9;
+
+   --grey: #888;
 
    /** Colores Bootstrap **/
    --primary: #188ae2;

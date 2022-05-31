@@ -1,6 +1,11 @@
 const { Schema, model } = require('mongoose');
 
-const verificationSchema = new Schema ({
+const facturaSchema = new Schema ({
+   cedula: {
+      type: String,
+      required: true,
+      maxlength: 10
+   },
    cliente: {
       type: String,
       required: true
@@ -12,6 +17,14 @@ const verificationSchema = new Schema ({
    _idSales: {
       type: Schema.Types.ObjectId,
       ref: 'Ventas'
+   },
+   subtotal: {
+      type: String,
+      require: true
+   },
+   iva: {
+      type: String,
+      require: true
    },
    total: {
       type: String,
@@ -26,4 +39,4 @@ const verificationSchema = new Schema ({
    versionKey: false
 });
 
-module.exports = model('Factura', verificationSchema);
+module.exports = model('Factura', facturaSchema);
