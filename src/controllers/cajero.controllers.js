@@ -2,7 +2,7 @@ const cajeroControllers = {};
 
 require('dotenv').config();
 
-const ProductModel = require('../models/Products');
+const PlatosModel = require('../models/Platos');
 const CategoryModel = require('../models/Categoria');
 
 cajeroControllers.welcome = (req, res) => {
@@ -288,13 +288,6 @@ cajeroControllers.deleteCategory = async (req, res) => {
    }
 };
 
-
-
-
-
-
-
-
 cajeroControllers.renderPlatos = (req, res) => {
    const {
       _id,
@@ -321,7 +314,7 @@ cajeroControllers.getAllPlatos = async (req, res) => {
    let allPlatos;
 
    try {
-      allPlatos = await ProductModel
+      allPlatos = await PlatosModel
          .find()
          .select({
             _idCategoría: 1,
@@ -336,10 +329,205 @@ cajeroControllers.getAllPlatos = async (req, res) => {
             select: 'nomCategoria'
          });
          
-      console.log(allPlatos);
+      // console.log(allPlatos);
       res.send(allPlatos);
    } catch (e) {
       console.log(e);
+   }
+};
+
+cajeroControllers.savePlato = async (req, res) => {
+   const {
+      categoria,
+      tipoPlato,
+      acompañadoPlato,
+      precioPlato,
+      estado
+   } = req.body;
+
+   let categoriaN = categoria.trim(),
+      tipoPlatoN = tipoPlato.trim(),
+      acompañadoPlatoN = acompañadoPlato.trim(),
+      precioPlatoN = precioPlato.trim(),
+      estadoN = estado.trim();
+
+   if (
+      categoriaN === '' ||
+      tipoPlatoN === '' ||
+      precioPlatoN === '' ||
+      estadoN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      try {
+         const newPlato = new PlatosModel({
+            _idCategoría: categoriaN,
+            nomPlato: tipoPlatoN,
+            acompañado: acompañadoPlatoN,
+            precio: precioPlatoN,
+            estado: estadoN
+         });
+
+         const savePlato = await newPlato.save();
+         
+         if (savePlato) {
+            res.json({
+               tittle: 'Plato registrado',
+               description: 'Se ha registrado el plato con exito!!!',
+               icon: 'success',
+               res: 'true'
+            });
+         } else {
+            res.json({
+               tittle: 'Plato no registrado',
+               description: 'No se ha podido registrar el plato!!!',
+               icon: 'error',
+               res: 'false'
+            });
+         }
+      } catch (e) {
+         console.log(e);
+
+         res.json({
+            tittle: 'Problemas',
+            description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+            icon: 'error',
+            res: 'error'
+         });
+      }
+   }
+};
+
+cajeroControllers.searchPlato = async (req, res) => {
+   const {
+      idPlato
+   } = req.query;
+
+   let idPlatoN = idPlato.trim();
+
+   if (idPlatoN === '') {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      try {
+         const searchPlato = await PlatosModel
+            .findById({
+               _id: idPlatoN
+            })
+            .select({
+               _idCategoría: 1,
+               nomPlato: 1,
+               acompañado: 1,
+               precio: 1,
+               estado: 1
+            });
+         // console.log(searchPlato);
+         
+         if (searchPlato) {
+            res.json({
+               res: 'true',
+               data: searchPlato
+            });
+         } else {
+            res.json({
+               tittle: 'Plato no registrado',
+               description: 'El plato a editar no se encuentra registrado!!!',
+               icon: 'error',
+               res: 'false'
+            });
+         }
+      } catch (e) {
+         console.log(e);
+
+         res.json({
+            tittle: 'Problemas',
+            description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+            icon: 'error',
+            res: 'error'
+         });
+      }
+   }
+};
+
+cajeroControllers.updatePlato = async (req, res) => {
+   const {
+      idPlato,
+      categoria,
+      tipoPlato,
+      acompañadoPlato,
+      precioPlato,
+      estado
+   } = req.body;
+
+   let idPlatoN = idPlato.trim(),
+      categoriaN = categoria.trim(),
+      tipoPlatoN = tipoPlato.trim(),
+      acompañadoPlatoN = acompañadoPlato.trim(),
+      precioPlatoN = precioPlato.trim(),
+      estadoN = estado.trim();
+
+   if (
+      idPlatoN === '' ||
+      categoriaN === '' ||
+      tipoPlatoN === '' ||
+      precioPlatoN === '' ||
+      estadoN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      try {
+         const updateCategory = await PlatosModel
+            .updateOne({
+               _id: idPlatoN
+            }, {
+               $set: {
+                  _idCategoría: categoriaN,
+                  nomPlato: tipoPlatoN,
+                  acompañado: acompañadoPlatoN,
+                  precio: precioPlatoN,
+                  estado: estadoN
+               }
+            });
+         
+         if (updateCategory.modifiedCount >= 1) {
+            res.json({
+               tittle: 'Plato actualizado',
+               description: 'Se ha actualizado el plato con éxito!!!',
+               icon: 'error',
+               res: 'true'
+            });
+         } else {
+            res.json({
+               tittle: 'Plato no actualizado',
+               description: 'No se ha podido actualizar el plato!!!',
+               icon: 'error',
+               res: 'false'
+            });
+         }
+      } catch (e) {
+         console.log(e);
+
+         res.json({
+            tittle: 'Problemas',
+            description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+            icon: 'error',
+            res: 'error'
+         });
+      }
    }
 };
 

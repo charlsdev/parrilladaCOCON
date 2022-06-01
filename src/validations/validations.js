@@ -82,15 +82,6 @@ const validate_letrasSpace = (letras) => {
    return false;
 };
 
-const validate_placa = (placa) => {
-   var placaRegex =
-      /^([A-Z]{0,3})?(-)?([0-9]{0,4})$/;
-   if (placaRegex.test(placa)) {
-      return true;
-   }
-   return false;
-};
-
 const validate_decimal = (decimal) => {
    var decimalRegex =
       /^([0-9]{1,4})?(,)?([0-9]{2,2})$/;
@@ -142,7 +133,6 @@ module.exports = ({
    validate_telefono,
    validate_letras,
    validate_letrasSpace,
-   validate_placa,
    validate_decimal,
    validate_letterYnumbers,
    validate_hora,

@@ -11,7 +11,7 @@ const platosSchema = new Schema ({
    },
    acompañado: {
       type: String,
-      required: true
+      // required: true
    },
    precio: {
       type: String,
@@ -22,6 +22,7 @@ const platosSchema = new Schema ({
       require: true
       // Stock
       // Sin stock
+      // Not Sale
    }
 }, {
    timestamps: true,

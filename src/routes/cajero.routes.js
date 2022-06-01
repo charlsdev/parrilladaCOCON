@@ -11,10 +11,11 @@ const {
    updateCategory,
    deleteCategory,
 
-
-
    renderPlatos,
-   getAllPlatos
+   getAllPlatos,
+   savePlato,
+   searchPlato,
+   updatePlato
 
 } = require('../controllers/cajero.controllers');
 
@@ -32,7 +33,10 @@ router.get('/searchCategory', isAuthenticated, isAuthenticatedCajero, searchCate
 router.put('/updateCategory', isAuthenticated, isAuthenticatedCajero, updateCategory);
 router.delete('/deleteCategory', isAuthenticated, isAuthenticatedCajero, deleteCategory);
 
-router.get('/products', isAuthenticated, isAuthenticatedCajero, renderPlatos);
-router.get('/allProducts', isAuthenticated, isAuthenticatedCajero, getAllPlatos);
+router.get('/platos', isAuthenticated, isAuthenticatedCajero, renderPlatos);
+router.get('/allPlatos', isAuthenticated, isAuthenticatedCajero, getAllPlatos);
+router.post('/savePlato', isAuthenticated, isAuthenticatedCajero, savePlato);
+router.get('/searchPlato', isAuthenticated, isAuthenticatedCajero, searchPlato);
+router.put('/updatePlato', isAuthenticated, isAuthenticatedCajero, updatePlato);
 
 module.exports = router;

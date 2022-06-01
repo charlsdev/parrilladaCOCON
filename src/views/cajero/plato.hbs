@@ -46,18 +46,29 @@
 
             <div class="row">
                <div class="col-md-12">
-                  <table id="listPlatos" class="table is-striped table-striped">
+                  <table id="listPlatos" class="table is-striped table-striped table-bordered table-sm">
                      <thead class="table-primary">
                         <tr>
                            <th nowrap scope="col">Categoría</th>
-                           <th nowrap scope="col">Tipo</th>
+                           <th scope="col">Tipo</th>
                            <th nowrap scope="col">Acompañado</th>
-                           <th nowrap scope="col">Precio</th>
-                           <th nowrap scope="col">Estado</th>
-                           <th nowrap scope="col">Options</th>
+                           <th scope="col">Precio</th>
+                           <th scope="col">Estado</th>
+                           <th nowrap scope="col">Acciones</th>
                         </tr>
                      </thead>
-   
+
+                     <tfoot>
+                        <tr>
+                           <th>Categoría</th>
+                           <th>Tipo</th>
+                           <th></th>
+                           <th></th>
+                           <th>Estado</th>
+                           <th></th>
+                        </tr>
+                     </tfoot>
+                     
                   </table>
                </div>
             </div>
@@ -122,6 +133,7 @@
                            <option class="opt" value="" selected disabled>Seleccionar...</option>
                            <option value="Stock">Stock</option>
                            <option value="Sin Stock">Sin Stock</option>
+                           <option value="Not Sale">Not Sale</option>
                         </select>
                      </div>
                   </div>
@@ -152,13 +164,13 @@
             listPlatos = $('#listPlatos').DataTable({
                destroy: true,
                "ajax": {
-                  "url": '/c/allProducts',
+                  "url": '/c/allPlatos',
                   "dataSrc":""
                },
                "columns": [
                   {"data": null,
                         render: function ( data, type, row ) {
-                           return row.nomCategoria;
+                           return row._idCategoría.nomCategoria;
                         }
                   },
                   {"data": null,
@@ -168,7 +180,7 @@
                   },
                   {"data": null,
                         render: function ( data, type, row ) {
-                           return row.acompañado;
+                           return result = (row.acompañado) ? row.acompañado : '';
                         }
                   },
                   {"data": null,
@@ -178,7 +190,19 @@
                   },
                   {"data": null,
                         render: function ( data, type, row ) {
-                           return result = (row.estado === 'Stock') ? '<span class="mode badge badge-pill badge-success">Stock</span>' : '<span class="mode badge badge-pill badge-danger">Sin Stock</span>';
+                           if(row.estado === 'Stock') { 
+                              result = '<span class="mode badge badge-pill badge-success">Stock</span>' 
+                           }
+                           
+                           if(row.estado === 'Sin Stock') { 
+                              result = '<span class="mode badge badge-pill badge-danger">Sin Stock</span>' 
+                           }
+                           
+                           if(row.estado === 'Not Sale') { 
+                              result = '<span class="mode badge badge-pill badge-dark">Not Sale</span>' 
+                           }
+
+                           return result;
                         }
                   },
                   
@@ -186,9 +210,13 @@
                         render: function ( data, type, row ) {
                            return `<button type="button" class="btnPoint btn btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"> <i class='bx bx-dots-vertical ' ></i> </button> 
                            <div class="dropdown-menu 1 menuD"> 
-                              <a class="dropdown-item" onclick="description('${row.categoria}', '${row.categoria}', '${row.categoria}', '${row.categoria}')"> 
-                                 <i class='bx bx-info-circle bx-tada' ></i>
-                                 Información 
+                              <a class="dropdown-item" onclick="editPlato('${row._id}')"> 
+                                 <i class='bx bx-edit-alt bx-tada' ></i>
+                                 Editar 
+                              </a>
+                              <a class="dropdown-item" onclick="deletePlato('${row._id}')"> 
+                                 <i class='bx bx-trash bx-tada' ></i>
+                                 Eliminar 
                               </a>
                            </div>`;
                         }
@@ -196,6 +224,49 @@
                ],
                responsive: true,
                language: idioma,
+               initComplete: function () {
+                  this.api()
+                     .columns([0, 1, 4])
+                     .every(function (i) {
+                        let arrayCat = [];
+                        let arrayTip = [];
+                        let arrayEst = [];
+
+                        var column = this;
+                        
+                        var select = $('<select class="form-control form-control-sm"><option value=""></option></select>')
+                           .appendTo($(column.footer()).empty())
+                           .on('change', function () {
+                              var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                              column.search(val ? '^' + val + '$' : '', true, false).draw();
+                           });
+
+                        column
+                           .data()
+                           .unique()
+                           .sort()
+                           .each(function (d, j) {
+                              // La D contiene el JSON de la API
+                              if (i == 0 && !arrayCat.includes(d._idCategoría.nomCategoria)) {
+                                 arrayCat.push(d._idCategoría.nomCategoria);
+                                 select.append('<option value="' + d._idCategoría.nomCategoria + '">' + d._idCategoría.nomCategoria + '</option>');
+                              }
+
+                              if (i == 1&& !arrayTip.includes(d.nomPlato)) {
+                                 arrayTip.push(d.nomPlato);
+                                 select.append('<option value="' + d.nomPlato + '">' + d.nomPlato + '</option>');
+                              }
+                              
+                              if (i == 4 && !arrayEst.includes(d.estado)) {
+                                 arrayEst.push(d.estado);
+                                 select.append('<option value="' + d.estado + '">' + d.estado + '</option>');
+                              }
+                           });
+                     });
+
+               }
+
             });
 
          });
@@ -262,7 +333,7 @@
 
             document.querySelector('.modalFooter').innerHTML = `
                   <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
-                  <button type="button" class="btn__Send" onclick="saveUser();">Guardar</button>`;
+                  <button type="button" class="btn__Send" onclick="savePlato();">Guardar</button>`;
             
             $('#categoria').val('').trigger('change');
             $('#tipoPlato').val('');
@@ -281,4 +352,376 @@
             $("#modalProducts").modal("show");
          }
 
+         const savePlato = () => {
+            categoria = $.trim($('#categoria').val());
+            tipoPlato = $.trim($('#tipoPlato').val());
+            acompañadoPlato = $.trim($('#acompañadoPlato').val());
+            precioPlato = $.trim($('#precioPlato').val());
+            estado = $.trim($('#estado').val());
+            
+            Swal.fire({
+               title: 'GUARDAR PLATO',
+               html: `<p style="font-size: 1rem;">¿Deseas añadir un nuevo plato?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, guardar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value == true) {
+                  if (
+                     categoria == '' ||
+                     tipoPlato == '' ||
+                     precioPlato == '' ||
+                     estado == ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/savePlato`,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                           categoria,
+                           tipoPlato,
+                           acompañadoPlato,
+                           precioPlato,
+                           estado
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    listPlatos.ajax.reload(null, false);
+                                    $("#modalProducts").modal("hide");
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         }
+
+         const editPlato = (idPlato) => {
+            dataCategoria();
+            
+            idPlato = $.trim(idPlato);
+
+            Swal.fire({
+               title: 'EDITAR PLATO',
+               html: `<p style="font-size: 1rem;">¿Deseas editar este plato?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, editar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value === true) {
+                  if (
+                     idPlato === ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/searchPlato`,
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                           idPlato
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           //dataCategoria();
+
+                           document.querySelector('.modalHeader').innerHTML = `
+                                 <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                                    Editar Plato
+                                 </h5>`;
+
+                           document.querySelector('.modalFooter').innerHTML = `
+                                 <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                                 <button type="button" class="btn__Send" onclick="updatePlato('${res.data._id}');">Actualizar</button>`;
+
+                           $('#categoria').select2({
+                              dropdownParent: $("#modalProducts"),
+                              theme: "bootstrap",
+                              placeholder: "Seleccionar...",
+                              allowClear: true
+                           });
+
+                           $('#categoria').val(`${res.data._idCategoría}`).trigger('change');
+                           $('#tipoPlato').val(`${res.data.nomPlato}`);
+                           $('#acompañadoPlato').val(`${res.data.acompañado}`);
+                           $('#precioPlato').val(`${res.data.precio}`);
+                           $('#estado').val(`${res.data.estado}`).trigger('change');
+
+                           $("#modalProducts").modal("show");
+
+                           desbloqueointerface();
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         }
+
+         const updatePlato = (idPlato) => {
+            idPlato = $.trim(idPlato);
+            categoria = $.trim($('#categoria').val());
+            tipoPlato = $.trim($('#tipoPlato').val());
+            acompañadoPlato = $.trim($('#acompañadoPlato').val());
+            precioPlato = $.trim($('#precioPlato').val());
+            estado = $.trim($('#estado').val());
+
+            Swal.fire({
+               title: 'ACTUALIZAR PLATO',
+               html: `<p style="font-size: 1rem;">¿Deseas actualizar el plato?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, actualizar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value === true) {
+                  if (
+                     idPlato === '' ||
+                     categoria === '' ||
+                     tipoPlato === '' ||
+                     precioPlato === '' ||
+                     estado === ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/updatePlato`,
+                        type: 'PUT',
+                        dataType: 'json',
+                        data: {
+                           idPlato,
+                           categoria,
+                           tipoPlato,
+                           acompañadoPlato,
+                           precioPlato,
+                           estado
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    listPlatos.ajax.reload(null, false);
+                                    $("#modalProducts").modal("hide");
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         }
+
+         
       </script>
