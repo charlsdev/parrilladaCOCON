@@ -3,15 +3,18 @@ const { Schema, model } = require('mongoose');
 const mesaSchema = new Schema ({
    numMesa: {
       type: Number,
-      required: true
+      required: true,
+      maxlength: 3
    },
    codigo: {
       type: String,
-      required: true
+      required: true,
+      maxlength: 6
    },
    estado: {
       type: String,
-      require: true
+      require: true,
+      maxlength: 10
       // Ocupada
       // Desocupada
    }

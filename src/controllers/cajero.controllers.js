@@ -257,8 +257,7 @@ cajeroControllers.deleteCategory = async (req, res) => {
             .deleteOne({
                _id: idCategoryN
             });
-
-         console.log(deleteCategory);
+            // console.log(deleteCategory);
          
          if (deleteCategory.deletedCount >= 1) {
             res.json({
@@ -529,6 +528,80 @@ cajeroControllers.updatePlato = async (req, res) => {
          });
       }
    }
+};
+
+cajeroControllers.deletePlato = async (req, res) => {
+   const {
+      idPlato
+   } = req.body;
+
+   let idPlatoN = idPlato.trim();
+
+   if (
+      idPlatoN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      try {
+         const platoDelete = await PlatosModel
+            .deleteOne({
+               _id: idPlatoN
+            });
+         // console.log(platoDelete);
+         
+         if (platoDelete.deletedCount >= 1) {
+            res.json({
+               tittle: 'Plato eliminado',
+               description: 'Se ha eliminado el plato con éxito!!!',
+               icon: 'error',
+               res: 'true'
+            });
+         } else {
+            res.json({
+               tittle: 'Plato no eliminado',
+               description: 'No se ha podido eliminar el plato!!!',
+               icon: 'error',
+               res: 'false'
+            });
+         }
+      } catch (e) {
+         console.log(e);
+
+         res.json({
+            tittle: 'Problemas',
+            description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+            icon: 'error',
+            res: 'error'
+         });
+      }
+   }
+};
+
+cajeroControllers.renderMesas = (req, res) => {
+   const {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      privilegio,
+      estado,
+      profile
+   } = req.user;
+
+   res.render('cajero/mesas', {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      privilegio,
+      estado,
+      profile
+   });
 };
 
 module.exports = cajeroControllers;

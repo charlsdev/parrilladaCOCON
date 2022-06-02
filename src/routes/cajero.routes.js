@@ -15,7 +15,10 @@ const {
    getAllPlatos,
    savePlato,
    searchPlato,
-   updatePlato
+   updatePlato,
+   deletePlato,
+
+   renderMesas,
 
 } = require('../controllers/cajero.controllers');
 
@@ -38,5 +41,8 @@ router.get('/allPlatos', isAuthenticated, isAuthenticatedCajero, getAllPlatos);
 router.post('/savePlato', isAuthenticated, isAuthenticatedCajero, savePlato);
 router.get('/searchPlato', isAuthenticated, isAuthenticatedCajero, searchPlato);
 router.put('/updatePlato', isAuthenticated, isAuthenticatedCajero, updatePlato);
+router.delete('/deletePlato', isAuthenticated, isAuthenticatedCajero, deletePlato);
+
+router.get('/mesa', isAuthenticated, isAuthenticatedCajero, renderMesas);
 
 module.exports = router;

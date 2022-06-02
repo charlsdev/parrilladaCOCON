@@ -1,0 +1,137 @@
+section.card {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   text-align: center;
+   /* background: linear-gradient(to right, #2fffe7, #91caff); */
+   background: var(--bodyColor);
+   padding: 1rem 1.5rem;
+   border-radius: 8px;
+   max-height: 368px;
+   margin-left: 32px;
+   margin-bottom: 32px;
+   border: 1px solid var(--navColor);
+   box-shadow: 4px 4px var(--grey);
+}
+
+section.card .icon {
+   width: 140px;
+   /* height: 100px; */
+}
+
+section.card img {
+   width: 100%;
+}
+
+section.card .tittle_card {
+   font-size: 1.5rem;
+   margin: 16px 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   text-transform: uppercase;
+   font-weight: 600;
+   color: var(--negro);
+}
+
+section.card .code {
+   font-weight: 500;
+   max-width: 240px;
+   font-size: 1.3rem;
+   margin-bottom: 16px;
+   font-style: italic;
+   letter-spacing: 1px;
+   color: var(--negro);
+}
+
+section.card .btnS button {
+   margin: 5px 5px;
+}
+
+section.card .btnS button i {
+   padding: 0.5rem;
+   text-transform: uppercase;
+   border-radius: 32px;
+   border: 0;
+   cursor: pointer;
+   font-size: 1.3rem;
+   font-weight: 500;
+   /* color: var(--blanco); */
+   margin-bottom: 16px 0;
+}
+
+section.card .btnS .btnS__all {
+   border: 1px solid var(--blanco);
+   border-radius: .5rem;
+   text-transform: uppercase;
+   background: transparent;
+   cursor: pointer;
+   transition: .5s;
+}
+
+section.card .btnS .btnS__all.edit {
+   border: 1px solid var(--primary);
+   cursor: pointer;
+   transition: .5s;
+   color: var(--primary);
+}
+
+section.card .btnS .btnS__all.edit:hover {
+   background: var(--primary);
+   transition: .5s;
+   color: var(--blanco);
+}
+
+section.card .btnS .btnS__all.delete {
+   border: 1px solid var(--danger);
+   cursor: pointer;
+   transition: .5s;
+   color: var(--danger);
+}
+
+section.card .btnS .btnS__all.delete:hover {
+   background: var(--danger);
+   transition: .5s;
+   color: var(--blanco);
+}
+
+section.card .btnS .btnS__all.list {
+   border: 1px solid var(--purple);
+   cursor: pointer;
+   transition: .5s;
+   color: var(--purple);
+}
+
+section.card .btnS .btnS__all.list:hover {
+   background: var(--purple);
+   transition: .5s;
+   color: var(--blanco);
+}
+
+section.card .btnS .btnS__all.pdf {
+   border: 1px solid var(--pink);
+   cursor: pointer;
+   transition: .5s;
+   color: var(--pink);
+}
+
+section.card .btnS .btnS__all.pdf:hover {
+   background: var(--pink);
+   transition: .5s;
+   color: var(--blanco);
+}
+
+@media screen and (max-width: 720px) {
+   section.card {
+      margin-left: 0;
+      margin-bottom: 32px;
+   }
+
+   section.card:last-child {
+      margin-bottom: 0;
+   }
+
+   section.card button {
+      font-size: 70%;
+   }
+}

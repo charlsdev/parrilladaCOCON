@@ -14,7 +14,11 @@ const ventasSchema = new Schema ({
          type: Number,
          required: true
       },
-      precio: {
+      precioUnit: {
+         type: String,
+         require: true
+      },
+      precioTot: {
          type: String,
          require: true
       }

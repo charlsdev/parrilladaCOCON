@@ -6,7 +6,7 @@ const facturaSchema = new Schema ({
       required: true,
       maxlength: 10
    },
-   cliente: {
+   nomCliente: {
       type: String,
       required: true
    },
