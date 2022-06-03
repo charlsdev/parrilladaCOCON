@@ -26,6 +26,10 @@ a {
    width: calc(100% - 80px) !important;
 }
 
+.alert-dismissible {
+   padding-right: 1.25rem !important;
+}
+
 .close {
    text-shadow: none !important;
 }

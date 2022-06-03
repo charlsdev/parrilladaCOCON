@@ -9,14 +9,14 @@ const mesaSchema = new Schema ({
    codigo: {
       type: String,
       required: true,
-      maxlength: 6
+      maxlength: 8
    },
    estado: {
       type: String,
       require: true,
       maxlength: 10
-      // Ocupada
-      // Desocupada
+      // Separada
+      // Reservar
    }
 }, {
    timestamps: true,

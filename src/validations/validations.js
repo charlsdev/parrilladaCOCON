@@ -126,6 +126,15 @@ const validate_ID = (word, sli, tam, ini) => {
    return false;
 };
 
+const validate_numeros = (numero) => {
+   var numeroRegex =
+      /^[0-9]+$/;
+   if (numeroRegex.test(numero)) {
+      return true;
+   }
+   return false;
+};
+
 module.exports = ({
    validate_email,
    validate_cedula,
@@ -136,5 +145,6 @@ module.exports = ({
    validate_decimal,
    validate_letterYnumbers,
    validate_hora,
-   validate_ID
+   validate_ID,
+   validate_numeros
 });

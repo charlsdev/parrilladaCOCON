@@ -5,6 +5,7 @@
 
       <link rel="stylesheet" href="/select2/select2.min.css" type="text/css">
       <link rel="stylesheet" href="/select2/select2-bootstrap.min.css" type="text/css">
+      <link rel="stylesheet" href="/dataTables/dataTable.min.css" type="text/css"/>
 
       <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
       <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
@@ -41,73 +42,19 @@
                </div>
             </div>
 
-            <div class="row">
-               <div class="col-md-4 mb-3">
+            <div class="row" id="allMesas">
+               {{!-- <div class="col-md-4 mb-3">
                   <section class="card">
                      <div class="icon">
                         <img src="/img/desk.png" alt="Shop here.">
                      </div>
-                     <div class="tittle_card">
-                        Mesa #1
-                     </div>
-                     <div class="code">
-                        589625
-                     </div>
-                     
-                     <div class="btnS">
-                        <button type="button" class="btnS__all edit" onclick="openModal();">
-                           <i class='bx bx-edit-alt ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all delete" onclick="openModal();">
-                           <i class='bx bx-trash ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all list" onclick="openModal();">
-                           <i class='bx bx-file-find ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all pdf" onclick="openModal();">
-                           <i class='bx bxs-file-pdf ' ></i>
-                        </button>
-                     </div>
-                  </section>
-               </div>
 
-               <div class="col-md-4 mb-3">
-                  <section class="card">
-                     <div class="icon">
-                        <img src="/img/desk.png" alt="Shop here.">
-                     </div>
                      <div class="tittle_card">
-                        Mesa #1
+                        Mesa #1 <br>
+                        <span class="badgeCard mode badge badge-pill badge-danger">Separada</span>
+                        <span class="badgeCard mode badge badge-pill badge-success">Ocupada</span>
                      </div>
-                     <div class="code">
-                        589625
-                     </div>
-                     
-                     <div class="btnS">
-                        <button type="button" class="btnS__all edit" onclick="openModal();">
-                           <i class='bx bx-edit-alt ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all delete" onclick="openModal();">
-                           <i class='bx bx-trash ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all list" onclick="openModal();">
-                           <i class='bx bx-file-find ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all pdf" onclick="openModal();">
-                           <i class='bx bxs-file-pdf ' ></i>
-                        </button>
-                     </div>
-                  </section>
-               </div>
 
-               <div class="col-md-4 mb-3">
-                  <section class="card">
-                     <div class="icon">
-                        <img src="/img/desk.png" alt="Shop here.">
-                     </div>
-                     <div class="tittle_card">
-                        Mesa #1
-                     </div>
                      <div class="code">
                         589625
                      </div>
@@ -127,65 +74,13 @@
                         </button>
                      </div>
                   </section>
-               </div>
+               </div> --}}
 
-               <div class="col-md-4 mb-3">
-                  <section class="card">
-                     <div class="icon">
-                        <img src="/img/desk.png" alt="Shop here.">
-                     </div>
-                     <div class="tittle_card">
-                        Mesa #1
-                     </div>
-                     <div class="code">
-                        589625
-                     </div>
-                     
-                     <div class="btnS">
-                        <button type="button" class="btnS__all edit" onclick="openModal();">
-                           <i class='bx bx-edit-alt ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all delete" onclick="openModal();">
-                           <i class='bx bx-trash ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all list" onclick="openModal();">
-                           <i class='bx bx-file-find ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all pdf" onclick="openModal();">
-                           <i class='bx bxs-file-pdf ' ></i>
-                        </button>
-                     </div>
-                  </section>
-               </div>
-
-               <div class="col-md-4 mb-3">
-                  <section class="card">
-                     <div class="icon">
-                        <img src="/img/desk.png" alt="Shop here.">
-                     </div>
-                     <div class="tittle_card">
-                        Mesa #1
-                     </div>
-                     <div class="code">
-                        589625
-                     </div>
-                     
-                     <div class="btnS">
-                        <button type="button" class="btnS__all edit" onclick="openModal();">
-                           <i class='bx bx-edit-alt ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all delete" onclick="openModal();">
-                           <i class='bx bx-trash ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all list" onclick="openModal();">
-                           <i class='bx bx-file-find ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all pdf" onclick="openModal();">
-                           <i class='bx bxs-file-pdf ' ></i>
-                        </button>
-                     </div>
-                  </section>
-               </div>
+               {{!-- <div class="col-md-5 mx-auto">
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                     <strong>Aviso</strong>
+                     <p style="text-align: left; font-size: 0.8em; color: #333;">No existen mesas ocupadas o separadas en el momento.</p>
+               </div> --}}
                
             </div>
 
@@ -216,36 +111,19 @@
                <div class="modal-body body__modal" style="padding: 0 1rem; !important">
                   <div class="row mt-3 mb-3">
                      <div class="form-group col-md-12">
-                        <label for="" class="required">Categoría</label>
-                        <select style="width: 100%" class="form-control" id="categoria" name="categoria" >
-                           {{!-- Data --}}
-                        </select>
-                     </div>
-
-                     <div class="form-group col-md-12">
-                        <label for="" class="required">Tipo</label>
-                        <input type="text" class="form-control" id="tipoPlato" name="tipoPlato" placeholder="Ingrese el tipo de presa: Ej. Pollo" >
-                     </div>
-
-                     <div class="form-group col-md-12">
-                        <label for="" class="">Acompañado con</label>
-                        <textarea class="form-control textarea" name="acompañadoPlato" id="acompañadoPlato" placeholder="Escribir el nombre del plato principal..." required></textarea>
-                     </div>
-
-                     <div class="form-group col-md-12">
-                        <label for="" class="required">Precio</label>
-                        <input type="text" class="form-control" id="precioPlato" name="precioPlato" placeholder="Ingreses el precio del plato: Ej. 4,50" >
+                        <label for="" class="required"># de Mesa</label>
+                        <input type="text" class="form-control" id="numMesa" name="numMesa" placeholder="Ingrese el numero de mesa: Ej. 5" >
                      </div>
 
                      <div class="form-group col-md-12">
                         <label for="" class="required">Estado</label>
                         <select class="form-control" id="estado" name="estado">
                            <option class="opt" value="" selected disabled>Seleccionar...</option>
-                           <option value="Stock">Stock</option>
-                           <option value="Sin Stock">Sin Stock</option>
-                           <option value="Not Sale">Not Sale</option>
+                           <option value="Separar">Separar</option>
+                           <option value="Reservar">Reservar</option>
                         </select>
                      </div>
+                     
                   </div>
                   
                </div>
@@ -262,4 +140,220 @@
 
       <script>
          {{> notifications}}
+
+         $(document).ready(function() {
+            allDesk();
+         });
+
+         const allDesk = () => {
+            bloqueointerface();
+            
+            $.ajax({
+               url: "/c/allMesas",
+               type: "GET",
+               datatype: "json",
+            })
+            .done(function(res) {
+               document.getElementById('allMesas').innerHTML = ``;
+
+               if(res.length > 0) {
+                  res.forEach(data => {
+                     document.getElementById('allMesas').innerHTML += `
+                           <div class="col-md-4 mb-3">
+                              <section class="card">
+                                 <div class="icon">
+                                    <img src="/img/desk.png" alt="Shop here.">
+                                 </div>
+
+                                 <div class="tittle_card">
+                                    Mesa #${data.numMesa} <br>
+                                    {{!-- <span class="badgeCard mode badge badge-pill badge-danger">Separada</span>
+                                    <span class="badgeCard mode badge badge-pill badge-success">Ocupada</span> --}}
+
+                                    ${data.estado === 'Ocupada' ? '<span class="badgeCard mode badge badge-pill badge-success">Ocupada</span>' : '<span class="badgeCard mode badge badge-pill badge-danger">Separada</span>'}
+                                 </div>
+
+                                 <div class="code">
+                                    ${data.codigo}
+                                 </div>
+                                 
+                                 <div class="btnS">
+                                    <button type="button" class="btnS__all edit" onclick="openModal('${data._id}');">
+                                       <i class='bx bx-edit-alt ' ></i>
+                                    </button>
+                                    <button type="button" class="btnS__all delete" onclick="openModal('${data._id}');">
+                                       <i class='bx bx-trash ' ></i>
+                                    </button>
+                                    <button type="button" class="btnS__all list" onclick="openModal('${data._id}');">
+                                       <i class='bx bx-file-find ' ></i>
+                                    </button>
+                                    <button type="button" class="btnS__all pdf" onclick="openModal('${data._id}');">
+                                       <i class='bx bxs-file-pdf ' ></i>
+                                    </button>
+                                 </div>
+                              </section>
+                           </div>
+                        `;
+                  });
+               } else {
+                  document.getElementById('allMesas').innerHTML += `
+                        <div class="col-md-5 mx-auto">
+                           <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                              <strong>Aviso</strong>
+                              <p style="text-align: left; font-size: 0.8em; color: #333;">No existen mesas ocupadas o separadas en el momento.</p>
+                        </div>
+                     `;
+               }
+
+               desbloqueointerface();
+            })
+            .fail(function() {
+               console.log("Error");
+            });
+         }
+
+         const openModal = () => {
+            document.querySelector('.modalHeader').innerHTML = `
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Nueva Mesa
+                  </h5>`;
+
+            document.querySelector('.modalFooter').innerHTML = `
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn__Send" onclick="saveMesa();">Guardar</button>`;
+            
+            $('#acompañadoPlato').val('');
+            $('#precioPlato').val('');
+
+            $("#modalMesa").modal("show");
+         }
+
+         const saveMesa = () => {
+            numMesa = $.trim($('#numMesa').val());
+            estado = $.trim($('#estado').val());
+            
+            Swal.fire({
+               title: 'SEPARAR o AGENDAR MESA',
+               html: `<p style="font-size: 1rem;">¿Deseas generar y guardar la mesa #${numMesa}?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, guardar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value == true) {
+                  if (
+                     numMesa == '' ||
+                     estado == ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/saveMesa`,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                           numMesa,
+                           estado
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    allDesk();
+                                    $("#modalMesa").modal("hide");
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+
+                           toastList.forEach(toastDes => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toastDes.tittle}`,
+                                    text: `${toastDes.description}`,
+                                    icon: `${toastDes.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              })
+                           });
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         } 
+
       </script>

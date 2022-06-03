@@ -2,8 +2,20 @@ const cajeroControllers = {};
 
 require('dotenv').config();
 
+const {
+   customAlphabet
+} = require('nanoid');
+const nanoidFormat = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8);
+
 const PlatosModel = require('../models/Platos');
 const CategoryModel = require('../models/Categoria');
+const DeskModel = require('../models/Desk');
+const SalesModel = require('../models/Sales');
+
+const { 
+   validate_letras,
+   validate_numeros
+} = require('../validations/validations');
 
 cajeroControllers.welcome = (req, res) => {
    const {
@@ -602,6 +614,157 @@ cajeroControllers.renderMesas = (req, res) => {
       estado,
       profile
    });
+};
+
+cajeroControllers.getAllMesas = async (req, res) => {
+   let allMesas;
+
+   try {
+      allMesas = await DeskModel
+         .find()
+         .select({
+            numMesa: 1,
+            codigo: 1,
+            estado: 1
+         })
+         .sort({
+            numMesa: 'asc'
+         })
+         .lean();   
+      // console.log(allMesas);
+
+      res.send(allMesas);
+   } catch (e) {
+      console.log(e);
+   }
+};
+
+cajeroControllers.saveMesa = async (req, res) => {
+   let toast = [];
+   
+   const {
+      numMesa,
+      estado
+   } = req.body;
+
+   let numMesaN = numMesa.trim(),
+      estadoN = estado.trim();
+
+   if (
+      numMesaN === '' ||
+      estadoN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      if (!validate_letras(estadoN)) {
+         toast.push({
+            tittle: 'Estado incorrecto',
+            description: 'El estado es incorrecto...',
+            icon: 'error'
+         });
+      }
+
+      if (!validate_numeros(numMesaN)) {
+         toast.push({
+            tittle: 'Mesa incorrecta',
+            description: 'La mesa a elegir es incorrecta...',
+            icon: 'error'
+         });
+      }
+
+      if (toast.length > 0) {
+         res.json({
+            toast,
+            res: 'toast'
+         });
+      } else {
+         const searchNumMesa = await DeskModel
+            .findOne({
+               numMesa: numMesaN
+            })
+            .exec();
+         // console.log(searchNumMesa);
+
+         if (searchNumMesa === null) {
+            try {
+               const fntID = async () => {
+                  const IDMesa = nanoidFormat();
+                  // console.log(IDMesa);
+
+                  const searchIDMesa = await DeskModel
+                     .findOne({
+                        codigo: IDMesa
+                     })
+                     .exec();
+                  // console.log(searchIDMesa);
+                     
+                  const searchIDDeskSale = await SalesModel
+                     .find({
+                        _codeMesa: IDMesa
+                     })
+                     .lean()
+                     .exec();
+                  // console.log(searchIDDeskSale);
+
+                  if (
+                     searchIDMesa != null ||
+                     searchIDDeskSale.length > 1
+                  ) {
+                     fntID();
+                  } else {
+                     const newDesk = new DeskModel({
+                        numMesa: numMesaN,
+                        codigo: IDMesa,
+                        estado: estadoN
+                     });
+                     // console.log(newDesk);
+
+                     const saveMesa = await newDesk.save();
+                     // console.log(saveMesa);
+
+                     if (saveMesa) {
+                        res.json({
+                           tittle: `Mesa ${estadoN === 'Separar' ? 'separada' : 'reservada'}`,
+                           description: `Se ha ${estadoN === 'Separar' ? 'separado' : 'reservado'} la mesa #${numMesaN} con exito!!!`,
+                           icon: 'success',
+                           res: 'true'
+                        });
+                     } else {
+                        res.json({
+                           tittle: `Mesa no ${estadoN === 'Separar' ? 'separada' : 'reservada'}`,
+                           description: `No se ha podido ${estadoN.toLowerCase()} la mesa #${numMesaN} con exito!!!`,
+                           icon: 'error',
+                           res: 'false'
+                        });
+                     }
+                  }
+               };
+               fntID();
+            } catch (e) {
+               console.log(e);
+
+               res.json({
+                  tittle: 'Problemas',
+                  description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+                  icon: 'error',
+                  res: 'error'
+               });
+            }
+         } else {
+            res.json({
+               tittle: 'Mesa ocupada o separada',
+               description: `La mesa #${numMesaN} ya se encuentra ocupada o separada!`,
+               icon: 'info',
+               res: 'false'
+            });
+         }
+      }
+   }
 };
 
 module.exports = cajeroControllers;
