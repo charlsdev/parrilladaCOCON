@@ -21,6 +21,7 @@ const {
    renderMesas,
    getAllMesas,
    saveMesa,
+   deleteMesa,
 
 } = require('../controllers/cajero.controllers');
 
@@ -48,5 +49,6 @@ router.delete('/deletePlato', isAuthenticated, isAuthenticatedCajero, deletePlat
 router.get('/mesa', isAuthenticated, isAuthenticatedCajero, renderMesas);
 router.get('/allMesas', isAuthenticated, isAuthenticatedCajero, getAllMesas);
 router.post('/saveMesa', isAuthenticated, isAuthenticatedCajero, saveMesa);
+router.delete('/deleteMesa', isAuthenticated, isAuthenticatedCajero, deleteMesa);
 
 module.exports = router;

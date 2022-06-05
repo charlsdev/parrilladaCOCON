@@ -43,44 +43,7 @@
             </div>
 
             <div class="row" id="allMesas">
-               {{!-- <div class="col-md-4 mb-3">
-                  <section class="card">
-                     <div class="icon">
-                        <img src="/img/desk.png" alt="Shop here.">
-                     </div>
-
-                     <div class="tittle_card">
-                        Mesa #1 <br>
-                        <span class="badgeCard mode badge badge-pill badge-danger">Separada</span>
-                        <span class="badgeCard mode badge badge-pill badge-success">Ocupada</span>
-                     </div>
-
-                     <div class="code">
-                        589625
-                     </div>
-                     
-                     <div class="btnS">
-                        <button type="button" class="btnS__all edit" onclick="openModal();">
-                           <i class='bx bx-edit-alt ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all delete" onclick="openModal();">
-                           <i class='bx bx-trash ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all list" onclick="openModal();">
-                           <i class='bx bx-file-find ' ></i>
-                        </button>
-                        <button type="button" class="btnS__all pdf" onclick="openModal();">
-                           <i class='bx bxs-file-pdf ' ></i>
-                        </button>
-                     </div>
-                  </section>
-               </div> --}}
-
-               {{!-- <div class="col-md-5 mx-auto">
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                     <strong>Aviso</strong>
-                     <p style="text-align: left; font-size: 0.8em; color: #333;">No existen mesas ocupadas o separadas en el momento.</p>
-               </div> --}}
+               {{!-- All Mesas --}}
                
             </div>
 
@@ -178,10 +141,10 @@
                                  </div>
                                  
                                  <div class="btnS">
-                                    <button type="button" class="btnS__all edit" onclick="openModal('${data._id}');">
+                                    <button type="button" class="btnS__all edit" onclick="editMesa('${data._id}', '${data.numMesa}', '${data.estado}');">
                                        <i class='bx bx-edit-alt ' ></i>
                                     </button>
-                                    <button type="button" class="btnS__all delete" onclick="openModal('${data._id}');">
+                                    <button type="button" class="btnS__all delete" onclick="deleteMesa('${data._id}', '${data.numMesa}');">
                                        <i class='bx bx-trash ' ></i>
                                     </button>
                                     <button type="button" class="btnS__all list" onclick="openModal('${data._id}');">
@@ -222,8 +185,8 @@
                   <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
                   <button type="button" class="btn__Send" onclick="saveMesa();">Guardar</button>`;
             
-            $('#acompañadoPlato').val('');
-            $('#precioPlato').val('');
+            $('#numMesa').val('');
+            $('#estado').val('').trigger('change');
 
             $("#modalMesa").modal("show");
          }
@@ -234,7 +197,7 @@
             
             Swal.fire({
                title: 'SEPARAR o AGENDAR MESA',
-               html: `<p style="font-size: 1rem;">¿Deseas generar y guardar la mesa #${numMesa}?</p>`,
+               html: `<p style="font-size: 1rem;">¿Deseas generar y guardar la <b>Mesa #${numMesa}</b>?</p>`,
                imageUrl: '/img/parilladaCOCON.png',
                imageWidth: 250,
                imageHeight: 140,
@@ -356,4 +319,201 @@
             })
          } 
 
+         const deleteMesa = (id, numMesa) => {
+            idMesa = $.trim(id);
+            numMesa = $.trim(numMesa);
+
+            Swal.fire({
+               title: `ElIMINAR MESA #${numMesa}`,
+               html: `<p style="font-size: 1rem;">¿Deseas eliminar la <b>Mesa #${numMesa}</b>? Recuerda que para eliminar una mesa debe de no tener un proceso de compra en ejecución. Y recuerda que este proceso es irreversible.</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, eliminar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value === true) {
+                  if (
+                     idMesa === '' ||
+                     numMesa === ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/deleteMesa`,
+                        type: 'DELETE',
+                        dataType: 'json',
+                        data: {
+                           idMesa,
+                           numMesa
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    allDesk();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+
+                           toastList.forEach(toastDes => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toastDes.tittle}`,
+                                    text: `${toastDes.description}`,
+                                    icon: `${toastDes.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              })
+                           });
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         }
+
+         const editMesa = (id, numMesa, estMesa) => {            
+            idMesa = $.trim(id);
+            numMesa = $.trim(numMesa);
+            estMesa = $.trim(estMesa);
+
+            Swal.fire({
+               title: `EDITAR MESA #${numMesa}`,
+               html: `<p style="font-size: 1rem;">¿Deseas editar la <b>Mesa #${numMesa}</b>?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, editar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value === true) {
+                  if (
+                     idMesa === '' ||
+                     numMesa === '' ||
+                     estMesa === ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     document.querySelector('.modalHeader').innerHTML = `
+                           <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                              Editar Mesa
+                           </h5>`;
+
+                     document.querySelector('.modalFooter').innerHTML = `
+                           <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                           <button type="button" class="btn__Send" onclick="updateMesa('${idMesa}', '${numMesa}', '${estMesa}');">Actualizar</button>`;
+                     
+                     $('#numMesa').val(`${numMesa}`);
+                     $('#estado').val(`${estMesa}`).trigger('change');
+
+                     $("#modalMesa").modal("show");
+
+                     desbloqueointerface();
+
+                  }
+               }
+            })
+         }
+
+         
       </script>

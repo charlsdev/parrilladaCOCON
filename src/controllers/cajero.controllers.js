@@ -767,4 +767,114 @@ cajeroControllers.saveMesa = async (req, res) => {
    }
 };
 
+cajeroControllers.deleteMesa = async (req, res) => {
+   let toast = [];
+   
+   const {
+      idMesa,
+      numMesa
+   } = req.body;
+
+   let idMesaN = idMesa.trim(),
+      numMesaN = numMesa.trim();
+
+   if (
+      idMesaN === '' ||
+      numMesaN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      if (!validate_numeros(numMesaN)) {
+         toast.push({
+            tittle: 'Mesa incorrecta',
+            description: 'La mesa a elegir es incorrecta...',
+            icon: 'error'
+         });
+      }
+
+      if (toast.length > 0) {
+         res.json({
+            toast,
+            res: 'toast'
+         });
+      } else {
+         try {
+            const searchMesa = await DeskModel
+               .findOne({
+                  _id: idMesaN
+               })
+               .select({
+                  codigo: 1
+               });
+            // console.log(searchMesa);
+
+            if (searchMesa) {
+               const searchSales = await SalesModel
+                  .find({
+                     _codeMesa: searchMesa.codigo
+                  })
+                  .select({
+                     _codeMesa: 1
+                  })
+                  .lean()
+                  .exec();
+               // console.log(searchSales);
+
+               if (searchSales.length === 0) {
+                  const deleteMesa = await DeskModel
+                     .deleteOne({
+                        _id: idMesaN
+                     });
+                  // console.log(deleteMesa);
+
+                  if (deleteMesa.deletedCount >= 1) {
+                     res.json({
+                        tittle: `Mesa #${numMesaN} eliminada`,
+                        description: `Se ha eliminado la <b>Mesa #${numMesaN}</b> con éxito!!!`,
+                        icon: 'error',
+                        res: 'true'
+                     });
+                  } else {
+                     res.json({
+                        tittle: `Mesa #${numMesaN} no eliminada`,
+                        description: `No se ha podido eliminar la <b>Mesa #${numMesaN}</b>!!!`,
+                        icon: 'error',
+                        res: 'false'
+                     });
+                  }
+               } else {
+                  res.json({
+                     tittle: 'Mesa no eliminada',
+                     description: 'La mesa no se puede eliminar porque tiene procesos de ventas en ejecución!!!',
+                     icon: 'error',
+                     res: 'false'
+                  });
+               }
+            } else {
+               res.json({
+                  tittle: 'Mesa no encontrada',
+                  description: 'La mesa a eliminar no se encuentra registrada!!!',
+                  icon: 'error',
+                  res: 'false'
+               });
+            }
+         } catch (e) {
+            console.log(e);
+
+            res.json({
+               tittle: 'Problemas',
+               description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+               icon: 'error',
+               res: 'error'
+            });
+         }
+      }
+   }
+};
+
 module.exports = cajeroControllers;
