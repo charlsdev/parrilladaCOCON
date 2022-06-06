@@ -877,4 +877,127 @@ cajeroControllers.deleteMesa = async (req, res) => {
    }
 };
 
+cajeroControllers.updateMesa = async (req, res) => {
+   let toast = [];
+   
+   const {
+      idMesa,
+      numMesa,
+      estado
+   } = req.body;
+
+   let idMesaN = idMesa.trim(),
+      numMesaN = numMesa.trim(),
+      estadoN = estado.trim();
+
+   if (
+      idMesaN === '' ||
+      numMesaN === '' ||
+      estadoN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      if (!validate_numeros(numMesaN)) {
+         toast.push({
+            tittle: 'Mesa incorrecta',
+            description: 'La mesa a elegir es incorrecta...',
+            icon: 'error'
+         });
+      }
+
+      if (!validate_letras(estadoN)) {
+         toast.push({
+            tittle: 'Estado incorrecto',
+            description: 'El estado de la mesa es incorrecta...',
+            icon: 'error'
+         });
+      }
+
+      if (toast.length > 0) {
+         res.json({
+            toast,
+            res: 'toast'
+         });
+      } else {
+         try {
+            const searchMesa = await DeskModel
+               .findOne({
+                  _id: idMesaN
+               })
+               .select({
+                  codigo: 1
+               });
+            // console.log(searchMesa);
+
+            if (searchMesa) {
+               const searchNumMesa = await DeskModel
+                  .findOne({
+                     numMesa: numMesaN
+                  })
+                  .select({
+                     numMesa: 1
+                  });
+               // console.log(searchNumMesa);
+
+               if (!searchNumMesa) {
+                  const updateMesa = await DeskModel
+                     .updateOne({
+                        _id: idMesaN
+                     }, {
+                        $set: {
+                           numMesa: numMesaN,
+                           estado: estadoN
+                        }
+                     });
+         
+                  if (updateMesa.modifiedCount >= 1) {
+                     res.json({
+                        tittle: `Mesa #${numMesaN} actualizada`,
+                        description: `Se ha actualizado la <b>Mesa #${numMesaN}</b> con éxito!!!`,
+                        icon: 'error',
+                        res: 'true'
+                     });
+                  } else {
+                     res.json({
+                        tittle: `Mesa #${numMesaN} no actualizada`,
+                        description: `No se ha podido actualizar la <b>Mesa #${numMesaN}</b>!!!`,
+                        icon: 'error',
+                        res: 'false'
+                     });
+                  }
+               } else {
+                  res.json({
+                     tittle: 'Mesa no actualizada',
+                     description: 'La mesa no se puede actualizar porque ya existe!!!',
+                     icon: 'error',
+                     res: 'false'
+                  });
+               }
+            } else {
+               res.json({
+                  tittle: 'Mesa no encontrada',
+                  description: 'La mesa a editar no se encuentra registrada!!!',
+                  icon: 'error',
+                  res: 'false'
+               });
+            }
+         } catch (e) {
+            console.log(e);
+
+            res.json({
+               tittle: 'Problemas',
+               description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+               icon: 'error',
+               res: 'error'
+            });
+         }
+      }
+   }
+};
+
 module.exports = cajeroControllers;

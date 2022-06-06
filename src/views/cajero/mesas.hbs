@@ -5,7 +5,6 @@
 
       <link rel="stylesheet" href="/select2/select2.min.css" type="text/css">
       <link rel="stylesheet" href="/select2/select2-bootstrap.min.css" type="text/css">
-      <link rel="stylesheet" href="/dataTables/dataTable.min.css" type="text/css"/>
 
       <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
       <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
@@ -82,8 +81,8 @@
                         <label for="" class="required">Estado</label>
                         <select class="form-control" id="estado" name="estado">
                            <option class="opt" value="" selected disabled>Seleccionar...</option>
-                           <option value="Separar">Separar</option>
-                           <option value="Reservar">Reservar</option>
+                           <option value="Reservada">Reservar</option>
+                           <option value="Ocupada">Ocupar</option>
                         </select>
                      </div>
                      
@@ -93,6 +92,30 @@
 
                <div class="modal-footer modalFooter">
                   {{!-- Footer del Modal --}}
+               </div>
+               
+            </div>
+         </div>
+      </div>
+
+      {{!-- Modal Products --}}
+      <div class="modal fade" id="modalProducts" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+         <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header modalHeader">
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Lista de Productos
+                  </h5>
+               </div>
+
+               <div class="modal-body body__modal" style="padding: 0 1rem; !important">
+                  
+                  
+               </div>
+
+               <div class="modal-footer modalFooter">
+                  <div></div>
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
                </div>
                
             </div>
@@ -130,10 +153,10 @@
 
                                  <div class="tittle_card">
                                     Mesa #${data.numMesa} <br>
-                                    {{!-- <span class="badgeCard mode badge badge-pill badge-danger">Separada</span>
+                                    {{!-- <span class="badgeCard mode badge badge-pill badge-success">Separada</span>
                                     <span class="badgeCard mode badge badge-pill badge-success">Ocupada</span> --}}
 
-                                    ${data.estado === 'Ocupada' ? '<span class="badgeCard mode badge badge-pill badge-success">Ocupada</span>' : '<span class="badgeCard mode badge badge-pill badge-danger">Separada</span>'}
+                                    ${data.estado === 'Ocupada' ? '<span class="badgeCard mode badge badge-pill badge-danger">Ocupada</span>' : '<span class="badgeCard mode badge badge-pill badge-success">Reservada</span>'}
                                  </div>
 
                                  <div class="code">
@@ -142,16 +165,16 @@
                                  
                                  <div class="btnS">
                                     <button type="button" class="btnS__all edit" onclick="editMesa('${data._id}', '${data.numMesa}', '${data.estado}');">
-                                       <i class='bx bx-edit-alt ' ></i>
+                                       <i class='bx bx-edit-alt' ></i>
                                     </button>
                                     <button type="button" class="btnS__all delete" onclick="deleteMesa('${data._id}', '${data.numMesa}');">
-                                       <i class='bx bx-trash ' ></i>
+                                       <i class='bx bx-trash' ></i>
                                     </button>
-                                    <button type="button" class="btnS__all list" onclick="openModal('${data._id}');">
-                                       <i class='bx bx-file-find ' ></i>
+                                    <button type="button" class="btnS__all list" onclick="openModalProducts();">
+                                       <i class='bx bx-file-find' ></i>
                                     </button>
                                     <button type="button" class="btnS__all pdf" onclick="openModal('${data._id}');">
-                                       <i class='bx bxs-file-pdf ' ></i>
+                                       <i class='bx bxs-file-pdf' ></i>
                                     </button>
                                  </div>
                               </section>
@@ -325,7 +348,7 @@
 
             Swal.fire({
                title: `ElIMINAR MESA #${numMesa}`,
-               html: `<p style="font-size: 1rem;">¿Deseas eliminar la <b>Mesa #${numMesa}</b>? Recuerda que para eliminar una mesa debe de no tener un proceso de compra en ejecución. Y recuerda que este proceso es irreversible.</p>`,
+               html: `<p style="font-size: 1rem;">¿Deseas eliminar la <b>Mesa #${numMesa}</b>? Recuerda que para eliminar una mesa no debe de tener un proceso de compra en ejecución. Y recuerda que este proceso es irreversible.</p>`,
                imageUrl: '/img/parilladaCOCON.png',
                imageWidth: 250,
                imageHeight: 140,
@@ -501,7 +524,7 @@
 
                      document.querySelector('.modalFooter').innerHTML = `
                            <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
-                           <button type="button" class="btn__Send" onclick="updateMesa('${idMesa}', '${numMesa}', '${estMesa}');">Actualizar</button>`;
+                           <button type="button" class="btn__Send" onclick="updateMesa('${idMesa}', '${numMesa}');">Actualizar</button>`;
                      
                      $('#numMesa').val(`${numMesa}`);
                      $('#estado').val(`${estMesa}`).trigger('change');
@@ -513,6 +536,291 @@
                   }
                }
             })
+         }
+
+         const updateMesa = (id, numero) => {
+            idMesa = $.trim(id);
+            numero = $.trim(numero);
+            numMesa = $.trim($('#numMesa').val());
+            estado = $.trim($('#estado').val());
+
+            Swal.fire({
+               title: `ACTUALIZAR MESA #${numero}`,
+               html: `<p style="font-size: 1rem;">¿Deseas actualizar la <b>Mesa #${numero}</b> a la <b>Mesa #${numMesa}</b>? Recuerda que para editar una mesa no debe de tener un proceso de compra en ejecución y peor aún ocupar una que ya ha sido reservada o esté ocupada.</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, actualizar!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value === true) {
+                  if (
+                     idMesa === '' ||
+                     numMesa === '' ||
+                     estado === ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/updateMesa`,
+                        type: 'PUT',
+                        dataType: 'json',
+                        data: {
+                           idMesa,
+                           numMesa,
+                           estado
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    allDesk();
+                                    $("#modalMesa").modal("hide");
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+
+                           toastList.forEach(toastDes => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toastDes.tittle}`,
+                                    text: `${toastDes.description}`,
+                                    icon: `${toastDes.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              })
+                           });
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
+         }
+
+         const openModalProducts = () => {
+            bloqueointerface();
+            allProducts();
+            $("#modalProducts").modal("show");
+            desbloqueointerface();
+         }
+
+         const allProducts = () => {
+            listProductsModal = $('#listProductsModal').DataTable({
+               destroy: true,
+               "ajax": {
+                  "url": '/c/allPlatos',
+                  "dataSrc":""
+               },
+               "columns": [
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row._idCategoría.nomCategoria;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.nomPlato;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return result = (row.acompañado) ? row.acompañado : '';
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.precio;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           if(row.estado === 'Stock') { 
+                              result = '<span class="mode badge badge-pill badge-success">Stock</span>' 
+                           }
+                           
+                           if(row.estado === 'Sin Stock') { 
+                              result = '<span class="mode badge badge-pill badge-danger">Sin Stock</span>' 
+                           }
+                           
+                           if(row.estado === 'Not Sale') { 
+                              result = '<span class="mode badge badge-pill badge-dark">Not Sale</span>' 
+                           }
+
+                           return result;
+                        }
+                  },
+                  
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<button type="button" class="btnPoint btn btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"> <i class='bx bx-dots-vertical ' ></i> </button> 
+                           <div class="dropdown-menu 1 menuD"> 
+                              <a class="dropdown-item" onclick="editPlato('${row._id}')"> 
+                                 <i class='bx bx-edit-alt bx-tada' ></i>
+                                 Editar 
+                              </a>
+                              <a class="dropdown-item" onclick="deletePlato('${row._id}')"> 
+                                 <i class='bx bx-trash bx-tada' ></i>
+                                 Eliminar 
+                              </a>
+                           </div>`;
+                        }
+                  },
+               ],
+               responsive: true,
+               language: idioma,
+               initComplete: function () {
+                  this.api()
+                     .columns([0, 1, 4])
+                     .every(function (i) {
+                        let arrayCat = [];
+                        let arrayTip = [];
+                        let arrayEst = [];
+
+                        var column = this;
+                        
+                        var select = $('<select class="form-control form-control-sm"><option value=""></option></select>')
+                           .appendTo($(column.footer()).empty())
+                           .on('change', function () {
+                              var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                              column.search(val ? '^' + val + '$' : '', true, false).draw();
+                           });
+
+                        column
+                           .data()
+                           .unique()
+                           .sort()
+                           .each(function (d, j) {
+                              // La D contiene el JSON de la API
+                              if (i == 0 && !arrayCat.includes(d._idCategoría.nomCategoria)) {
+                                 arrayCat.push(d._idCategoría.nomCategoria);
+                                 select.append('<option value="' + d._idCategoría.nomCategoria + '">' + d._idCategoría.nomCategoria + '</option>');
+                              }
+
+                              if (i == 1&& !arrayTip.includes(d.nomPlato)) {
+                                 arrayTip.push(d.nomPlato);
+                                 select.append('<option value="' + d.nomPlato + '">' + d.nomPlato + '</option>');
+                              }
+                              
+                              if (i == 4 && !arrayEst.includes(d.estado)) {
+                                 arrayEst.push(d.estado);
+                                 select.append('<option value="' + d.estado + '">' + d.estado + '</option>');
+                              }
+                           });
+                     });
+
+               }
+
+            });
+         }
+
+         var idioma = {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+               "sFirst":    "Primero",
+               "sLast":     "Último",
+               "sNext":     "Siguiente",
+               "sPrevious": "Anterior"
+            },
+            "oAria": {
+               "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+               "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+               "copy": "Copiar",
+               "colvis": "Visibilidad"
+
+            }
          }
 
          
