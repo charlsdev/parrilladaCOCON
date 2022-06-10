@@ -14,7 +14,8 @@ const SalesModel = require('../models/Sales');
 
 const { 
    validate_letras,
-   validate_numeros
+   validate_numeros,
+   validate_code
 } = require('../validations/validations');
 
 cajeroControllers.welcome = (req, res) => {
@@ -986,6 +987,183 @@ cajeroControllers.updateMesa = async (req, res) => {
                   res: 'false'
                });
             }
+         } catch (e) {
+            console.log(e);
+
+            res.json({
+               tittle: 'Problemas',
+               description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+               icon: 'error',
+               res: 'error'
+            });
+         }
+      }
+   }
+};
+
+cajeroControllers.allPlatosList = async (req, res) => {
+   let allPlatos;
+
+   try {
+      allPlatos = await PlatosModel
+         .find({
+            estado: 'Stock'
+         })
+         .select({
+            _idCategoría: 1,
+            nomPlato: 1,
+            acompañado: 1,
+            precio: 1,
+            estado: 1
+         })
+         .lean()
+         .populate({
+            path: '_idCategoría',
+            select: 'nomCategoria'
+         });
+         
+      // console.log(allPlatos);
+      res.send(allPlatos);
+   } catch (e) {
+      console.log(e);
+   }
+};
+
+cajeroControllers.saveItem = async (req, res) => {
+   let toast = [];
+   
+   const {
+      codeMesa,
+      IDPlato,
+      cantidadPlato
+   } = req.body;
+
+   let codeMesaN = codeMesa.trim(),
+      IDPlatoN = IDPlato.trim(),
+      cantidadPlatoN = cantidadPlato.trim();
+
+   if (
+      codeMesaN === '' ||
+      IDPlatoN === '' ||
+      cantidadPlatoN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      if (!validate_code(codeMesaN)) {
+         toast.push({
+            tittle: 'Código incorrecto',
+            description: 'El código de la mesa es incorrecto...',
+            icon: 'error'
+         });
+      }
+
+      if (!validate_numeros(cantidadPlatoN)) {
+         toast.push({
+            tittle: 'Cantidad incorrecta',
+            description: 'La cantidad ingresada es incorrecta...',
+            icon: 'error'
+         });
+      }
+
+      if (toast.length > 0) {
+         res.json({
+            toast,
+            res: 'toast'
+         });
+      } else {
+         try {
+            const updateDesk = await DeskModel
+               .findOneAndUpdate({
+                  codigo: codeMesaN
+               }, {
+                  $set: {
+                     estado: 'Ocupada',
+                  }
+               });
+            // console.log(updateDesk);
+
+            if (updateDesk) {
+               const findPlato = await PlatosModel
+                  .findById({
+                     _id: IDPlatoN,
+                     estado: 'Stock'
+                  })
+                  .select({
+                     _idCategoría: 1,
+                     nomPlato: 1,
+                     acompañado: 1,
+                     precio: 1,
+                     estado: 1
+                  })
+                  .lean()
+                  .populate({
+                     path: '_idCategoría',
+                     select: 'nomCategoria'
+                  });
+               // console.log(findPlato);
+               
+               if (findPlato) {
+                  const products = {
+                     plato: `${findPlato._idCategoría.nomCategoria}: ${findPlato.nomPlato}`,
+                     cantidad: cantidadPlatoN,
+                     precioUnit: findPlato.precio,
+                     precioPar: findPlato.precio * cantidadPlatoN,
+                  };
+                  // console.table(products);
+                  
+                  const saveItems = await SalesModel
+                     .updateOne({
+                        _codeMesa: codeMesaN
+                     }, {
+                        $push: {
+                           ventas: products
+                        }
+                     }, {
+                        upsert: true
+                     });
+                  // console.table(saveItems);
+
+                  if (
+                     saveItems.modifiedCount > 0 ||
+                     saveItems.upsertedCount > 0
+                  ) {
+                     res.json({
+                        tittle: 'Plato vendido',
+                        description: 'Se ha vendido el plato con exito!!!',
+                        icon: 'success',
+                        res: 'true'
+                     });
+                  } else {
+                     res.json({
+                        tittle: 'Item no guardado',
+                        description: 'Opss! No se ha podido vender el plato. Inténtalo mas luego.',
+                        icon: 'info',
+                        res: 'false'
+                     });
+                  }
+
+               } else {
+                  res.json({
+                     tittle: 'Plato no encontrado',
+                     description: 'Opss! El plato a vender no esta registrado o no está en stock.',
+                     icon: 'warning',
+                     res: 'false'
+                  });
+               }
+            } else {
+               res.json({
+                  tittle: 'Mesa no encontrada',
+                  description: 'Opss! EL codigo de la mesa es incorrecto o no está registrada.',
+                  icon: 'warning',
+                  res: 'false'
+               });
+            }
+
          } catch (e) {
             console.log(e);
 

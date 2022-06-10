@@ -84,7 +84,7 @@ const validate_letrasSpace = (letras) => {
 
 const validate_decimal = (decimal) => {
    var decimalRegex =
-      /^([0-9]{1,4})?(,)?([0-9]{2,2})$/;
+      /^([0-9]{1,4})?(.)?([0-9]{2,2})$/;
    if (decimalRegex.test(decimal)) {
       return true;
    }
@@ -135,6 +135,19 @@ const validate_numeros = (numero) => {
    return false;
 };
 
+const validate_code = (code) => {
+   var codeRegex =
+      /^[0-9a-zA-Z]{8}$/i;
+   if (codeRegex.test(code)) {
+      if (code.length === 8) {
+         return true;
+      } else {
+         return false;
+      }
+   }
+   return false;
+};
+
 module.exports = ({
    validate_email,
    validate_cedula,
@@ -146,5 +159,6 @@ module.exports = ({
    validate_letterYnumbers,
    validate_hora,
    validate_ID,
-   validate_numeros
+   validate_numeros,
+   validate_code
 });

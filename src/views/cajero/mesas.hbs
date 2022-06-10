@@ -98,18 +98,110 @@
          </div>
       </div>
 
-      {{!-- Modal Products --}}
-      <div class="modal fade" id="modalProducts" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      {{!-- Modal Ventas --}}
+      <div class="modal fade" id="modalVentas" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
          <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                <div class="modal-header modalHeader">
                   <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
-                     Lista de Productos
+                     Lista de Ventas
                   </h5>
                </div>
 
-               <div class="modal-body body__modal" style="padding: 0 1rem; !important">
-                  
+               <div class="modal-body body__modal" style="padding: 0 2rem; !important">
+                  <div class="row">
+                     <div class="col-md-4 mb-3">
+                        <div class="row mt-2">
+                           <div class="form-group col-md-12 mb-3">
+                              <label for="" class="required">Platos</label>
+                              <select style="width: 100%" class="form-control" id="platos" name="platos" >
+                                 {{!-- Data --}}
+                              </select>
+                           </div>
+
+                           {{!-- <div class="form-group col-md-12 mb-3">
+                              <label for="" class="required">Tipo</label>
+                              <input type="text" class="form-control" id="tipoPlato" name="tipoPlato" placeholder="Ingrese el tipo de presa: Ej. Pollo" disabled >
+                           </div> --}}
+                           
+                           <input type="hidden" class="form-control" id="IDPlato" name="IDPlato" disabled >
+
+                           <div class="form-group col-md-12 mb-3">
+                              <label for="" class="">Acompañado con</label>
+                              <textarea class="form-control textarea" name="acompañadoPlato" id="acompañadoPlato" placeholder="Escribir el nombre del plato principal..." disabled ></textarea>
+                           </div>
+
+                           <div class="form-group col-md-12 mb-3">
+                              <label for="" class="required">Precio</label>
+                              <input type="text" class="form-control" id="precioPlato" name="precioPlato" placeholder="Precio del plato: Ej. 4,50" disabled >
+                           </div>
+
+                           <div class="form-group col-md-12 mb-3">
+                              <label for="" class="required">Cantidad</label>
+                              <input type="text" class="form-control" id="cantidadPlato" name="cantidadPlato" placeholder="Cantidad plato a llevar" required >
+                           </div>
+
+                           <div class="form-group col-md-12 mb-3 modalFooter footerVentas">
+                              <div></div>
+                              <div></div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="col-md-8 mb-3 mt-4">
+                        <div class="row">
+                           <div class="col-md-12">
+                              <table class="table table-sm">
+                                 <thead>
+                                    <tr>
+                                       <th scope="col">#</th>
+                                       <th scope="col">Plato</th>
+                                       <th scope="col">Cantidad</th>
+                                       <th scope="col">P. Unitario</th>
+                                       <th scope="col">P. Parcial</th>
+                                       <th scope="col">
+                                          Acciones
+                                       </th>
+                                    </tr>
+                                 </thead>
+
+                                 <tbody class="table-group-divider addItems">
+                                    <tr>
+                                       <td colspan="6">
+                                          <div class="row">
+                                             <div class="col-md-7 mx-auto">
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                   <p style="text-align: left; font-size: 0.8em; color: #333;">No tiene productos comprados</p>
+                                                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                   </button>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">1</th>
+                                       <th >Patacones con camarón</th>
+                                       <th >Cantidad</th>
+                                       <th >P. Unitario</th>
+                                       <th >P. Parcial</th>
+                                       <th >
+                                          <div class="btnS">
+                                             <button type="button" class="btnS__all edit" onclick="editMesa('${data._id}', '${data.numMesa}', '${data.estado}');">
+                                                <i class='bx bx-edit-alt' ></i>
+                                             </button>
+                                             <button type="button" class="btnS__all delete" onclick="deleteMesa('${data._id}', '${data.numMesa}');">
+                                                <i class='bx bx-trash' ></i>
+                                             </button>
+                                          </div>
+                                       </th>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                   
                </div>
 
@@ -126,6 +218,8 @@
 
       <script>
          {{> notifications}}
+
+         let arrayPlatos = [];
 
          $(document).ready(function() {
             allDesk();
@@ -153,8 +247,6 @@
 
                                  <div class="tittle_card">
                                     Mesa #${data.numMesa} <br>
-                                    {{!-- <span class="badgeCard mode badge badge-pill badge-success">Separada</span>
-                                    <span class="badgeCard mode badge badge-pill badge-success">Ocupada</span> --}}
 
                                     ${data.estado === 'Ocupada' ? '<span class="badgeCard mode badge badge-pill badge-danger">Ocupada</span>' : '<span class="badgeCard mode badge badge-pill badge-success">Reservada</span>'}
                                  </div>
@@ -170,10 +262,10 @@
                                     <button type="button" class="btnS__all delete" onclick="deleteMesa('${data._id}', '${data.numMesa}');">
                                        <i class='bx bx-trash' ></i>
                                     </button>
-                                    <button type="button" class="btnS__all list" onclick="openModalProducts();">
+                                    <button type="button" class="btnS__all list" onclick="openModalVentas('${data.codigo}');">
                                        <i class='bx bx-file-find' ></i>
                                     </button>
-                                    <button type="button" class="btnS__all pdf" onclick="openModal('${data._id}');">
+                                    <button type="button" class="btnS__all pdf" onclick="pdf('${data._id}');">
                                        <i class='bx bxs-file-pdf' ></i>
                                     </button>
                                  </div>
@@ -676,152 +768,204 @@
             })
          }
 
-         const openModalProducts = () => {
-            bloqueointerface();
-            allProducts();
-            $("#modalProducts").modal("show");
-            desbloqueointerface();
-         }
+         const dataPlatos = () => {
+            $.ajax({
+               url: "/c/allPlatosList",
+               type: "GET",
+               datatype: "json",
+            })
+            .done(function(res) {
+               document.getElementById('platos').innerHTML = `<option></option>`;
 
-         const allProducts = () => {
-            listProductsModal = $('#listProductsModal').DataTable({
-               destroy: true,
-               "ajax": {
-                  "url": '/c/allPlatos',
-                  "dataSrc":""
-               },
-               "columns": [
-                  {"data": null,
-                        render: function ( data, type, row ) {
-                           return row._idCategoría.nomCategoria;
-                        }
-                  },
-                  {"data": null,
-                        render: function ( data, type, row ) {
-                           return row.nomPlato;
-                        }
-                  },
-                  {"data": null,
-                        render: function ( data, type, row ) {
-                           return result = (row.acompañado) ? row.acompañado : '';
-                        }
-                  },
-                  {"data": null,
-                        render: function ( data, type, row ) {
-                           return row.precio;
-                        }
-                  },
-                  {"data": null,
-                        render: function ( data, type, row ) {
-                           if(row.estado === 'Stock') { 
-                              result = '<span class="mode badge badge-pill badge-success">Stock</span>' 
-                           }
-                           
-                           if(row.estado === 'Sin Stock') { 
-                              result = '<span class="mode badge badge-pill badge-danger">Sin Stock</span>' 
-                           }
-                           
-                           if(row.estado === 'Not Sale') { 
-                              result = '<span class="mode badge badge-pill badge-dark">Not Sale</span>' 
-                           }
+               if(res.length > 0) {
+                  res.forEach(data => {
+                     document.getElementById('platos').innerHTML += `
+                           <option value="${data._id}">
+                              ${data._idCategoría.nomCategoria} +
+                              ${data.nomPlato}
+                           </option>
+                        `;
 
-                           return result;
-                        }
-                  },
-                  
-                  {"data": null,
-                        render: function ( data, type, row ) {
-                           return `<button type="button" class="btnPoint btn btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"> <i class='bx bx-dots-vertical ' ></i> </button> 
-                           <div class="dropdown-menu 1 menuD"> 
-                              <a class="dropdown-item" onclick="editPlato('${row._id}')"> 
-                                 <i class='bx bx-edit-alt bx-tada' ></i>
-                                 Editar 
-                              </a>
-                              <a class="dropdown-item" onclick="deletePlato('${row._id}')"> 
-                                 <i class='bx bx-trash bx-tada' ></i>
-                                 Eliminar 
-                              </a>
-                           </div>`;
-                        }
-                  },
-               ],
-               responsive: true,
-               language: idioma,
-               initComplete: function () {
-                  this.api()
-                     .columns([0, 1, 4])
-                     .every(function (i) {
-                        let arrayCat = [];
-                        let arrayTip = [];
-                        let arrayEst = [];
-
-                        var column = this;
-                        
-                        var select = $('<select class="form-control form-control-sm"><option value=""></option></select>')
-                           .appendTo($(column.footer()).empty())
-                           .on('change', function () {
-                              var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                              column.search(val ? '^' + val + '$' : '', true, false).draw();
-                           });
-
-                        column
-                           .data()
-                           .unique()
-                           .sort()
-                           .each(function (d, j) {
-                              // La D contiene el JSON de la API
-                              if (i == 0 && !arrayCat.includes(d._idCategoría.nomCategoria)) {
-                                 arrayCat.push(d._idCategoría.nomCategoria);
-                                 select.append('<option value="' + d._idCategoría.nomCategoria + '">' + d._idCategoría.nomCategoria + '</option>');
-                              }
-
-                              if (i == 1&& !arrayTip.includes(d.nomPlato)) {
-                                 arrayTip.push(d.nomPlato);
-                                 select.append('<option value="' + d.nomPlato + '">' + d.nomPlato + '</option>');
-                              }
-                              
-                              if (i == 4 && !arrayEst.includes(d.estado)) {
-                                 arrayEst.push(d.estado);
-                                 select.append('<option value="' + d.estado + '">' + d.estado + '</option>');
-                              }
-                           });
-                     });
-
+                     arrayPlatos.push({
+                        id: data._id,
+                        nameCategoria: data._idCategoría.nomCategoria,
+                        nomPlato: data.nomPlato,
+                        acompañado: data.acompañado,
+                        precio: data.precio,
+                     })
+                  });
                }
-
+            })
+            .fail(function() {
+               console.log("Error");
             });
          }
 
-         var idioma = {
-            "sProcessing":     "Procesando...",
-            "sLengthMenu":     "Mostrar _MENU_ registros",
-            "sZeroRecords":    "No se encontraron resultados",
-            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
-            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-            "sInfoPostFix":    "",
-            "sSearch":         "Buscar:",
-            "sUrl":            "",
-            "sInfoThousands":  ",",
-            "sLoadingRecords": "Cargando...",
-            "oPaginate": {
-               "sFirst":    "Primero",
-               "sLast":     "Último",
-               "sNext":     "Siguiente",
-               "sPrevious": "Anterior"
-            },
-            "oAria": {
-               "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-               "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-            },
-            "buttons": {
-               "copy": "Copiar",
-               "colvis": "Visibilidad"
+         const openModalVentas = (codeMesa) => {
+            bloqueointerface();
 
-            }
+            dataPlatos();
+            $('#platos').select2({
+               dropdownParent: $("#modalVentas"),
+               theme: "bootstrap",
+               placeholder: "Seleccionar...",
+               allowClear: true
+            });
+
+            $('#acompañadoPlato').val('');
+            $('#precioPlato').val('');
+            $('#cantidadPlato').val('');
+
+            document.querySelector('.footerVentas').innerHTML = `
+                  <div></div>
+                  <button type="button" class="btn__Send" onclick="venderPlato('${codeMesa}');">Vender</button>`;
+
+            $('#modalVentas').modal('show');
+            desbloqueointerface();
+         }
+         
+         $('#platos').change(function() {
+            const found = arrayPlatos.find(element => element.id === `${$(this).val()}`);
+            
+            $('#IDPlato').val(`${found.id}`);
+            $('#acompañadoPlato').val(`${found.acompañado}`);
+            $('#precioPlato').val(`${found.precio}`);
+         })
+
+         const venderPlato = (codeMesa) => {
+            codeMesa = $.trim(codeMesa);
+            IDPlato = $.trim($('#IDPlato').val());
+            cantidadPlato = $.trim($('#cantidadPlato').val());
+
+            Swal.fire({
+               title: 'NUEVA VENTA',
+               html: `<p style="font-size: 1rem;">¿Deseas añadir el item a la factura?</p>`,
+               imageUrl: '/img/parilladaCOCON.png',
+               imageWidth: 250,
+               imageHeight: 140,
+               imageAlt: 'Parrilladas COCON',
+               showCancelButton: true,
+               confirmButtonColor: '#049947',
+               cancelButtonColor: '#f34943',
+               confirmButtonText: 'Sí, vender!',
+               cancelButtonText: 'No, cancelar!',
+               reverseButtons: true,
+               focusConfirm: false,
+               focusCancel: true,
+               allowOutsideClick: false
+            }).then((result) => {
+               if (result.value == true) {
+                  if (
+                     codeMesa == '' ||
+                     IDPlato == '' ||
+                     cantidadPlato == ''
+                  ) {
+                     Swal.fire({
+                        position: 'top-end',
+                        imageUrl: '/img/parilladaCOCON.png',
+                        imageWidth: 250,
+                        imageHeight: 140,
+                        imageAlt: 'Parrilladas COCON',
+                        title: 'CAMPOS VACÍOS',
+                        html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                        showConfirmButton: false,
+                        timer: 1500
+                     })
+                  } else {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/saveItem`,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                           codeMesa,
+                           IDPlato,
+                           cantidadPlato
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    // Hola
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+
+                           toastList.forEach(toastDes => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toastDes.tittle}`,
+                                    text: `${toastDes.description}`,
+                                    icon: `${toastDes.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              })
+                           });
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               }
+            })
          }
 
-         
       </script>

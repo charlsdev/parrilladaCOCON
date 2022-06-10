@@ -15,8 +15,8 @@ const mesaSchema = new Schema ({
       type: String,
       require: true,
       maxlength: 10
-      // Separada
-      // Reservar
+      // Ocupada
+      // Reservada
    }
 }, {
    timestamps: true,

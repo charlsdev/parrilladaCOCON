@@ -3,10 +3,11 @@ const { Schema, model } = require('mongoose');
 const ventasSchema = new Schema ({
    _codeMesa: {
       type: String,
-      required: true
+      required: true,
+      maxlength: 8
    },
    ventas: [{
-      producto: {
+      plato: {
          type: String,
          require: true
       },
@@ -18,7 +19,7 @@ const ventasSchema = new Schema ({
          type: String,
          require: true
       },
-      precioTot: {
+      precioPar: {
          type: String,
          require: true
       }
