@@ -126,6 +126,96 @@ section.card .btnS .btnS__all.pdf:hover {
    color: var(--blanco);
 }
 
+.marginCua {
+   margin: 5px 10px;
+}
+
+.cabeceraItems tr th {
+   display: table-cell;
+   vertical-align: middle;
+   text-align: center;
+   font-size: .856rem;
+}
+
+.addItems tr th {
+   display: table-cell;
+   vertical-align: middle;
+   text-align: right;
+   font-weight: 500 !important;
+   font-size: .856rem;
+}
+
+.addItems tr th.center,
+.cabeceraItems tr th.center {
+   text-align: center;
+}
+
+.addItems tr th.left,
+.cabeceraItems tr th.left {
+   text-align: left;
+}
+
+.addItems tr th.rigth,
+.cabeceraItems tr th.rigth {
+   text-align: right;
+}
+
+.addItems tr th.bold,
+.cabeceraItems tr th.bold {
+   font-weight: 700 !important;
+}
+
+.btnSG button {
+   margin: 5px 5px;
+}
+
+.btnSG button i {
+   padding: .25rem .5rem;
+   text-transform: uppercase;
+   border-radius: 32px;
+   border: 0;
+   cursor: pointer;
+   font-size: 1rem;
+   font-weight: 500;
+   /* color: var(--blanco); */
+   margin-bottom: 16px 0;
+}
+
+.btnSG .btnS__all {
+   border: 1px solid var(--blanco);
+   border-radius: .5rem;
+   text-transform: uppercase;
+   background: transparent;
+   cursor: pointer;
+   transition: .5s;
+}
+
+.btnSG .btnS__all.edit {
+   border: 1px solid var(--primary);
+   cursor: pointer;
+   transition: .5s;
+   color: var(--primary);
+}
+
+.btnSG .btnS__all.edit:hover {
+   background: var(--primary);
+   transition: .5s;
+   color: var(--blanco);
+}
+
+.btnSG .btnS__all.delete {
+   border: 1px solid var(--danger);
+   cursor: pointer;
+   transition: .5s;
+   color: var(--danger);
+}
+
+.btnSG .btnS__all.delete:hover {
+   background: var(--danger);
+   transition: .5s;
+   color: var(--blanco);
+}
+
 @media screen and (max-width: 720px) {
    section.card {
       margin-left: 0;

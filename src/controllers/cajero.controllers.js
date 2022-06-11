@@ -820,24 +820,34 @@ cajeroControllers.deleteMesa = async (req, res) => {
                      _codeMesa: searchMesa.codigo
                   })
                   .select({
-                     _codeMesa: 1
+                     _codeMesa: 1,
+                     ventas: 1
                   })
                   .lean()
                   .exec();
                // console.log(searchSales);
 
-               if (searchSales.length === 0) {
+               if (searchSales.length === 0 || searchSales[0].ventas.length === 0) {
                   const deleteMesa = await DeskModel
                      .deleteOne({
                         _id: idMesaN
                      });
                   // console.log(deleteMesa);
 
-                  if (deleteMesa.deletedCount >= 1) {
+                  const deleteSale = await SalesModel
+                     .deleteOne({
+                        _codeMesa: searchMesa.codigo
+                     });
+                  // console.log(deleteSale);
+
+                  if (
+                     deleteMesa.deletedCount >= 1 ||
+                     deleteSale.deletedCount >= 1
+                  ) {
                      res.json({
                         tittle: `Mesa #${numMesaN} eliminada`,
                         description: `Se ha eliminado la <b>Mesa #${numMesaN}</b> con éxito!!!`,
-                        icon: 'error',
+                        icon: 'success',
                         res: 'true'
                      });
                   } else {
@@ -1174,6 +1184,92 @@ cajeroControllers.saveItem = async (req, res) => {
                res: 'error'
             });
          }
+      }
+   }
+};
+
+cajeroControllers.allSales = async (req, res) => {
+   const {
+      codeMesa
+   } = req.query;
+
+   let allSales;
+
+   try {
+      allSales = await SalesModel
+         .findOne({
+            _codeMesa: codeMesa
+         })
+         .select({
+            _codeMesa: 1,
+            ventas: 1
+         })
+         .lean();
+         
+      // console.table(allSales.ventas);
+      res.send(allSales);
+   } catch (e) {
+      console.log(e);
+   }
+};
+
+cajeroControllers.deleteItem = async (req, res) => {
+   const {
+      idItem,
+      idSale
+   } = req.body;
+
+   let idItemN = idItem.trim(),
+      idSaleN = idSale.trim();
+
+   if (
+      idItemN === '' ||
+      idSaleN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      try {
+         const deleteItem = await SalesModel
+            .updateOne({
+               _id: idSaleN
+            }, {
+               $pull: {
+                  ventas: {
+                     _id: idItemN
+                  }
+               }
+            });
+         console.table(deleteItem);
+
+         if (deleteItem.modifiedCount >= 1) {
+            res.json({
+               tittle: 'Item eliminado',
+               description: 'Se ha eliminado el ítem con éxito!!!',
+               icon: 'success',
+               res: 'true'
+            });
+         } else {
+            res.json({
+               tittle: 'Item no encontrada',
+               description: 'No se ha podido eliminar el ítem seleccionado!!!',
+               icon: 'error',
+               res: 'false'
+            });
+         }
+      } catch (e) {
+         console.log(e);
+
+         res.json({
+            tittle: 'Problemas',
+            description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+            icon: 'error',
+            res: 'error'
+         });
       }
    }
 };

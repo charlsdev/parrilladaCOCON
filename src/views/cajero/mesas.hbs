@@ -110,7 +110,7 @@
 
                <div class="modal-body body__modal" style="padding: 0 2rem; !important">
                   <div class="row">
-                     <div class="col-md-4 mb-3">
+                     <div class="col-md-4 mb-3 marginCua">
                         <div class="row mt-2">
                            <div class="form-group col-md-12 mb-3">
                               <label for="" class="required">Platos</label>
@@ -148,45 +148,38 @@
                         </div>
                      </div>
 
-                     <div class="col-md-8 mb-3 mt-4">
+                     <div class="col-md-7 mb-3 mt-4 mx-auto marginCua">
                         <div class="row">
-                           <div class="col-md-12">
-                              <table class="table table-sm">
-                                 <thead>
+                           <div class="table-responsive">
+                              <table class="table table-sm table-striped table-bordered">
+                                 {{!-- <caption>List of users</caption> --}}
+                                 <thead class="cabeceraItems table-success">
                                     <tr>
-                                       <th scope="col">#</th>
-                                       <th scope="col">Plato</th>
-                                       <th scope="col">Cantidad</th>
-                                       <th scope="col">P. Unitario</th>
-                                       <th scope="col">P. Parcial</th>
-                                       <th scope="col">
+                                       <th nowrap scope="col">#</th>
+                                       <th nowrap scope="col">Plato</th>
+                                       <th nowrap scope="col">Cantidad</th>
+                                       <th nowrap scope="col">P. Unitario</th>
+                                       <th nowrap scope="col">P. Parcial</th>
+                                       <th nowrap scope="col">
                                           Acciones
                                        </th>
                                     </tr>
                                  </thead>
 
-                                 <tbody class="table-group-divider addItems">
-                                    <tr>
-                                       <td colspan="6">
-                                          <div class="row">
-                                             <div class="col-md-7 mx-auto">
-                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                   <p style="text-align: left; font-size: 0.8em; color: #333;">No tiene productos comprados</p>
-                                                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                   </button>
-                                                </div>
-                                             </div>
-                                          </div>
+                                 <tbody class="table-group-divider table-group-divider addItems">
+                                    {{!-- <tr>
+                                       <td colspan="6" class="center">
+                                          No tiene productos comprados
                                        </td>
-                                    </tr>
-                                    <tr>
-                                       <th scope="row">1</th>
+                                    </tr> --}}
+                                    {{!-- <tr>
+                                       <th class="center">1</th>
                                        <th >Patacones con camarón</th>
-                                       <th >Cantidad</th>
-                                       <th >P. Unitario</th>
-                                       <th >P. Parcial</th>
-                                       <th >
-                                          <div class="btnS">
+                                       <th >3</th>
+                                       <th >2.50</th>
+                                       <th >7.50</th>
+                                       <th class="center">
+                                          <div class="btnSG">
                                              <button type="button" class="btnS__all edit" onclick="editMesa('${data._id}', '${data.numMesa}', '${data.estado}');">
                                                 <i class='bx bx-edit-alt' ></i>
                                              </button>
@@ -195,8 +188,16 @@
                                              </button>
                                           </div>
                                        </th>
-                                    </tr>
+                                    </tr> --}}
                                  </tbody>
+
+                                 <tfoot class="cabeceraItems">
+                                    <tr>
+                                       <th colspan="4" class="right">TOTAL A PAGAR</th>
+                                       <th class="pagoFin rigth">$180</th>
+                                       <th></th>
+                                    </tr>
+                                 </tfoot>
                               </table>
                            </div>
                         </div>
@@ -820,6 +821,8 @@
                   <div></div>
                   <button type="button" class="btn__Send" onclick="venderPlato('${codeMesa}');">Vender</button>`;
 
+            allSales(codeMesa);
+
             $('#modalVentas').modal('show');
             desbloqueointerface();
          }
@@ -900,7 +903,12 @@
                            }).then((result) => {
                               if (result.value == true) {
                                  if (res.res == 'true') {
-                                    // Hola
+                                    allSales(codeMesa);
+                                    
+                                    $('#IDPlato').val('');
+                                    $('#acompañadoPlato').val('');
+                                    $('#precioPlato').val('');
+                                    $('#cantidadPlato').val('');
                                  }
                               }
                            })
@@ -966,6 +974,203 @@
                   }
                }
             })
+         }
+
+         const allSales = (codeMesa) => {
+            $.ajax({
+               url: "/c/allSales",
+               type: "GET",
+               datatype: "json",
+               data: {
+                  codeMesa
+               }
+            })
+            .done(function(res) {
+               document.querySelector('.addItems').innerHTML = ``;
+
+               if(res !== '') {
+                  let num = 0, totPagar = 0;
+                  res.ventas.forEach(data => {
+                     document.querySelector('.addItems').innerHTML += `
+                           <tr>
+                              <th class="center bold">${++num}</th>
+                              <th class="left">${data.plato}</th>
+                              <th >${data.cantidad}</th>
+                              <th >${data.precioUnit}</th>
+                              <th >${data.precioPar}</th>
+                              <th class="center">
+                                 <div class="btnSG">
+                                    <button type="button" class="btnS__all edit" onclick="editMesa('${data._id}');">
+                                       <i class='bx bx-edit-alt' ></i>
+                                    </button>
+                                    <button type="button" class="btnS__all delete" onclick="deleteItem('${data._id}', '${num}', '${res._id}', '${codeMesa}');">
+                                       <i class='bx bx-trash' ></i>
+                                    </button>
+                                 </div>
+                              </th>
+                           </tr>
+                        `;
+
+                     totPagar += parseFloat(data.precioPar);
+                  });
+
+                  document.querySelector('.pagoFin').innerHTML = `
+                        ${totPagar}
+                     `;
+               } else {
+                  document.querySelector('.addItems').innerHTML = `
+                        <tr>
+                           <th colspan="6" class="center">
+                              No tiene productos comprados
+                           </th>
+                        </tr>
+                     `;
+                  
+                  document.querySelector('.pagoFin').innerHTML = `
+                        0,00
+                     `;
+               }
+            })
+            .fail(function() {
+               console.log("Error");
+            });
+         }
+
+         const deleteItem = (idItem, num, idSale, codeMesa) => {
+            idItem = $.trim(idItem);
+            num = $.trim(num);
+            idSale = $.trim(idSale);
+            codeMesa = $.trim(codeMesa);
+
+            if (
+               idItem === '' ||
+               num === '' ||
+               idSale === '' ||
+               codeMesa === ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrilladas COCON',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: `ElIMINAR ITEM #${num}`,
+                  html: `<p style="font-size: 1rem;">¿Deseas eliminar el <b>Item #${num}</b>? Este proceso es irreversible.</p>`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrilladas COCON',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: 'Sí, eliminar!',
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  focusConfirm: false,
+                  focusCancel: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value === true) {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/deleteItem`,
+                        type: 'DELETE',
+                        dataType: 'json',
+                        data: {
+                           idItem,
+                           idSale
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    allSales(codeMesa);
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+
+                           toastList.forEach(toastDes => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toastDes.tittle}`,
+                                    text: `${toastDes.description}`,
+                                    icon: `${toastDes.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              })
+                           });
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               })
+            }
          }
 
       </script>
