@@ -997,7 +997,7 @@
                               <th class="left">${data.plato}</th>
                               <th >${data.cantidad}</th>
                               <th >${data.precioUnit}</th>
-                              <th >${data.precioPar}</th>
+                              <th >${parseFloat(data.precioPar).toFixed(2)}</th>
                               <th class="center">
                                  <div class="btnSG">
                                     <button type="button" class="btnS__all edit" onclick="editMesa('${data._id}');">
@@ -1015,7 +1015,7 @@
                   });
 
                   document.querySelector('.pagoFin').innerHTML = `
-                        ${totPagar}
+                        ${parseFloat(totPagar).toFixed(2)}
                      `;
                } else {
                   document.querySelector('.addItems').innerHTML = `
