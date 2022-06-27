@@ -1119,7 +1119,7 @@ cajeroControllers.saveItem = async (req, res) => {
                
                if (findPlato) {
                   const products = {
-                     plato: `${findPlato._idCategoría.nomCategoria}: ${findPlato.nomPlato}`,
+                     plato: `${findPlato._idCategoría.nomCategoria}: ${findPlato.nomPlato} ${findPlato.acompañado !== '' ? `+ ${findPlato.acompañado}` : ''}`,
                      cantidad: cantidadPlatoN,
                      precioUnit: findPlato.precio,
                      precioPar: findPlato.precio * cantidadPlatoN,
@@ -1244,7 +1244,7 @@ cajeroControllers.deleteItem = async (req, res) => {
                   }
                }
             });
-         console.table(deleteItem);
+         // console.table(deleteItem);
 
          if (deleteItem.modifiedCount >= 1) {
             res.json({

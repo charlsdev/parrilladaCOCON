@@ -1,0 +1,27 @@
+version: '3.8'                                     # Versión del Docker-Compose
+
+services:
+   web:
+      container_name: appNode
+      restart: always
+      build: .                                     # Buscara el archivo Dockerfile
+      ports:
+         - 4000:3000
+      environment:
+         - sesionKey="CoopRude/ashy584@"
+         - MONGO_SESSION="mongodb+srv://admin:admin@localhost/sessionSave?retryWrites=true&ssl=false"
+         - mongoDB="mongodb+srv://admin:admin@localhost/parrilladacocon?retryWrites=true&ssl=false"
+      links:
+         - "mongodb"                               # Enlazarlo a un servicio (Ej.: mongodb)
+
+   mongodb:
+      container_name: mongodb                      # Nombre al contenedor
+      image: mongo                                 # Se puede indicar la version con :6.2
+      restart: always                              # Por si falla se vuelva a iniciar
+      ports:
+         - 27017:27017                             # Inicamos el puerto pExterior:pDefecto
+      environment:
+         - MONGO_INITDB_ROOT_USERNAME=admin        # Variable de entorno USER
+         - MONGO_INITDB_ROOT_PASSWORD=admin        # Variable de entorno PASSWORD
+      logging:
+         driver: none                              # Ocultar los logs en la consola

@@ -215,6 +215,38 @@
          </div>
       </div>
 
+      {{!-- Modal Edit Items --}}
+      <div class="modal fade" id="modalItems" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header modalHeader modalHEdit">
+                  {{!-- Header del Modal --}}
+               </div>
+
+               <div class="modal-body body__modal" style="padding: 0 1rem; !important">
+                  <div class="row mt-3 mb-3">
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Pedido</label>
+                        <input type="text" class="form-control" id="nomPedido" name="nomPedido" placeholder="Pedido del cliente" disabled />
+                     </div>
+
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Cantidad</label>
+                        <input type="text" class="form-control" id="cantidadPlato" name="cantidadPlato" placeholder="Ingrese la cantidad: Ej. 5" >
+                     </div>
+                     
+                  </div>
+                  
+               </div>
+
+               <div class="modal-footer modalFooter modalFEdit">
+                  {{!-- Footer del Modal --}}
+               </div>
+               
+            </div>
+         </div>
+      </div>
+
       <script src="/js/validationsFront.min.js"></script>
 
       <script>
@@ -903,12 +935,23 @@
                            }).then((result) => {
                               if (result.value == true) {
                                  if (res.res == 'true') {
+                                    bloqueointerface();
                                     allSales(codeMesa);
+
+                                    dataPlatos();
+                                    $('#platos').select2({
+                                       dropdownParent: $("#modalVentas"),
+                                       theme: "bootstrap",
+                                       placeholder: "Seleccionar...",
+                                       allowClear: true
+                                    });
                                     
                                     $('#IDPlato').val('');
                                     $('#acompañadoPlato').val('');
                                     $('#precioPlato').val('');
                                     $('#cantidadPlato').val('');
+                                    
+                                    desbloqueointerface();
                                  }
                               }
                            })
@@ -993,14 +1036,14 @@
                   res.ventas.forEach(data => {
                      document.querySelector('.addItems').innerHTML += `
                            <tr>
-                              <th class="center bold">${++num}</th>
+                              <th nowrap class="center bold">${++num}</th>
                               <th class="left">${data.plato}</th>
-                              <th >${data.cantidad}</th>
-                              <th >${data.precioUnit}</th>
-                              <th >${parseFloat(data.precioPar).toFixed(2)}</th>
-                              <th class="center">
+                              <th nowrap >${data.cantidad}</th>
+                              <th nowrap >${data.precioUnit}</th>
+                              <th nowrap >${parseFloat(data.precioPar).toFixed(2)}</th>
+                              <th nowrap class="center">
                                  <div class="btnSG">
-                                    <button type="button" class="btnS__all edit" onclick="editMesa('${data._id}');">
+                                    <button type="button" class="btnS__all edit" onclick="openModalEdit('${data._id}', '${num}', '${res._id}', '${codeMesa}');">
                                        <i class='bx bx-edit-alt' ></i>
                                     </button>
                                     <button type="button" class="btnS__all delete" onclick="deleteItem('${data._id}', '${num}', '${res._id}', '${codeMesa}');">
@@ -1172,5 +1215,23 @@
                })
             }
          }
+
+         const openModalEdit = (idItem, num, idSale, codeMesa) => {
+            document.querySelector('.modalHEdit').innerHTML = `
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Editar Item
+                  </h5>`;
+
+            document.querySelector('.modalFEdit').innerHTML = `
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn__Send" onclick="saveMesa();">Actualizar</button>`;
+            
+            $('#numMesa').val('');
+            $('#estado').val('').trigger('change');
+
+            $("#modalItems").modal("show");
+         }
+
+         
 
       </script>
