@@ -232,7 +232,7 @@
 
                      <div class="form-group col-md-12">
                         <label for="" class="required">Cantidad</label>
-                        <input type="text" class="form-control" id="cantidadPlato" name="cantidadPlato" placeholder="Ingrese la cantidad: Ej. 5" >
+                        <input type="text" class="form-control" id="cantidadEdit" name="cantidadEdit" placeholder="Ingrese la cantidad: Ej. 5" >
                      </div>
                      
                   </div>
@@ -1043,7 +1043,7 @@
                               <th nowrap >${parseFloat(data.precioPar).toFixed(2)}</th>
                               <th nowrap class="center">
                                  <div class="btnSG">
-                                    <button type="button" class="btnS__all edit" onclick="openModalEdit('${data._id}', '${num}', '${res._id}', '${codeMesa}');">
+                                    <button type="button" class="btnS__all edit" onclick="openModalEdit('${data._id}', '${data.plato}', '${res._id}', '${codeMesa}', ${data.cantidad});">
                                        <i class='bx bx-edit-alt' ></i>
                                     </button>
                                     <button type="button" class="btnS__all delete" onclick="deleteItem('${data._id}', '${num}', '${res._id}', '${codeMesa}');">
@@ -1216,7 +1216,11 @@
             }
          }
 
-         const openModalEdit = (idItem, num, idSale, codeMesa) => {
+         const openModalEdit = (idItem, plato, idSale, codeMesa, cantidad) => {
+            console.log(idSale);
+            console.log(codeMesa);
+            console.log(idItem);
+
             document.querySelector('.modalHEdit').innerHTML = `
                   <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
                      Editar Item
@@ -1224,12 +1228,154 @@
 
             document.querySelector('.modalFEdit').innerHTML = `
                   <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
-                  <button type="button" class="btn__Send" onclick="saveMesa();">Actualizar</button>`;
+                  <button type="button" class="btn__Send" onclick="updateItemCantidad('${idSale}', '${codeMesa}', '${idItem}');">Actualizar</button>`;
             
-            $('#numMesa').val('');
-            $('#estado').val('').trigger('change');
+            $('#nomPedido').val(`${plato}`);
+            $('#cantidadEdit').val(`${cantidad}`);
 
             $("#modalItems").modal("show");
+         }
+
+         const updateItemCantidad = (idSale, codeMesa, idItem) => {
+            idSale = $.trim(idSale);
+            codeMesa = $.trim(codeMesa);
+            idItem = $.trim(idItem);
+            nomPedido = $.trim($('#nomPedido').val());
+            cantidadEdit = $.trim($('#cantidadEdit').val());
+
+            if (
+               idSale === '' ||
+               codeMesa === '' ||
+               idItem === '' ||
+               nomPedido === '' ||
+               cantidadEdit === ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrilladas COCON',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: `ACTUALIZAR CANTIDAD`,
+                  html: `<p style="font-size: 1rem;">¿Deseas actualizar el ítem <b>${nomPedido}</b> con la cantidad <b>${cantidadEdit}</b>?</p>`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrilladas COCON',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: 'Sí, actualizar!',
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  focusConfirm: false,
+                  focusCancel: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value === true) {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/updateItem`,
+                        type: 'PUT',
+                        dataType: 'json',
+                        data: {
+                           idSale,
+                           codeMesa,
+                           idItem,
+                           cantidadEdit
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    allSales(codeMesa);
+                                    $("#modalItems").modal("hide");
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+
+                           toastList.forEach(toastDes => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toastDes.tittle}`,
+                                    text: `${toastDes.description}`,
+                                    icon: `${toastDes.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              })
+                           });
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               })
+            }
          }
 
          

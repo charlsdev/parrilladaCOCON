@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(methodOverride('_method'));
 app.use(session({
-   secret: process.env.sesionKey,
+   secret: process.env.SESSION_KEY,
    cookie: {
       maxAge: 60000 * 60 * 24,
       secure: false

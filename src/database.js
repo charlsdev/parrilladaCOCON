@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mongoDB = process.env.mongoDB;
+const mongoDB = process.env.MONGO_DB;
 
 mongoose.connect(mongoDB, {
    // useUnifiedTopology: true,

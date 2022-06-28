@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 3000
 
 # Ejecutar comando con parametros ["ejecutable", "comando"]
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "dev" ]

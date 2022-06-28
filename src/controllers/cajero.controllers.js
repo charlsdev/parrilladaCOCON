@@ -1274,4 +1274,160 @@ cajeroControllers.deleteItem = async (req, res) => {
    }
 };
 
+cajeroControllers.updateItem = async (req, res) => {
+   let toast = [];
+
+   const {
+      idSale,
+      codeMesa,
+      idItem,
+      cantidadEdit
+   } = req.body;
+
+   let idSaleN = idSale.trim(),
+      codeMesaN = codeMesa.trim(),
+      idItemN = idItem.trim(),
+      cantidadEditN = cantidadEdit.trim();
+
+   if (
+      idSaleN === '' ||
+      codeMesaN === '' ||
+      idItemN === '' ||
+      cantidadEditN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      if (!validate_numeros(cantidadEditN)) {
+         toast.push({
+            tittle: 'Cantidad incorrecta',
+            description: 'La cantidad es incorrecta...',
+            icon: 'error'
+         });
+      }
+
+      if (toast.length > 0) {
+         res.json({
+            toast,
+            res: 'toast'
+         });
+      } else {
+         try {
+            const verifyDeskItem = await DeskModel
+               .findOne({
+                  codigo: codeMesaN
+               })
+               .select({
+                  numMesa: 1,
+                  codigo: 1,
+                  estado: 1
+               });
+            // console.log(verifyDeskItem);
+
+            if (verifyDeskItem) {
+               const verifySale = await SalesModel
+                  .findOne({
+                     _id: idSaleN,
+                     _codeMesa: codeMesaN
+                  })
+                  .select({
+                     _codeMesa: 1,
+                     ventas: 1
+                  });
+               // console.log(verifySale);
+
+               if (verifySale) {
+                  let items;
+                  
+                  verifySale.ventas.forEach(item => {
+                     if (item._id.equals(idItemN)) items = item;
+                  });
+                  // console.log(items);
+
+                  if (items) {
+                     const updateItem = {
+                        plato: items.plato,
+                        cantidad: cantidadEdit,
+                        precioUnit: items.precioUnit,
+                        precioPar: items.precioUnit * cantidadEdit
+                     };
+                     // console.log(updateItem);
+                     
+                     /**
+                      * ? Actualizar un objeto de un array - MongoDB
+                      */
+                     const updateItemSale = await SalesModel
+                        .updateOne({
+                           _id: idSaleN,
+                           _codeMesa: codeMesaN
+                        }, {
+                           $set: {
+                              'ventas.$[elem]': updateItem
+                           }
+                        }, {
+                           arrayFilters: [{
+                              'elem._id': {
+                                 $eq: idItemN
+                              }
+                           }]
+                        });
+                     // console.log(updateItemSale);
+
+                     if (updateItemSale.modifiedCount >= 1) {
+                        res.json({
+                           tittle: 'Item actualizado',
+                           description: `Se ha actualizado la cantidad del plato <b>${updateItem.plato}</b> a <b>${updateItem.cantidad}</b> con éxito!!!`,
+                           icon: 'true',
+                           res: 'true'
+                        });
+                     } else {
+                        res.json({
+                           tittle: 'Item no actualizado',
+                           description: `No se ha podido actualizar la cantidad del plato <b>${updateItem.plato}</b>!!!`,
+                           icon: 'error',
+                           res: 'false'
+                        });
+                     }
+                  } else {
+                     res.json({
+                        tittle: 'Item no encontrado',
+                        description: 'Opss! El item a modificar no ha sido encontrado!',
+                        icon: 'error',
+                        res: 'false'
+                     });
+                  }
+               } else {
+                  res.json({
+                     tittle: 'Venta no encontrada',
+                     description: 'Opss! La venta no se encuentra registrada!',
+                     icon: 'error',
+                     res: 'false'
+                  });
+               }
+            } else {
+               res.json({
+                  tittle: 'Mesa no encontrada',
+                  description: 'Opss! La mesa no se encuentra registrada!',
+                  icon: 'error',
+                  res: 'false'
+               });
+            }
+         } catch (e) {
+            console.log(e);
+
+            res.json({
+               tittle: 'Problemas',
+               description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+               icon: 'error',
+               res: 'error'
+            });
+         }
+      }
+   }
+};
+
 module.exports = cajeroControllers;
