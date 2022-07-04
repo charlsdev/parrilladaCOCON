@@ -30,6 +30,8 @@ const {
    deleteItem,
    updateItem,
 
+   generateInvoce,
+
 } = require('../controllers/cajero.controllers');
 
 const {
@@ -64,5 +66,7 @@ router.post('/saveItem', isAuthenticated, isAuthenticatedCajero, saveItem);
 router.get('/allSales', isAuthenticated, isAuthenticatedCajero, allSales);
 router.delete('/deleteItem', isAuthenticated, isAuthenticatedCajero, deleteItem);
 router.put('/updateItem', isAuthenticated, isAuthenticatedCajero, updateItem);
+
+router.get('/generateInvoce', isAuthenticated, isAuthenticatedCajero, generateInvoce);
 
 module.exports = router;

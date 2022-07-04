@@ -1,9 +1,16 @@
 const { Schema, model } = require('mongoose');
 
 const facturaSchema = new Schema ({
+   _idVendedor: {
+      type: Schema.Types.ObjectId,
+      ref: 'Usuarios'
+   },
+   _idSales: {
+      type: Schema.Types.ObjectId,
+      ref: 'Ventas'
+   },
    cedula: {
       type: String,
-      required: true,
       maxlength: 10
    },
    nomCliente: {
@@ -14,9 +21,8 @@ const facturaSchema = new Schema ({
       type: String,
       require: true
    },
-   _idSales: {
-      type: Schema.Types.ObjectId,
-      ref: 'Ventas'
+   email: {
+      type: String,
    },
    subtotal: {
       type: String,
@@ -29,10 +35,6 @@ const facturaSchema = new Schema ({
    total: {
       type: String,
       require: true
-   },
-   _idVendedor: {
-      type: Schema.Types.ObjectId,
-      ref: 'Usuarios'
    },
 }, {
    timestamps: true,

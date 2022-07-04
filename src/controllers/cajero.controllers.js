@@ -1430,4 +1430,125 @@ cajeroControllers.updateItem = async (req, res) => {
    }
 };
 
+cajeroControllers.generateInvoce = async (req, res) => {
+   let toast = [];
+
+   const {
+      id,
+      codeMesa,
+      numMesa
+   } = req.query;
+
+   let IDN = id.trim(),
+      codeMesaN = codeMesa.trim(),
+      numMesaN = numMesa.trim();
+
+   if (
+      IDN === '' ||
+      codeMesaN === '' ||
+      numMesaN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {   
+      if (!validate_numeros(numMesaN)) {
+         toast.push({
+            tittle: 'Mesa incorrecta',
+            description: 'El número de mesa es incorrecta...',
+            icon: 'error'
+         });
+      }
+   
+      if (toast.length > 0) {
+         res.json({
+            toast,
+            res: 'toast'
+         });
+      } else {
+         try {
+            const searchDesk = await DeskModel
+               .findOne({
+                  _id: IDN,
+                  numMesa: numMesaN,
+                  codigo: codeMesaN
+               })
+               .select({
+                  numMesa: 1,
+                  codigo: 1,
+                  estado: 1
+               });
+
+            if (searchDesk) {
+               const searchSales = await SalesModel
+                  .find({
+                     _codeMesa: searchDesk.codigo
+                  })
+                  .select({
+                     _codeMesa: 1,
+                     ventas: 1
+                  })
+                  .lean()
+                  .exec();
+               // console.log(searchSales);
+
+               if (searchSales.length === 0) {
+                  res.json({
+                     tittle: 'Factura no generada',
+                     description: 'No se ha podido generar la factura porque no se ha hecho ninguna compra!!!',
+                     icon: 'warning',
+                     res: 'false'
+                  });
+               } else {
+                  if (searchSales[0].ventas.length === 0) {
+                     res.json({
+                        tittle: 'Factura no generada',
+                        description: 'No se ha podido generar la factura porque no se ha hecho ninguna compra!!!',
+                        icon: 'warning',
+                        res: 'false'
+                     });
+                  } else {
+                     var total = 0, 
+                        iva, 
+                        precioPar, 
+                        items = searchSales[0].ventas;
+                     console.log(items);
+                     
+                     items.forEach(item => {
+                        total += +item.precioPar;
+                     });
+                     
+                     iva = total.toFixed(2) * 0.12;
+                     precioPar = total.toFixed(2) - iva.toFixed(2);
+
+                     console.log(iva);
+                     console.log(precioPar.toFixed(2));
+                     console.log(total);
+                  }
+               }
+            } else {
+               res.json({
+                  tittle: 'Mesa no encontrada',
+                  description: 'La mesa no existe o no esta registrada!!!',
+                  icon: 'error',
+                  res: 'false'
+               });
+            }
+         } catch (e) {
+            console.log(e);
+
+            res.json({
+               tittle: 'Problemas',
+               description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+               icon: 'error',
+               res: 'error'
+            });
+         }
+      }
+   }
+};
+
 module.exports = cajeroControllers;

@@ -298,7 +298,7 @@
                                     <button type="button" class="btnS__all list" onclick="openModalVentas('${data.codigo}');">
                                        <i class='bx bx-file-find' ></i>
                                     </button>
-                                    <button type="button" class="btnS__all pdf" onclick="pdf('${data._id}');">
+                                    <button type="button" class="btnS__all pdf" onclick="generateInvoice('${data._id}', '${data.codigo}', '${data.numMesa}');">
                                        <i class='bx bxs-file-pdf' ></i>
                                     </button>
                                  </div>
@@ -600,7 +600,7 @@
             })
          }
 
-         const editMesa = (id, numMesa, estMesa) => {            
+         const editMesa = (id, numMesa, estMesa) => {
             idMesa = $.trim(id);
             numMesa = $.trim(numMesa);
             estMesa = $.trim(estMesa);
@@ -1311,6 +1311,145 @@
                                  if (res.res == 'true') {
                                     allSales(codeMesa);
                                     $("#modalItems").modal("hide");
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+
+                           toastList.forEach(toastDes => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toastDes.tittle}`,
+                                    text: `${toastDes.description}`,
+                                    icon: `${toastDes.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              })
+                           });
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               })
+            }
+         }
+
+         const generateInvoice = (id, codeMesa, numMesa) => {
+            id = $.trim(id);
+            codeMesa = $.trim(codeMesa);
+            numMesa = $.trim(numMesa);
+
+            if (
+               id === '' ||
+               codeMesa === '' ||
+               numMesa === ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrilladas COCON',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: 'GENERAR FACTURA',
+                  html: `<p style="font-size: 1rem;">¿Deseas generar la factura de la <b>Mesa #${numMesa}</b>? Al aceptar das consentimento a terminar la venta.</p>`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrilladas COCON',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: 'Sí, generar!',
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  focusConfirm: false,
+                  focusCancel: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value == true) {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/generateInvoce`,
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                           id,
+                           codeMesa,
+                           numMesa
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    bloqueointerface();
+                                    allDesk();
+                                    
+                                    desbloqueointerface();
                                  }
                               }
                            })
