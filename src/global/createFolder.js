@@ -13,6 +13,10 @@ multer({
    dest: path.join(__dirname, '../public/docs')
 });
 
+multer({
+   dest: path.join(__dirname, '../docs')
+});
+
 module.exports = {
    tempFolder
 };

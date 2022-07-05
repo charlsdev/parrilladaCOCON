@@ -247,6 +247,43 @@
          </div>
       </div>
 
+      {{!-- Modal Invoce --}}
+      <div class="modal fade" id="modalInvoce" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header modalHeader modalHI">
+                  {{!-- Header del Modal --}}
+               </div>
+
+               <div class="modal-body body__modal" style="padding: 0 1rem; !important">
+                  <div class="row mt-3 mb-3">
+                     <div class="form-group col-md-12">
+                        <label for="" class="required"># de Cédula</label>
+                        <input type="text" class="form-control" id="cedulaCliente" name="cedulaCliente" placeholder="Ingrese la cédula del cliente" >
+                     </div>
+
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Nombres Completos</label>
+                        <input type="text" class="form-control" id="nameCliente" name="nameCliente" placeholder="Ingrese la cédula del cliente" >
+                     </div>
+
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="emailCliente" name="emailCliente" placeholder="Ingrese la cédula del cliente" >
+                     </div>
+                     
+                  </div>
+                  
+               </div>
+
+               <div class="modal-footer modalFooter modalFI">
+                  {{!-- Footer del Modal --}}
+               </div>
+               
+            </div>
+         </div>
+      </div>
+
       <script src="/js/validationsFront.min.js"></script>
 
       <script>
@@ -298,7 +335,7 @@
                                     <button type="button" class="btnS__all list" onclick="openModalVentas('${data.codigo}');">
                                        <i class='bx bx-file-find' ></i>
                                     </button>
-                                    <button type="button" class="btnS__all pdf" onclick="generateInvoice('${data._id}', '${data.codigo}', '${data.numMesa}');">
+                                    <button type="button" class="btnS__all pdf" onclick="modalInvoce('${data._id}', '${data.codigo}', '${data.numMesa}');">
                                        <i class='bx bxs-file-pdf' ></i>
                                     </button>
                                  </div>
@@ -1378,15 +1415,38 @@
             }
          }
 
+         const modalInvoce = (id, codeMesa, numMesa) => {
+            document.querySelector('.modalHI').innerHTML = `
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Generar Factura
+                  </h5>`;
+
+            document.querySelector('.modalFI').innerHTML = `
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn__Send" onclick="generateInvoice('${id}', '${codeMesa}', '${numMesa}');">Generar</button>`;
+            
+            $('#cedulaCliente').val('');
+            $('#nameCliente').val('');
+            $('#emailCliente').val('');
+
+            $("#modalInvoce").modal("show");
+         }
+
          const generateInvoice = (id, codeMesa, numMesa) => {
             id = $.trim(id);
             codeMesa = $.trim(codeMesa);
             numMesa = $.trim(numMesa);
+            cedulaCliente = $.trim($('#cedulaCliente').val());
+            nameCliente = $.trim($('#nameCliente').val());
+            emailCliente = $.trim($('#emailCliente').val());
 
             if (
                id === '' ||
                codeMesa === '' ||
-               numMesa === ''
+               numMesa === '' ||
+               cedulaCliente === '' ||
+               nameCliente === '' ||
+               emailCliente === ''
             ) {
                Swal.fire({
                   position: 'top-end',
@@ -1427,7 +1487,10 @@
                         data: {
                            id,
                            codeMesa,
-                           numMesa
+                           numMesa,
+                           cedulaCliente,
+                           nameCliente,
+                           emailCliente,
                         }
                      })
                      .done(function(res) {

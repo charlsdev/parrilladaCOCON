@@ -6,16 +6,26 @@ const {
    customAlphabet
 } = require('nanoid');
 const nanoidFormat = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8);
+const path = require('path');
+const fse = require('fs-extra');
+const nodemailer = require('nodemailer');
+const pdf = require('pdf-creator-node');
+const configPDF = require('../helpers/optionsPDF');
+const moment = require('moment');
+moment.locale('es');
 
 const PlatosModel = require('../models/Platos');
 const CategoryModel = require('../models/Categoria');
 const DeskModel = require('../models/Desk');
 const SalesModel = require('../models/Sales');
+const InvoiceModel = require('../models/Invoice');
 
 const { 
    validate_letras,
    validate_numeros,
-   validate_code
+   validate_code,
+   validate_cedula,
+   validate_letrasSpace
 } = require('../validations/validations');
 
 cajeroControllers.welcome = (req, res) => {
@@ -1436,17 +1446,26 @@ cajeroControllers.generateInvoce = async (req, res) => {
    const {
       id,
       codeMesa,
-      numMesa
+      numMesa,
+      cedulaCliente,
+      nameCliente,
+      emailCliente
    } = req.query;
 
    let IDN = id.trim(),
       codeMesaN = codeMesa.trim(),
-      numMesaN = numMesa.trim();
+      numMesaN = numMesa.trim(),
+      cedulaClienteN = cedulaCliente.trim(),
+      nameClienteN = nameCliente.trim(),
+      emailClienteN = emailCliente.trim();
 
    if (
       IDN === '' ||
       codeMesaN === '' ||
-      numMesaN === ''
+      numMesaN === '' ||
+      cedulaClienteN === '' ||
+      nameClienteN === '' ||
+      emailClienteN === ''
    ) {
       res.json({
          tittle: 'Campos Vacíos',
@@ -1455,6 +1474,22 @@ cajeroControllers.generateInvoce = async (req, res) => {
          res: 'false'
       });
    } else {   
+      if (!validate_cedula(cedulaClienteN)) {
+         toast.push({
+            tittle: 'Cédula incorrecta',
+            description: 'La cédula que ingresó es incorrecta...',
+            icon: 'error'
+         });
+      }
+
+      if (!validate_letrasSpace(nameClienteN)) {
+         toast.push({
+            tittle: 'Formato incorrecto',
+            description: 'El campo nombre no cumpl el formato requerido...',
+            icon: 'error'
+         });
+      }
+
       if (!validate_numeros(numMesaN)) {
          toast.push({
             tittle: 'Mesa incorrecta',
@@ -1514,8 +1549,8 @@ cajeroControllers.generateInvoce = async (req, res) => {
                      var total = 0, 
                         iva, 
                         precioPar, 
-                        items = searchSales[0].ventas;
-                     console.log(items);
+                        items = searchSales[0].ventas,
+                        products = [];
                      
                      items.forEach(item => {
                         total += +item.precioPar;
@@ -1524,9 +1559,82 @@ cajeroControllers.generateInvoce = async (req, res) => {
                      iva = total.toFixed(2) * 0.12;
                      precioPar = total.toFixed(2) - iva.toFixed(2);
 
-                     console.log(iva);
-                     console.log(precioPar.toFixed(2));
-                     console.log(total);
+                     const newInvoce = new InvoiceModel({
+                        _idVendedor: req.user._id,
+                        _codeMesa: searchDesk.codigo,
+                        cedula: cedulaClienteN,
+                        nomCliente: nameClienteN,
+                        fecha: moment().format('ll'),
+                        email: emailClienteN,
+                        subtotal: precioPar,
+                        iva: iva,
+                        total: total,
+                     });
+
+                     const saveInvoce = await newInvoce.save();
+
+                     if (saveInvoce) {
+                        // await DeskModel
+                        //    .deleteOne({
+                        //       codigo: searchDesk.codigo
+                        //    });
+
+                        /**
+                         * ? Generate PDF
+                         */
+                        items.forEach(item => {
+                           products.push(
+                              {
+                                 plato: item.plato,
+                                 cantidad: item.cantidad,
+                                 precioUnit: parseFloat(item.precioUnit).toFixed(2),
+                                 precioPar: parseFloat(item.precioPar).toFixed(2)
+                              }
+                           );
+                        });
+                        
+                        const allData = {
+                           _codeMesa: searchDesk.codigo,
+                           cedula: cedulaClienteN,
+                           nomCliente: nameClienteN,
+                           fecha: moment().format('ll'),
+                           email: emailClienteN,
+                           items: products,
+                           subtotal: precioPar.toFixed(2),
+                           iva: iva.toFixed(2),
+                           total: total.toFixed(2),
+                        };
+                        console.log(allData);
+
+                        const html = fse.readFileSync(path.join(__dirname, '../template/docs/factura.html'), 'utf-8');
+                        const filename = 'ParrilladasCOCON - ' + moment().format('MMM D, YYYY').replace(/\b\w/g, l => l.toUpperCase()) + ' - ' + searchDesk.codigo + '.pdf';
+
+                        const document = {
+                           html: html,
+                           data: {
+                              allData
+                           },
+                           path: path.join(__dirname, '../docs/') + filename
+                        };
+                        try {
+                           await pdf.create(document, configPDF);
+                           var data = path.join(__dirname, '../docs/' + filename);
+                           // res.download(data, filename);
+
+                           console.log(data);
+                           console.log(filename);
+                        } catch (e) {
+                           console.log(e);
+                        }
+                        
+                     } else {
+                        res.json({
+                           tittle: 'Problemas',
+                           description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+                           icon: 'error',
+                           res: 'error'
+                        });
+                     }
                   }
                }
             } else {

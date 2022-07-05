@@ -5,9 +5,10 @@ const facturaSchema = new Schema ({
       type: Schema.Types.ObjectId,
       ref: 'Usuarios'
    },
-   _idSales: {
-      type: Schema.Types.ObjectId,
-      ref: 'Ventas'
+   _codeMesa: {
+      type: String,
+      required: true,
+      maxlength: 8
    },
    cedula: {
       type: String,

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Parrilladas COCON</title>
+
+      <style>
+         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+
+         body {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif !important;
+         }
+         table {
+            width: 100%;
+         }
+         .containerTemplate {
+            max-width: 100%;
+         }
+         :is(.imgIZ, .waveDER) {
+            position: fixed;
+            bottom: 0;
+            height: 87%;
+            z-index: -1;
+            opacity: 0.5;
+         }
+         .encabezado {
+            margin: 10px 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px double #2c3e50;
+            padding: 5px 15px;
+            border-radius: .25rem;
+            color: #000;
+            background: #92da92;
+         }
+         .encabezado img {
+            width: 45px;
+         }
+         .encabezado .datosUniversidad {
+            display: grid;
+            text-align: center;
+         }
+         .encabezado .datosUniversidad .titulo {
+            margin: 5px;
+            font-size: 16px;
+            font-weight: 600;
+         }
+
+         .linearsTR {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px 20px;
+         }         
+         .titulo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px;
+            font-size: 19px;
+            font-weight: 600;
+            text-transform: uppercase;
+         }
+         .linearsTR .spaceBlack {
+            width: 5%;
+         }
+         .linearsTR .blakcText {
+            font-weight: 900 !important;
+            text-transform: uppercase;
+            font-size: 13px;
+            width: 10%;
+            text-align: left;
+         }
+         .linearsTR .textInfo {
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 13px;
+            display: flex;
+            text-align: left;
+            width: 50%;
+         }
+         .customersFooter {
+            width: 100%;
+            margin: 25px 0;
+            border-collapse: collapse;
+            padding: 58px;
+         }
+
+
+         .datesInitials {
+            margin: 5px 25px;
+            padding-left: 50px;
+         }
+         .datesInitials .blakcText {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            width: 190px;
+         }
+         .datesInitials .textInfo {
+            font-size: 13px;
+            text-transform: uppercase;
+            padding: 1px 15px;
+         }
+         .contenido {
+            width: 100%;
+            margin: 10px 25px;
+         }
+         
+         .customers {
+            margin: 10px 10px;
+            border-collapse: collapse;
+            max-width: -webkit-fill-available;
+         }
+         .customers .number {
+            font-weight: 600;
+            text-align: center;
+         }
+         .customers .headTable th{
+            text-align: center;
+            background: #ffbe81;
+         }
+         .customers .footTable th{
+            text-align: center;
+            background: #ffbe81;
+         }
+         .customers th {
+            text-transform: uppercase;
+         }
+         .customers .alingD {
+            text-align: right !important;
+         }
+         .customers .alingL {
+            text-align: left !important;
+         }
+         .customers td, 
+         .customers th {
+            border: 1px double #75787b;
+            padding: 8px;
+            font-size: 12px;
+         }
+         .customers th {
+            padding-top: 9px;
+            padding-bottom: 9px;
+            text-align: left;
+         }
+         footer {
+            padding: 15px 10px;
+            width: 100%;
+         }
+         .lowerCase{
+            text-transform: lowercase;
+         }
+      
+      </style>
+   </head>
+
+   <body>
+      <table>
+         <tbody>
+            <tr class="encabezado">
+               <th class="datosUniversidad">
+                  <div class="titulo"><b>NOTA DE VENTA</b></div>
+               </th>
+               <th>
+                  <div class="number">
+                     <b>{{allData._codeMesa}}</b>
+                  </div>
+               </th>
+            </tr>
+         </tbody>            
+      </table>
+
+      <table>
+         <tbody>
+            <tr class="linearsTR">
+               <th class="spaceBlack"></th>
+               <th class="blakcText">
+                  <b>Cédula : </b>
+               </th>
+               <th class="textInfo">
+                  {{allData.cedula}}
+               </th>
+            </tr>
+            <tr class="linearsTR">
+               <th class="spaceBlack"></th>
+               <th class="blakcText">
+                  <b>Cliente :</b> 
+               </th>
+               <th class="textInfo">
+                  {{allData.nomCliente}}
+               </th>
+            </tr>
+            <tr class="linearsTR">
+               <th class="spaceBlack"></th>
+               <th class="blakcText">
+                  <b>Fecha :</b> 
+               </th>
+               <th class="textInfo lowerCase">
+                  {{allData.fecha}}
+               </th>
+            </tr>
+            <tr class="linearsTR">
+               <th class="spaceBlack"></th>
+               <th class="blakcText">
+                  <b>Email :</b> 
+               </th>
+               <th class="textInfo lowerCase">
+                  {{allData.email}}
+               </th>
+            </tr>
+         </tbody>            
+      </table>
+
+      <table class="customers">
+         <tr class="headTable">
+            <th><b>Cant.</b></th>
+            <th><b>Detalle</b></th>
+            <th><b>P. Unitario</b></th>
+            <th><b>V. Total</b></th>
+         </tr>
+
+         {{#each allData.items}}
+            <tr>
+               <td class="number">{{cantidad}}</td>
+               <td>{{plato}}</td>
+               <td class="alingD">{{precioUnit}}</td>
+               <td class="alingD">{{precioPar}}</td>
+            </tr>
+         {{/each}}
+
+         <tr class="footTable">
+            <th colspan="2"></th>
+            <th><b>Iva</b></th>
+            <th class="alingD">{{allData.subtotal}}</th>
+         </tr>
+
+         <tr class="footTable">
+            <th colspan="2"></th>
+            <th><b>Subtotal</b></th>
+            <th class="alingD">{{allData.iva}}</th>
+         </tr>
+
+         <tr class="footTable">
+            <th colspan="2"></th>
+            <th><b>Total</b></th>
+            <th class="alingD">{{allData.total}}</th>
+         </tr>
+
+      </table>
+   </body>
+</html>
