@@ -1,0 +1,162 @@
+      <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css">
+      <link rel="stylesheet" href="/boxicons/boxicons.min.css" type="text/css">
+      <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
+      <link rel="stylesheet" href="/toastJS/jquery.toast.min.css" type="text/css">
+
+      <link rel="stylesheet" href="/dataTables/dataTable.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/datatables.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/theme/dataTables.bootstrap4.min.css" type="text/css"/>
+
+      <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/products.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/modal.min.css" type="text/css">
+
+   </head>
+
+	<body>
+      {{> loader}}
+      {{> navbarC}}
+
+      <div class="contentView">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12 text-center">
+                  <div class="lettersTittle">
+                     <span>F</span>
+                     <span>A</span>
+                     <span>C</span>
+                     <span>T</span>
+                     <span>U</span>
+                     <span>R</span>
+                     <span>A</span>
+                     <span>S</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-12">
+                  <table id="listInvoice" class="table is-striped table-striped table-bordered table-sm">
+                     <thead class="table-danger">
+                        <tr>
+                           <th nowrap scope="col">Código</th>
+                           <th nowrap scope="col">Cédula</th>
+                           <th nowrap scope="col">Cliente</th>
+                           <th nowrap scope="col">Fecha</th>
+                           <th nowrap scope="col">Vendedor</th>
+                           <th nowrap scope="col">Total</th>
+                           <th nowrap scope="col">Factura</th>
+                        </tr>
+                     </thead>
+   
+                  </table>
+               </div>
+            </div>
+
+         </div>
+      </div>
+
+      <br>
+
+      {{> drapArea}}
+
+      <script src="/JQuery/jquery.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/bootstrap/js/bootstrap.min.js"></script>
+      <script src="/sweetalert2/sweetalert2.min.js"></script>
+      <script src="/imaskJS/imask.min.js"></script>
+      <script src="/toastJS/jquery.toast.min.js"></script>
+
+      <script src="/dataTables/jquery.dataTables.min.js"></script>
+      <script src="/dataTables/datatables.min.js"></script>
+      <script src="/dataTables/theme/dataTables.bootstrap4.min.js"></script>
+
+      <script src="/js/navbar.min.js"></script>
+
+      <script>
+         {{> notifications}}
+
+         $(document).ready(function() {
+            listInvoice = $('#listInvoice').DataTable({
+               destroy: true,
+               "ajax": {
+                  "url": '/c/allInvoices',
+                  "dataSrc":""
+               },
+               "columns": [
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row._codeMesa;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.cedula;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.nomCliente;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.fecha;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `${row._idVendedor.nombres} ${row._idVendedor.apellidos}`;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return parseFloat(row.total).toFixed(2);
+                        }
+                  },                 
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<button type="button" class="btnBootstrap btn btn-outline-success" onclick="editCategory('${row._id}')">
+                              <i class='bx bxs-file-pdf'></i>
+                              Generar
+                           </button>`;
+                        }
+                  },
+               ],
+               responsive: true,
+               language: idioma,
+            });
+         });
+
+         var idioma = {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+               "sFirst":    "Primero",
+               "sLast":     "Último",
+               "sNext":     "Siguiente",
+               "sPrevious": "Anterior"
+            },
+            "oAria": {
+               "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+               "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+               "copy": "Copiar",
+               "colvis": "Visibilidad"
+
+            }
+         }
+
+      </script>

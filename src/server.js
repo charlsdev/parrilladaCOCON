@@ -74,6 +74,7 @@ app.use('/c', require('./routes/cajero.routes'));
 
 //Archivos estáticos
 app.use(express.static(path.join(__dirname + '/public')));
+app.use(express.static(path.join(__dirname + '/docs')));
 
 // Error 404 - Not Found
 app.get('*', (req, res) => {

@@ -31,6 +31,10 @@ const {
    updateItem,
 
    generateInvoce,
+   viewPDF,
+
+   renderFacturas,
+   getAllInvoice
 
 } = require('../controllers/cajero.controllers');
 
@@ -68,5 +72,9 @@ router.delete('/deleteItem', isAuthenticated, isAuthenticatedCajero, deleteItem)
 router.put('/updateItem', isAuthenticated, isAuthenticatedCajero, updateItem);
 
 router.get('/generateInvoce', isAuthenticated, isAuthenticatedCajero, generateInvoce);
+router.get('/pdf/:file', isAuthenticated, isAuthenticatedCajero, viewPDF);
+
+router.get('/invoice', isAuthenticated, isAuthenticatedCajero, renderFacturas);
+router.get('/allInvoices', isAuthenticated, isAuthenticatedCajero, getAllInvoice);
 
 module.exports = router;

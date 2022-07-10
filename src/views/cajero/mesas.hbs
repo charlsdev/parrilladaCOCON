@@ -167,28 +167,6 @@
                                  </thead>
 
                                  <tbody class="table-group-divider table-group-divider addItems">
-                                    {{!-- <tr>
-                                       <td colspan="6" class="center">
-                                          No tiene productos comprados
-                                       </td>
-                                    </tr> --}}
-                                    {{!-- <tr>
-                                       <th class="center">1</th>
-                                       <th >Patacones con camarón</th>
-                                       <th >3</th>
-                                       <th >2.50</th>
-                                       <th >7.50</th>
-                                       <th class="center">
-                                          <div class="btnSG">
-                                             <button type="button" class="btnS__all edit" onclick="editMesa('${data._id}', '${data.numMesa}', '${data.estado}');">
-                                                <i class='bx bx-edit-alt' ></i>
-                                             </button>
-                                             <button type="button" class="btnS__all delete" onclick="deleteMesa('${data._id}', '${data.numMesa}');">
-                                                <i class='bx bx-trash' ></i>
-                                             </button>
-                                          </div>
-                                       </th>
-                                    </tr> --}}
                                  </tbody>
 
                                  <tfoot class="cabeceraItems">
@@ -381,7 +359,7 @@
             estado = $.trim($('#estado').val());
             
             Swal.fire({
-               title: 'SEPARAR o AGENDAR MESA',
+               title: 'SEPARAR O AGENDAR MESA',
                html: `<p style="font-size: 1rem;">¿Deseas generar y guardar la <b>Mesa #${numMesa}</b>?</p>`,
                imageUrl: '/img/parilladaCOCON.png',
                imageWidth: 250,
@@ -1511,7 +1489,8 @@
                                  if (res.res == 'true') {
                                     bloqueointerface();
                                     allDesk();
-                                    
+                                    window.open(`/c/pdf/${res.filename}`,"ventana1","height=750,width=1250,location=no,toolbar=no,menubar=no,scrollbars=no");
+                                    $("#modalInvoce").modal("hide");
                                     desbloqueointerface();
                                  }
                               }
@@ -1579,7 +1558,5 @@
                })
             }
          }
-
          
-
       </script>

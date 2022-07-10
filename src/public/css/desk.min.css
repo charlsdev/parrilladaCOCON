@@ -216,6 +216,12 @@ section.card .btnS .btnS__all.pdf:hover {
    color: var(--blanco);
 }
 
+#canvas_container {
+   background: #333;
+   text-align: center;
+   border: solid 3px;
+}
+
 @media screen and (max-width: 720px) {
    section.card {
       margin-left: 0;

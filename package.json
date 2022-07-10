@@ -5,7 +5,8 @@
    "main": "index.js",
    "scripts": {
       "start": "node src/index.js",
-      "dev": "nodemon src/index.js --config nodemon.json"
+      "dev": "nodemon src/index.js --config nodemon.json",
+      "docker": "docker-compose build"
    },
    "author": "CharlsDEV",
    "license": "ISC",

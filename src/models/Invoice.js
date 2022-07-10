@@ -20,7 +20,8 @@ const facturaSchema = new Schema ({
    },
    fecha: {
       type: String,
-      require: true
+      require: true,
+      maxlength: 10
    },
    email: {
       type: String,

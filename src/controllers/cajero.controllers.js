@@ -1564,7 +1564,7 @@ cajeroControllers.generateInvoce = async (req, res) => {
                         _codeMesa: searchDesk.codigo,
                         cedula: cedulaClienteN,
                         nomCliente: nameClienteN,
-                        fecha: moment().format('ll'),
+                        fecha: moment().format('L'),
                         email: emailClienteN,
                         subtotal: precioPar,
                         iva: iva,
@@ -1574,10 +1574,10 @@ cajeroControllers.generateInvoce = async (req, res) => {
                      const saveInvoce = await newInvoce.save();
 
                      if (saveInvoce) {
-                        // await DeskModel
-                        //    .deleteOne({
-                        //       codigo: searchDesk.codigo
-                        //    });
+                        await DeskModel
+                           .deleteOne({
+                              codigo: searchDesk.codigo
+                           });
 
                         /**
                          * ? Generate PDF
@@ -1604,7 +1604,7 @@ cajeroControllers.generateInvoce = async (req, res) => {
                            iva: iva.toFixed(2),
                            total: total.toFixed(2),
                         };
-                        console.log(allData);
+                        // console.log(allData);
 
                         const html = fse.readFileSync(path.join(__dirname, '../template/docs/factura.html'), 'utf-8');
                         const filename = 'ParrilladasCOCON - ' + moment().format('MMM D, YYYY').replace(/\b\w/g, l => l.toUpperCase()) + ' - ' + searchDesk.codigo + '.pdf';
@@ -1616,23 +1616,76 @@ cajeroControllers.generateInvoce = async (req, res) => {
                            },
                            path: path.join(__dirname, '../docs/') + filename
                         };
-                        try {
-                           await pdf.create(document, configPDF);
-                           var data = path.join(__dirname, '../docs/' + filename);
-                           // res.download(data, filename);
 
-                           console.log(data);
-                           console.log(filename);
+                        let data;
+                        
+                        try {
+                           data = await pdf.create(document, configPDF);
+                           path.join(__dirname, '../docs/' + filename);
+                           // console.log(data);
+                        } catch (e) {
+                           console.log(e);
+                        }
+
+                        try {
+                           const transporte = nodemailer
+                              .createTransport({
+                                 host: 'mail.privateemail.com',
+                                 port: 587,
+                                 secure: false,
+                                 auth: {
+                                    user: `${process.env.userMail}`,
+                                    pass: `${process.env.passMail}`
+                                 },
+                                 tls: {
+                                    rejectUnauthorized: false
+                                 }
+                              });
+                           
+                           const info = await transporte
+                              .sendMail({
+                                 from: `'Parrillada COCON' <${process.env.userMail}>`,
+                                 to: emailClienteN,
+                                 subject: 'Factura consumida',
+                                 html: require('../template/emails/facturaFinal.tmp')({
+                                    nameUser: `${nameClienteN}`,
+                                    numFactura: `${searchDesk.codigo}`,
+                                    valorTot: `${total.toFixed(2)}`
+                                 }),
+                                 attachments: [{
+                                    filename: `${filename}`,
+                                    path: path.join(__dirname, `../docs/${filename}`),
+                                    contentType: 'application/pdf'
+                                 }]
+                              });
+                           
+                           console.log(info.response);
                         } catch (e) {
                            console.log(e);
                         }
                         
+                        if (data) {
+                           res.json({
+                              tittle: 'Factura generada',
+                              description: 'Se ha generado la factura con éxito!!!',
+                              icon: 'success',
+                              res: 'true',
+                              filename
+                           });
+                        } else {
+                           res.json({
+                              tittle: 'Factura no generada',
+                              description: 'Opss! No se podido generar la factura. ¡Intentelo más luego!',
+                              icon: 'error',
+                              res: 'false'
+                           });
+                        }
                      } else {
                         res.json({
-                           tittle: 'Problemas',
-                           description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+                           tittle: 'Factura no generada',
+                           description: 'Opss! No se podido generar la factura. ¡Intentelo más luego!',
                            icon: 'error',
-                           res: 'error'
+                           res: 'false'
                         });
                      }
                   }
@@ -1656,6 +1709,66 @@ cajeroControllers.generateInvoce = async (req, res) => {
             });
          }
       }
+   }
+};
+
+cajeroControllers.viewPDF = (req, res) => {
+   const {
+      file
+   } = req.params;
+
+   res.render('cajero/pdf', { file });
+};
+
+cajeroControllers.renderFacturas = (req, res) => {
+   const {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      privilegio,
+      estado,
+      profile
+   } = req.user;
+
+   res.render('cajero/facturas', {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      privilegio,
+      estado,
+      profile
+   });
+};
+
+cajeroControllers.getAllInvoice = async (req, res) => {
+   let allInvoice;
+
+   try {
+      allInvoice = await InvoiceModel
+         .find()
+         .select({
+            _codeMesa: 1,
+            cedula: 1,
+            nomCliente: 1,
+            fecha: 1,
+            _idVendedor: 1,
+            total: 1,
+         })
+         .populate({
+            path: '_idVendedor',
+            select: 'apellidos nombres'
+         })
+         .sort({
+            fecha: 1
+         })
+         .lean()
+         .exec();
+         
+      res.send(allInvoice);
+   } catch (e) {
+      console.log(e);
    }
 };
 

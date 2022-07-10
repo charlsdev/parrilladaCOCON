@@ -7,16 +7,17 @@
       <title>Parrilladas COCON</title>
 
       <style>
-         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+         @import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap');
 
          body {
             padding: 0;
             margin: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', sans-serif !important;
+            font-family: 'PT Sans', sans-serif;
          }
          table {
             width: 100%;
+            border-radius: 10px;
          }
          .containerTemplate {
             max-width: 100%;
@@ -71,7 +72,7 @@
             width: 5%;
          }
          .linearsTR .blakcText {
-            font-weight: 900 !important;
+            font-weight: bold;
             text-transform: uppercase;
             font-size: 13px;
             width: 10%;
@@ -98,7 +99,7 @@
             padding-left: 50px;
          }
          .datesInitials .blakcText {
-            font-weight: 600;
+            font-weight: bold;
             text-transform: uppercase;
             font-size: 14px;
             display: flex;
@@ -115,10 +116,20 @@
             margin: 10px 25px;
          }
          
+         .customers.redondo {
+            border-radius: 25px;
+         }
          .customers {
             margin: 10px 10px;
             border-collapse: collapse;
             max-width: -webkit-fill-available;
+            /* border-radius: 2rem; */
+         }
+         .customers .code {
+            font-weight: 600;
+            font-style: italic;
+            text-align: center;
+            font-size: 14px;
          }
          .customers .number {
             font-weight: 600;
@@ -131,6 +142,10 @@
          .customers .footTable th{
             text-align: center;
             background: #ffbe81;
+         }
+         .customers .footTable .white{
+            border: none;
+            background: #fff;
          }
          .customers th {
             text-transform: uppercase;
@@ -156,22 +171,25 @@
             padding: 15px 10px;
             width: 100%;
          }
-         .lowerCase{
+         .linearsTR .lowerCase{
             text-transform: lowercase;
+         }
+         .linearsTR .name{
+            text-transform: capitalize;
          }
       
       </style>
    </head>
 
    <body>
-      <table>
+      <table class="customers redondo">
          <tbody>
             <tr class="encabezado">
                <th class="datosUniversidad">
                   <div class="titulo"><b>NOTA DE VENTA</b></div>
                </th>
                <th>
-                  <div class="number">
+                  <div class="code">
                      <b>{{allData._codeMesa}}</b>
                   </div>
                </th>
@@ -179,12 +197,12 @@
          </tbody>            
       </table>
 
-      <table>
+      <table class="">
          <tbody>
             <tr class="linearsTR">
                <th class="spaceBlack"></th>
                <th class="blakcText">
-                  <b>Cédula : </b>
+                  Cédula :
                </th>
                <th class="textInfo">
                   {{allData.cedula}}
@@ -193,16 +211,16 @@
             <tr class="linearsTR">
                <th class="spaceBlack"></th>
                <th class="blakcText">
-                  <b>Cliente :</b> 
+                  Cliente :
                </th>
-               <th class="textInfo">
+               <th class="textInfo name">
                   {{allData.nomCliente}}
                </th>
             </tr>
             <tr class="linearsTR">
                <th class="spaceBlack"></th>
                <th class="blakcText">
-                  <b>Fecha :</b> 
+                  Fecha :
                </th>
                <th class="textInfo lowerCase">
                   {{allData.fecha}}
@@ -211,7 +229,7 @@
             <tr class="linearsTR">
                <th class="spaceBlack"></th>
                <th class="blakcText">
-                  <b>Email :</b> 
+                  Email :
                </th>
                <th class="textInfo lowerCase">
                   {{allData.email}}
@@ -238,19 +256,19 @@
          {{/each}}
 
          <tr class="footTable">
-            <th colspan="2"></th>
+            <th colspan="2" class="white"></th>
             <th><b>Iva</b></th>
             <th class="alingD">{{allData.subtotal}}</th>
          </tr>
 
          <tr class="footTable">
-            <th colspan="2"></th>
+            <th colspan="2" class="white"></th>
             <th><b>Subtotal</b></th>
             <th class="alingD">{{allData.iva}}</th>
          </tr>
 
          <tr class="footTable">
-            <th colspan="2"></th>
+            <th colspan="2" class="white"></th>
             <th><b>Total</b></th>
             <th class="alingD">{{allData.total}}</th>
          </tr>
