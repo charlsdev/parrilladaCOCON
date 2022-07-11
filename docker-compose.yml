@@ -8,8 +8,8 @@ services:
       ports:
          - 27017:27017                             # Inicamos el puerto pExterior:pDefecto
       environment:
-         - MONGO_INITDB_ROOT_USERNAME=admin        # Variable de entorno USER
-         - MONGO_INITDB_ROOT_PASSWORD=admin        # Variable de entorno PASSWORD
+         MONGO_INITDB_ROOT_USERNAME: "${ADMIN}"        # Variable de entorno USER
+         MONGO_INITDB_ROOT_PASSWORD: "${PASS}"        # Variable de entorno PASSWORD
       logging:
          driver: none                              # Ocultar los logs en la consola
 
@@ -20,8 +20,8 @@ services:
       ports:
          - 4000:3000
       environment:
-         - SESSION_KEY=CoopRude/ashy584@
-         - MONGO_SESSION=mongodb://admin:admin@mongodb/sessionSave
-         - MONGO_DB=mongodb://admin:admin@mongodb/parrilladacocon
+         SESSION_KEY: "${SESSION_KEY}"
+         MONGO_SESSION: "mongodb://${ADMIN}:${PASS}@mongodb/sessionSave"
+         MONGO_DB: "mongodb://${ADMIN}:${PASS}@mongodb/parrilladacocon"
       links:
          - "mongodb"                               # Enlazarlo a un servicio (Ej.: mongodb)

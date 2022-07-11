@@ -49,11 +49,9 @@
                            <th nowrap scope="col">Factura</th>
                         </tr>
                      </thead>
-   
                   </table>
                </div>
             </div>
-
          </div>
       </div>
 
@@ -117,7 +115,7 @@
                   },                 
                   {"data": null,
                         render: function ( data, type, row ) {
-                           return `<button type="button" class="btnBootstrap btn btn-outline-success" onclick="editCategory('${row._id}')">
+                           return `<button type="button" class="btnBootstrap btn btn-outline-success" onclick="viewInvoice('${row._codeMesa}')">
                               <i class='bx bxs-file-pdf'></i>
                               Generar
                            </button>`;
@@ -159,4 +157,119 @@
             }
          }
 
+         const viewInvoice = (codeMesa) => {
+            codeMesa = $.trim(codeMesa);
+
+            if (
+               codeMesa === ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrilladas COCON',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: 'VISUALIZAR FACTURA',
+                  html: `<p style="font-size: 1rem;">¿Deseas visualizar la factura <b>N° ${codeMesa}</b>?</p>`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrilladas COCON',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: 'Sí, visualizar!',
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  focusConfirm: false,
+                  focusCancel: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value == true) {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/c/reGenerateInvoice`,
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                           codeMesa
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrilladas COCON',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    bloqueointerface();
+                                    
+                                    window.open(`/c/pdf/${res.filename}`,"ventana1","height=750,width=1250,location=no,toolbar=no,menubar=no,scrollbars=no");
+                                    
+                                    desbloqueointerface();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               })
+            }
+         }
+         
       </script>

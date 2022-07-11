@@ -34,7 +34,8 @@ const {
    viewPDF,
 
    renderFacturas,
-   getAllInvoice
+   getAllInvoice,
+   reGenerateInvoice,
 
 } = require('../controllers/cajero.controllers');
 
@@ -76,5 +77,6 @@ router.get('/pdf/:file', isAuthenticated, isAuthenticatedCajero, viewPDF);
 
 router.get('/invoice', isAuthenticated, isAuthenticatedCajero, renderFacturas);
 router.get('/allInvoices', isAuthenticated, isAuthenticatedCajero, getAllInvoice);
+router.get('/reGenerateInvoice', isAuthenticated, isAuthenticatedCajero, reGenerateInvoice);
 
 module.exports = router;

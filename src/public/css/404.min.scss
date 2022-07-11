@@ -175,7 +175,6 @@ body {
 }
 
 @include key-frame(float) {
-
    0%,
    100% {
       @include transform(rotate(3deg) translate3d(0px, -10px, 0px));

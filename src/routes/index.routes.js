@@ -18,7 +18,7 @@ const {
    renderChangePassword,
    changePassword,
 
-   exitLogout
+   exitLogout,
 } = require('../controllers/index.controllers');
 
 const {

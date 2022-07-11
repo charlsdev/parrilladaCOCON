@@ -1607,7 +1607,8 @@ cajeroControllers.generateInvoce = async (req, res) => {
                         // console.log(allData);
 
                         const html = fse.readFileSync(path.join(__dirname, '../template/docs/factura.html'), 'utf-8');
-                        const filename = 'ParrilladasCOCON - ' + moment().format('MMM D, YYYY').replace(/\b\w/g, l => l.toUpperCase()) + ' - ' + searchDesk.codigo + '.pdf';
+                        // const filename = 'ParrilladasCOCON - ' + moment().format('MMM D, YYYY').replace(/\b\w/g, l => l.toUpperCase()) + ' - ' + searchDesk.codigo + '.pdf';
+                        const filename = 'ParrilladasCOCON - ' + searchDesk.codigo + '.pdf';
 
                         const document = {
                            html: html,
@@ -1769,6 +1770,159 @@ cajeroControllers.getAllInvoice = async (req, res) => {
       res.send(allInvoice);
    } catch (e) {
       console.log(e);
+   }
+};
+
+cajeroControllers.reGenerateInvoice = async (req, res) => {
+   const {
+      codeMesa
+   } = req.query;
+
+   let codeMesaN = codeMesa.trim();
+
+   if (
+      codeMesaN === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {   
+      try {
+         const searchSales = await SalesModel
+            .findOne({
+               _codeMesa: codeMesaN
+            })
+            .select({
+               _codeMesa: 1,
+               ventas: 1
+            })
+            .lean()
+            .exec();
+         // console.log(searchSales);
+
+         if (!searchSales) {
+            res.json({
+               tittle: 'Factura no encontrada',
+               description: 'La factura a generar no tiene ninguna compra o no existe!!!',
+               icon: 'info',
+               res: 'false'
+            });
+         } else {
+            if (searchSales.ventas.length === 0) {
+               res.json({
+                  tittle: 'Factura no generada',
+                  description: 'No se ha podido generar la factura porque no se ha hecho ninguna compra!!!',
+                  icon: 'warning',
+                  res: 'false'
+               });
+            } else {
+               const searchInvoice = await InvoiceModel
+                  .findOne({
+                     _codeMesa: codeMesaN
+                  })
+                  .select({
+                     _idVendedor: 1,
+                     _codeMesa: 1,
+                     cedula: 1,
+                     nomCliente: 1,
+                     fecha: 1,
+                     email: 1,
+                     subtotal: 1,
+                     iva: 1,
+                     total: 1
+                  })
+                  .lean()
+                  .exec();
+               // console.log(searchInvoice);
+               
+               if (searchInvoice) {
+                  let products = [];
+
+                  /**
+                   * ? Generate PDF
+                   */
+                  searchSales.ventas.forEach(item => {
+                     products.push({
+                        plato: item.plato,
+                        cantidad: item.cantidad,
+                        precioUnit: parseFloat(item.precioUnit).toFixed(2),
+                        precioPar: parseFloat(item.precioPar).toFixed(2)
+                     });
+                  });
+                  
+                  const allData = {
+                     _codeMesa: searchInvoice._codeMesa,
+                     cedula: searchInvoice.cedula,
+                     nomCliente: searchInvoice.nomCliente,
+                     fecha: moment(new Date(searchInvoice.fecha)).format('ll'),
+                     email: searchInvoice.email,
+                     items: products,
+                     subtotal: parseFloat(searchInvoice.subtotal).toFixed(2),
+                     iva: parseFloat(searchInvoice.iva).toFixed(2),
+                     total: parseFloat(searchInvoice.total).toFixed(2),
+                  };
+                  // console.log(allData);
+
+                  const html = fse.readFileSync(path.join(__dirname, '../template/docs/factura.html'), 'utf-8');
+                  const filename = 'ParrilladasCOCON - ' + searchInvoice._codeMesa + '.pdf';
+
+                  const document = {
+                     html: html,
+                     data: {
+                        allData
+                     },
+                     path: path.join(__dirname, '../docs/') + filename
+                  };
+
+                  let data;
+                  
+                  try {
+                     data = await pdf.create(document, configPDF);
+                     path.join(__dirname, '../docs/' + filename);
+                     // console.log(data);
+                  } catch (e) {
+                     console.log(e);
+                  }
+                  
+                  if (data) {
+                     res.json({
+                        tittle: 'Factura generada',
+                        description: 'Se ha generado la factura con éxito!!!',
+                        icon: 'success',
+                        res: 'true',
+                        filename
+                     });
+                  } else {
+                     res.json({
+                        tittle: 'Factura no generada',
+                        description: 'Opss! No se podido generar la factura. ¡Intentelo más luego!',
+                        icon: 'error',
+                        res: 'false'
+                     });
+                  }
+               } else {
+                  res.json({
+                     tittle: 'Factura no generada',
+                     description: 'Opss! No se podido generar la factura. ¡Intentelo más luego!',
+                     icon: 'error',
+                     res: 'false'
+                  });
+               }
+            }
+         }
+      } catch (e) {
+         console.log(e);
+
+         res.json({
+            tittle: 'Problemas',
+            description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+            icon: 'error',
+            res: 'error'
+         });
+      }
    }
 };
 

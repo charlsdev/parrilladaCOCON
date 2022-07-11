@@ -530,13 +530,12 @@ indexControllers.changePassword = async (req, res) => {
    }
 };
 
-
-
-
-indexControllers.exitLogout = (req, res) => {
-   req.logout();
-   req.flash('warning_msg', 'Sesión cerrada. Vuelva pronto...');
-   res.redirect('/');
+indexControllers.exitLogout = (req, res, next) => {
+   req.logout(req.user, err => {
+      if(err) return next(err);
+      req.flash('warning_msg', 'Sesión cerrada. Vuelva pronto...');
+      res.redirect('/');
+   });
 };
 
 module.exports = indexControllers;
