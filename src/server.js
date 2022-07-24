@@ -69,8 +69,8 @@ app.use((req, res, next) => {
 //Rutas
 app.use(require('./routes/index.routes'));
 app.use('/c', require('./routes/cajero.routes'));
-// app.use('/d', require('./routes/docentes.routes'));
-// app.use('/a', require('./routes/admin.routes'));
+app.use('/a', require('./routes/admin.routes'));
+// app.use('/d', require('./routes/gerente.routes'));
 
 //Archivos estáticos
 app.use(express.static(path.join(__dirname + '/public')));

@@ -9,7 +9,7 @@ module.exports = ({
             <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
             <meta content="width=device-width" name="viewport" />
             <meta content="IE=edge" http-equiv="X-UA-Compatible" />
-            <title>Parrilladas COCON</title>
+            <title>Parrillada del COCO</title>
             
             <style type="text/css">
                body {
@@ -309,7 +309,7 @@ module.exports = ({
                                                    >
                                                       <span style="color: #ffffff"
                                                          ><strong
-                                                            >PARRILLADAS COCON</strong
+                                                            >PARRILLADA DEL COCO</strong
                                                          ></span
                                                       >
                                                    </h1>
@@ -679,7 +679,7 @@ module.exports = ({
                                                 >
                                                    <span style="font-size: 12px"
                                                       ><strong
-                                                         >PARRILLADAS COCON S.A.</strong
+                                                         >PARRILLADA DEL COCO S.A.</strong
                                                       ></span
                                                    >
                                                 </p>
@@ -694,7 +694,7 @@ module.exports = ({
                                                       margin-bottom: 0;
                                                    ">
                                                    <span style="font-size: 12px">
-                                                      DIRECCIÓN: KM 1½ VÍA A ROCAFUERTE JUNTO A LA ESQUINA DE LUCHO
+                                                      DIRECCIÓN: LOS TAMARINDOS TERCERA ETAPA
                                                    </span>
                                                 </p>
                                                 <p

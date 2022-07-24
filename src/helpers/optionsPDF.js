@@ -32,7 +32,7 @@ module.exports = {
                      <th>
                         <div class="leters IZ" style="font-weight: 500; margin: 0 10px; text-align: left;">
                            <b style="font-weight: bold;">Fuente :</b>
-                           Parrilladas COCON
+                           Parrillada del COCO
                         </div>
                      </th>
                   </tr>

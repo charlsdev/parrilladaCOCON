@@ -1,0 +1,169 @@
+      <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css">
+      <link rel="stylesheet" href="/boxicons/boxicons.min.css" type="text/css">
+      <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
+      <link rel="stylesheet" href="/toastJS/jquery.toast.min.css" type="text/css">
+
+      <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/welcome.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/cardsDasboard.min.css" type="text/css">
+
+      <style>
+         .contentView {
+            min-height: 100vh;
+            margin-bottom: 0 !important;
+            /* top: 25px !important; */
+            top: 0px !important;
+            display: flex;
+            align-items: center;
+         }
+      </style>
+
+   </head>
+
+	<body>
+      {{> loader}}
+      {{> navbarA}}
+
+      <div class="contentView">
+         <div class="container justify-content-center">
+            <div class="row">
+               <div class="col-md-12 text-center">
+                  <div class="lettersTittle">
+                     <span>B</span>
+                     <span>I</span>
+                     <span>E</span>
+                     <span>N</span>
+                     <span>V</span>
+                     <span>E</span>
+                     <span>N</span>
+                     <span>I</span>
+                     <span>D</span>
+                     <span>O</span>
+                  </div>
+               </div>
+            </div>
+            
+            <section class="home">
+               <div class="cardDash profile-card">               
+                  <div class="profile-card-wrapper">
+                     <figure class="card-avatar">
+                        <img src="/profile/{{profile}}" alt="Foto de {{apellidos}} {{nombres}}" width="48" height="48">
+                     </figure>
+
+                     <div>
+                        <p class="card-title">{{nombres}} {{apellidos}}</p>
+                        <p class="card-subtitle">{{privilegio}}</p>
+                     </div>
+                  </div>
+            
+                  <ul class="contact-list">
+                     <li>
+                        <div class="contact-link icon-box">
+                           <i class='bx bx-mail-send icon' ></i>
+                           <p class="text">{{email}}</p>
+                        </div>
+                     </li>
+            
+                     <li>
+                        <div class="contact-link icon-box">
+                           <i class='bx bx-phone icon' ></i>
+                           <p class="text">{{telefono}}</p>
+                        </div>
+                     </li>
+            
+                  </ul>
+            
+                  <div class="divider card-divider"></div>
+
+                  <ul class="progress-list">
+                     <li class="progress-item">
+                        <div class="progress-label">
+                           <p class="progress-title">Desempeño</p>
+                           <data class="progress-data" value="95">95%</data>
+                        </div>
+            
+                        <div class="progress-bar">
+                           <div class="progress" style="--width: 95%; --bg: var(--blue-ryb);"></div>
+                        </div>
+                     </li>
+            
+                     <li class="progress-item">
+                        <div class="progress-label">
+                           <p class="progress-title">Coordialidad</p>
+                           <data class="progress-data" value="9.5">9.5</data>
+                        </div>
+            
+                        <div class="progress-bar">
+                           <div class="progress" style="--width: 95%; --bg: var(--coral);"></div>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            
+               <div class="card-wrapper">
+                  <div class="cardDash task-card">
+                     <div class="card-icon icon-box green">
+                        {{!-- <span class="material-symbols-rounded  icon">task_alt</span> --}}
+                        <i class='bx bx-desktop icon'></i>
+                     </div>
+            
+                     <div>
+                        <data class="card-data" value="21">21</data>
+                        <p class="card-text">Tasks Completed</p>
+                     </div>
+                  </div>
+            
+                  <div class="cardDash task-card">
+                     <div class="card-icon icon-box blue">
+                        {{!-- <span class="material-symbols-rounded  icon">drive_file_rename_outline</span> --}}
+                        <i class='bx bx-buildings icon'></i>
+                     </div>
+            
+                     <div>
+                        <data class="card-data" value="21">21</data>
+                        <p class="card-text">Tasks Inprogress</p>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cardDash revenue-card">
+                  <p class="card-title">Ventas Totales</p>
+                  <data class="card-price" >$2,100</data>
+                  <p class="card-text">Total de ventas en la actualidad*</p>
+
+                  <div class="divider card-divider"></div>
+
+                  <ul class="revenue-list">
+                     <li class="revenue-item icon-box">
+                        <i class='bx bx-stats icon green'></i>
+
+                        <div>
+                           <data class="revenue-item-data" value="15">15%</data>
+                           <p class="revenue-item-text">Prev Week</p>
+                        </div>
+                     </li>
+
+                     <li class="revenue-item icon-box">
+                        <i class='bx bx-stats icon red'></i>
+                        <div>
+                           <data class="revenue-item-data" value="10">10%</data>
+                           <p class="revenue-item-text">Prev Month</p>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </section>
+         </div>
+      </div>
+
+      <script src="/JQuery/jquery.min.js"></script>
+      <script src="/bootstrap/js/bootstrap.min.js"></script>
+      <script src="/sweetalert2/sweetalert2.min.js"></script>
+      <script src="/toastJS/jquery.toast.min.js"></script>
+
+      <script src="/js/navbar.min.js"></script>
+
+      <script>
+         {{> notifications}}
+      </script>

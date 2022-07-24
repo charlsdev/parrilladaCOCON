@@ -378,7 +378,7 @@ indexControllers.renderChangePassword = async (req, res) => {
    });
 };
 
-indexControllers.changePassword = async (req, res) => {
+indexControllers.changePassword = async (req, res, next) => {
    const toast = [];
 
    const {
@@ -476,8 +476,8 @@ indexControllers.changePassword = async (req, res) => {
                   const transporte = nodemailer
                      .createTransport({
                         host: 'mail.privateemail.com',
-                        port: 587,
-                        secure: false,
+                        port: 465,
+                        secure: true,
                         auth: {
                            user: `${process.env.userMail}`,
                            pass: `${process.env.passMail}`
@@ -500,7 +500,9 @@ indexControllers.changePassword = async (req, res) => {
                   console.log(e);
                }
                
-               req.logout();
+               req.logout(req.user, err => {
+                  if(err) return next(err);
+               });
 
                res.json({
                   tittle: 'Contraseña actualizada',
