@@ -14,7 +14,7 @@ const verificationSchema = new Schema ({
    estado: {
       type: String,
       require: true
-      // NoVerificado
+      // No Verificado
    }
 }, {
    timestamps: true,

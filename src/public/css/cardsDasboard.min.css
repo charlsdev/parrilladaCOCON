@@ -191,7 +191,8 @@ a {
 .card-title {
    color: var(--onyx);
    font-weight: var(--fw-600);
-   margin-bottom: 5px;
+   margin-bottom: 5px !important;
+   font-size: var(--fs-4);
 }
 .card-subtitle {
    color: var(--cool-gray);
@@ -251,6 +252,14 @@ a {
 .home .task-card .card-icon.green {
    --background: var(--emerald_12);
    --color: var(--emerald);
+}
+.home .task-card .card-icon.red {
+   --background: var(--coral_12);
+   --color: var(--imperial-red);
+}
+.home .task-card .card-icon.orange {
+   --background: var(--coral_12);
+   --color: var(--coral);
 }
 .revenue-item .card-icon.green {
    --background: var(--emerald_12);

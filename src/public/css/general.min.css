@@ -3,7 +3,8 @@
 	margin: 0;
 	box-sizing: border-box;
 	/* font-weight: bold !important; */
-   font-family: 'Poppins', sans-serif !important;
+   /* font-family: 'Poppins', sans-serif !important; */
+   font-family: 'PT Sans', sans-serif !important;
 }
 
 body{

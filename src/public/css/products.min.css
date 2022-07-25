@@ -18,9 +18,9 @@ label.required::after {
 
 .form-imgP {
    border-radius: 50px !important;
-   width: 170px !important;
-   height: 170px !important;
-   margin: 18px 5px;
+   width: 140px !important;
+   height: 140px !important;
+   margin: 2px 5px 18px;
 }
 
 .form-title {
