@@ -3,6 +3,8 @@ const adminControllers = {};
 require('dotenv').config();
 
 const nodemailer = require('nodemailer');
+const { customAlphabet } = require('nanoid');
+const nanoidAl = customAlphabet('1234567890_-abcdefghijklmnopqrstuvwxyz', 8);
 const moment = require('moment');
 moment.locale('es');
 
@@ -161,6 +163,145 @@ adminControllers.allCajero = async (req, res) => {
          .lean();
 
       res.status(201).send(allCajero);
+   } catch (e) {
+      console.log(e);
+   }
+};
+
+adminControllers.renderGerente = async (req, res) => {
+   let date = new Date(),
+      d = date.getDate(),
+      m = date.getMonth() + 1,
+      a = date.getFullYear();
+
+   const {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      fechaNacimiento,
+      genero,
+      direccion,
+      telefono,
+      email,
+      privilegio,
+      estado,
+      profile
+   } = req.user;
+
+   res.render('admin/gerente', {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      fechaNacimiento,
+      genero,
+      direccion,
+      telefono,
+      email,
+      privilegio,
+      estado,
+      profile,
+      d, m, a
+   });
+};
+
+adminControllers.allGerente = async (req, res) => {
+   let allGerente;
+
+   try {
+      allGerente = await UsersModel
+         .find({
+            privilegio: 'Gerente'
+         })
+         .select({
+            cedula: 1,
+            apellidos: 1,
+            nombres: 1,
+            fechaNacimiento: 1,
+            genero: 1,
+            direccion: 1,
+            telefono: 1,
+            email: 1,
+            privilegio: 1,
+            estado: 1,
+            profile: 1
+         })
+         .lean();
+
+      res.status(201).send(allGerente);
+   } catch (e) {
+      console.log(e);
+   }
+};
+
+adminControllers.renderAdmin = async (req, res) => {
+   let date = new Date(),
+      d = date.getDate(),
+      m = date.getMonth() + 1,
+      a = date.getFullYear();
+
+   const {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      fechaNacimiento,
+      genero,
+      direccion,
+      telefono,
+      email,
+      privilegio,
+      estado,
+      profile
+   } = req.user;
+
+   res.render('admin/admin', {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      fechaNacimiento,
+      genero,
+      direccion,
+      telefono,
+      email,
+      privilegio,
+      estado,
+      profile,
+      d, m, a
+   });
+};
+
+adminControllers.allAdmin = async (req, res) => {
+   let allAdmin;
+
+   try {
+      allAdmin = await UsersModel
+         .find({
+            privilegio: 'Administrador',
+            cedula: {
+               $not: {
+                  $eq: req.user.cedula
+               } 
+            }
+         })
+         .select({
+            cedula: 1,
+            apellidos: 1,
+            nombres: 1,
+            fechaNacimiento: 1,
+            genero: 1,
+            direccion: 1,
+            telefono: 1,
+            email: 1,
+            privilegio: 1,
+            estado: 1,
+            profile: 1
+         })
+         .lean();
+
+      res.status(201).send(allAdmin);
    } catch (e) {
       console.log(e);
    }
@@ -508,35 +649,15 @@ adminControllers.updateUser = async (req, res) => {
             res: 'toast'
          });
       } else {
-         const searchAccount = await UsersModel
-            .find({
-               email: emailN,
-               _id: {
-                  $not: {
-                     $eq: idN
-                  }
-               }
-            })
-            .select({
-               cedula: 1,
-               apellidos: 1,
-               nombres: 1,
-               email: 1
-            })
-            .lean();
-         console.log(searchAccount);
-
-         if (searchAccount.length > 0) {
-            res.json({
-               tittle: 'Correo ya registrado',
-               description: 'El correo a actualizar ya se encuentran registrado dentro del sistema!!!',
-               icon: 'warning',
-               res: 'false'
-            });
-         } else {
+         try {
             const searchAccount = await UsersModel
-               .findOne({
-                  _id: id
+               .find({
+                  email: emailN,
+                  _id: {
+                     $not: {
+                        $eq: idN
+                     }
+                  }
                })
                .select({
                   cedula: 1,
@@ -547,15 +668,35 @@ adminControllers.updateUser = async (req, res) => {
                .lean();
             // console.log(searchAccount);
 
-            if (!searchAccount) {
+            if (searchAccount.length > 0) {
                res.json({
-                  tittle: 'Cuenta no existente',
-                  description: 'La cuenta no se encuentra registrada dentro del sistema!!!',
-                  icon: 'info',
+                  tittle: 'Correo ya registrado',
+                  description: 'El correo a actualizar ya se encuentran registrado dentro del sistema!!!',
+                  icon: 'warning',
                   res: 'false'
                });
             } else {
-               try {
+               const searchAccount = await UsersModel
+                  .findOne({
+                     _id: id
+                  })
+                  .select({
+                     cedula: 1,
+                     apellidos: 1,
+                     nombres: 1,
+                     email: 1
+                  })
+                  .lean();
+               // console.log(searchAccount);
+
+               if (!searchAccount) {
+                  res.json({
+                     tittle: 'Cuenta no existente',
+                     description: 'La cuenta no se encuentra registrada dentro del sistema!!!',
+                     icon: 'info',
+                     res: 'false'
+                  });
+               } else {
                   const updateUser = await UsersModel
                      .updateOne({
                         _id: id
@@ -572,7 +713,7 @@ adminControllers.updateUser = async (req, res) => {
                         }
                      });
    
-                  if (updateUser) {
+                  if (updateUser.modifiedCount >= 1) {
                      res.json({
                         tittle: 'Cuenta actualizada',
                         description: 'Se ha actualizado la cuenta con exito!!!',
@@ -587,18 +728,228 @@ adminControllers.updateUser = async (req, res) => {
                         res: 'false'
                      });
                   }
-               } catch (e) {
-                  console.log(e);
-
-                  res.json({
-                     tittle: 'Problemas',
-                     description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
-                     icon: 'error',
-                     res: 'error'
-                  });
                }
             }
+         } catch (e) {
+            console.log(e);
+
+            res.json({
+               tittle: 'Problemas',
+               description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+               icon: 'error',
+               res: 'error'
+            });
          }
+      }
+   }
+};
+
+adminControllers.newPass = async (req, res) => {
+   const {
+      id
+   } = req.body;
+
+   let idN = id.trim();
+
+   if (
+      idN === ''
+   ) {
+      return res.status(500).json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      try {
+         const searchAccount = await UsersModel
+            .findOne({
+               _id: idN
+            })
+            .select({
+               cedula: 1,
+               apellidos: 1,
+               nombres: 1,
+               email: 1
+            })
+            .lean();
+         // console.log(searchAccount);
+
+         if (!searchAccount) {
+            res.json({
+               tittle: 'Cuenta no existente',
+               description: 'La cuenta no se encuentra registrada dentro del sistema!!!',
+               icon: 'info',
+               res: 'false'
+            });
+         } else {
+            const newPass = `PC@$${nanoidAl()}`;
+            const inst = new UsersModel();
+
+            const updateUser = await UsersModel
+               .updateOne({
+                  _id: id
+               }, {
+                  $set: {
+                     password: await inst.encryptPassword(newPass)
+                  }
+               });
+            // console.log(updateUser);
+               
+            if (updateUser.modifiedCount >= 1) {
+               try {
+                  await VerificationsModel
+                     .updateOne({
+                        _idUser: searchAccount._id,
+                        motivo: 'changePassword'
+                     }, {
+                        $setOnInsert: {
+                           _idUser: searchAccount._id,
+                           motivo: 'changePassword',
+                           estado: 'No Verificado'
+                        }
+                     }, {
+                        upsert: true
+                     });
+               } catch (e) {
+                  console.log(e);
+               }
+
+               try {
+                  // Enviar correos electronicos de registro a los usuarios
+                  const transporte = nodemailer
+                     .createTransport({
+                        host: 'mail.privateemail.com',
+                        port: 587,
+                        secure: false,
+                        auth: {
+                           user: `${process.env.userMail}`,
+                           pass: `${process.env.passMail}`
+                        },
+                        tls: {
+                           rejectUnauthorized: false
+                        }
+                     });
+
+                  const info = await transporte
+                     .sendMail({
+                        from: `'Parrillada del COCO' <${process.env.userMail}>`,
+                        to: searchAccount.email,
+                        subject: 'Contraseña Regenerada - Parrillada del COCO',
+                        html: require('../template/emails/regeneratePass.tmp')({
+                           nameUser: `${searchAccount.nombres} ${searchAccount.apellidos}`,
+                           newPass
+                        })
+                     });
+
+                  console.log(info.response);
+               } catch (e) {
+                  console.log(e);
+               }
+
+               res.json({
+                  tittle: 'Contraseña regenerada',
+                  description: 'Se ha regenerado la contraseña con exito!!!',
+                  icon: 'success',
+                  res: 'true'
+               });
+            } else {
+               res.json({
+                  tittle: 'Contraseña no regenerada',
+                  description: 'No se ha podido regenerar la contraseña!!!',
+                  icon: 'error',
+                  res: 'false'
+               });
+            }
+         }
+      } catch (e) {
+         console.log(e);
+
+         res.json({
+            tittle: 'Problemas',
+            description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+            icon: 'error',
+            res: 'error'
+         });
+      }
+   }
+};
+
+adminControllers.changeEstado = async (req, res) => {
+   const {
+      id
+   } = req.body;
+
+   let idN = id.trim();
+
+   if (
+      idN === ''
+   ) {
+      return res.status(500).json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      try {
+         const searchAccount = await UsersModel
+            .findOne({
+               _id: idN
+            })
+            .select({
+               cedula: 1,
+               apellidos: 1,
+               nombres: 1,
+               estado: 1,
+               privilegio: 1
+            })
+            .lean();
+         // console.log(searchAccount);
+
+         if (!searchAccount) {
+            res.json({
+               tittle: 'Cuenta no existente',
+               description: 'La cuenta no se encuentra registrada dentro del sistema!!!',
+               icon: 'info',
+               res: 'false'
+            });
+         } else {
+            const updateUser = await UsersModel
+               .updateOne({
+                  _id: id
+               }, {
+                  $set: {
+                     estado: (searchAccount.estado === 'Enabled') ? 'Disabled' : 'Enabled'
+                  }
+               });
+            // console.log(updateUser);
+               
+            if (updateUser.modifiedCount >= 1) {
+               res.json({
+                  tittle: `${(searchAccount.privilegio).toUpperCase()} ${((searchAccount.estado === 'Enabled') ? 'Desactivado' : 'Activado').toUpperCase()}`,
+                  description: `Se ha ${((searchAccount.estado === 'Enabled') ? 'Desactivado' : 'Activado').toLowerCase()} la cuenta con exito!!!`,
+                  icon: 'success',
+                  res: 'true'
+               });
+            } else {
+               res.json({
+                  tittle: `${(searchAccount.privilegio).toUpperCase()} NO ${((searchAccount.estado === 'Enabled') ? 'Desactivado' : 'Activado').toUpperCase()}`,
+                  description: `No se ha podido ${((searchAccount.estado === 'Enabled') ? 'Desactivar' : 'Activar').toLowerCase()} la contraseña!!!`,
+                  icon: 'error',
+                  res: 'false'
+               });
+            }
+         }
+      } catch (e) {
+         console.log(e);
+
+         res.json({
+            tittle: 'Problemas',
+            description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+            icon: 'error',
+            res: 'error'
+         });
       }
    }
 };

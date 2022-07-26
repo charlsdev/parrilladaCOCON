@@ -24,7 +24,8 @@ const {
 const {
    isAuthenticated,
    isNotAuthenticated,
-   isAuthenticatedAllPriv
+   isAuthenticatedAllPriv,
+   verificationProcess
 } = require('../global/middleware');
 
 router.get('/', isNotAuthenticated, login);
@@ -32,9 +33,9 @@ router.post('/login', loginAuth);
 
 router.get('/verification', isAuthenticated, isAuthenticatedAllPriv, verification);
 
-router.get('/profile', isAuthenticated, isAuthenticatedAllPriv, renderProfile);
-router.put('/profile', isAuthenticated, isAuthenticatedAllPriv, updateDataProfile);
-router.post('/photoProfile', isAuthenticated, isAuthenticatedAllPriv, tempFolder.single('photoProfile'), changePhotoProfile);
+router.get('/profile', isAuthenticated, isAuthenticatedAllPriv, verificationProcess, renderProfile);
+router.put('/profile', isAuthenticated, isAuthenticatedAllPriv, verificationProcess, updateDataProfile);
+router.post('/photoProfile', isAuthenticated, isAuthenticatedAllPriv, verificationProcess, tempFolder.single('photoProfile'), changePhotoProfile);
 
 router.get('/password', isAuthenticated, isAuthenticatedAllPriv, renderChangePassword);
 router.post('/password', isAuthenticated, isAuthenticatedAllPriv, changePassword);

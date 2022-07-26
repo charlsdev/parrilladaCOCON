@@ -7,9 +7,6 @@
       <link rel="stylesheet" href="/dataTables/datatables.min.css" type="text/css"/>
       <link rel="stylesheet" href="/dataTables/theme/dataTables.bootstrap4.min.css" type="text/css"/>
 
-      <link rel="stylesheet" href="/select2/select2.min.css" type="text/css">
-      <link rel="stylesheet" href="/select2/select2-bootstrap.min.css" type="text/css">
-
       <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
       <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
       <link rel="stylesheet" href="/css/products.min.css" type="text/css">
@@ -19,18 +16,22 @@
 
 	<body>
       {{> loader}}
-      {{> navbarC}}
+      {{> navbarG}}
 
       <div class="contentView">
          <div class="container">
             <div class="row">
                <div class="col-md-12 text-center">
                   <div class="lettersTittle">
-                     <span>P</span>
-                     <span>L</span>
+                     <span>C</span>
                      <span>A</span>
                      <span>T</span>
+                     <span>E</span>
+                     <span>G</span>
                      <span>O</span>
+                     <span>R</span>
+                     <span>Í</span>
+                     <span>A</span>
                      <span>S</span>
                   </div>
                </div>
@@ -46,29 +47,16 @@
 
             <div class="row">
                <div class="col-md-12">
-                  <table id="listPlatos" class="table is-striped table-striped table-bordered table-sm">
+                  <table id="listCategorias" class="table is-striped table-striped table-bordered table-sm">
                      <thead class="table-primary">
                         <tr>
+                           <th nowrap scope="col">ID</th>
                            <th nowrap scope="col">Categoría</th>
-                           <th scope="col">Tipo</th>
-                           <th nowrap scope="col">Acompañado</th>
-                           <th scope="col">Precio</th>
-                           <th scope="col">Estado</th>
-                           <th nowrap scope="col">Acciones</th>
+                           <th nowrap scope="col">Editar</th>
+                           <th nowrap scope="col">Eliminar</th>
                         </tr>
                      </thead>
-
-                     <tfoot>
-                        <tr>
-                           <th>Categoría</th>
-                           <th>Tipo</th>
-                           <th></th>
-                           <th></th>
-                           <th>Estado</th>
-                           <th></th>
-                        </tr>
-                     </tfoot>
-                     
+   
                   </table>
                </div>
             </div>
@@ -77,6 +65,8 @@
       </div>
 
       <br>
+
+      {{> drapArea}}
 
       <script src="/JQuery/jquery.min.js"></script>
       <script src="/js/popper.min.js"></script>
@@ -89,12 +79,10 @@
       <script src="/dataTables/datatables.min.js"></script>
       <script src="/dataTables/theme/dataTables.bootstrap4.min.js"></script>
 
-      <script src="/select2/select2.min.js"></script>
-
       <script src="/js/navbar.min.js"></script>
 
-      {{!-- Modal Products --}}
-      <div class="modal fade" id="modalProducts" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      {{!-- Modal Categorías --}}
+      <div class="modal fade" id="modalCategorias" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
          <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                <div class="modal-header modalHeader">
@@ -104,35 +92,8 @@
                <div class="modal-body body__modal" style="padding: 0 1rem; !important">
                   <div class="row mt-3 mb-3">
                      <div class="form-group col-md-12">
-                        <label for="" class="required">Categoría</label>
-                        <select style="width: 100%" class="form-control" id="categoria" name="categoria" >
-                           {{!-- Data --}}
-                        </select>
-                     </div>
-
-                     <div class="form-group col-md-12">
-                        <label for="" class="required">Tipo</label>
-                        <input type="text" class="form-control" id="tipoPlato" name="tipoPlato" placeholder="Ingrese el tipo de presa: Ej. Pollo" >
-                     </div>
-
-                     <div class="form-group col-md-12">
-                        <label for="" class="">Acompañado con</label>
-                        <textarea class="form-control textarea" name="acompañadoPlato" id="acompañadoPlato" placeholder="Escribir el nombre del plato principal..." required></textarea>
-                     </div>
-
-                     <div class="form-group col-md-12">
-                        <label for="" class="required">Precio</label>
-                        <input type="text" class="form-control" id="precioPlato" name="precioPlato" placeholder="Ingreses el precio del plato: Ej. 4,50" >
-                     </div>
-
-                     <div class="form-group col-md-12">
-                        <label for="" class="required">Estado</label>
-                        <select class="form-control" id="estado" name="estado">
-                           <option class="opt" value="" selected disabled>Seleccionar...</option>
-                           <option value="Stock">Stock</option>
-                           <option value="Sin Stock">Sin Stock</option>
-                           <option value="Not Sale">Not Sale</option>
-                        </select>
+                        <label for="" class="required">Nombre de Categoría</label>
+                        <textarea class="form-control textarea" name="nomCategoria" id="nomCategoria" placeholder="Escribir el nombre del plato principal..." required></textarea>
                      </div>
                   </div>
                   
@@ -159,111 +120,44 @@
          });
 
          $(document).ready(function() {
-            listPlatos = $('#listPlatos').DataTable({
+            listCategorias = $('#listCategorias').DataTable({
                destroy: true,
                "ajax": {
-                  "url": '/c/allPlatos',
+                  "url": '/g/allCategorias',
                   "dataSrc":""
                },
                "columns": [
                   {"data": null,
                         render: function ( data, type, row ) {
-                           return row._idCategoría.nomCategoria;
+                           return row._id;
                         }
                   },
                   {"data": null,
                         render: function ( data, type, row ) {
-                           return row.nomPlato;
+                           return row.nomCategoria;
+                        }
+                  },                  
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<button type="button" class="btnBootstrap btn btn-outline-info" onclick="editCategory('${row._id}')">
+                              <i class='bx bx-edit-alt' ></i>
+                              Editar
+                           </button>`;
                         }
                   },
                   {"data": null,
                         render: function ( data, type, row ) {
-                           return result = (row.acompañado) ? row.acompañado : '';
-                        }
-                  },
-                  {"data": null,
-                        render: function ( data, type, row ) {
-                           return row.precio;
-                        }
-                  },
-                  {"data": null,
-                        render: function ( data, type, row ) {
-                           if(row.estado === 'Stock') { 
-                              result = '<span class="mode badge badge-pill badge-success">Stock</span>' 
-                           }
-                           
-                           if(row.estado === 'Sin Stock') { 
-                              result = '<span class="mode badge badge-pill badge-danger">Sin Stock</span>' 
-                           }
-                           
-                           if(row.estado === 'Not Sale') { 
-                              result = '<span class="mode badge badge-pill badge-dark">Not Sale</span>' 
-                           }
-
-                           return result;
-                        }
-                  },
-                  
-                  {"data": null,
-                        render: function ( data, type, row ) {
-                           return `<button type="button" class="btnPoint btn btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"> <i class='bx bx-dots-vertical ' ></i> </button> 
-                           <div class="dropdown-menu 1 menuD"> 
-                              <a class="dropdown-item" onclick="editPlato('${row._id}')"> 
-                                 <i class='bx bx-edit-alt bx-tada' ></i>
-                                 Editar 
-                              </a>
-                              <a class="dropdown-item" onclick="deletePlato('${row._id}')"> 
-                                 <i class='bx bx-trash bx-tada' ></i>
-                                 Eliminar 
-                              </a>
-                           </div>`;
+                           return `<button type="button" class="btnBootstrap btn btn-outline-danger" onclick="deleteCategory('${row._id}')">
+                              <i class='bx bx-trash' ></i>
+                              Eliminar
+                           </button>`;
                         }
                   },
                ],
                responsive: true,
                language: idioma,
-               initComplete: function () {
-                  this.api()
-                     .columns([0, 1, 4])
-                     .every(function (i) {
-                        let arrayCat = [];
-                        let arrayTip = [];
-                        let arrayEst = [];
-
-                        var column = this;
-                        
-                        var select = $('<select class="form-control form-control-sm"><option value=""></option></select>')
-                           .appendTo($(column.footer()).empty())
-                           .on('change', function () {
-                              var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                              column.search(val ? '^' + val + '$' : '', true, false).draw();
-                           });
-
-                        column
-                           .data()
-                           .unique()
-                           .sort()
-                           .each(function (d, j) {
-                              // La D contiene el JSON de la API
-                              if (i == 0 && !arrayCat.includes(d._idCategoría.nomCategoria)) {
-                                 arrayCat.push(d._idCategoría.nomCategoria);
-                                 select.append('<option value="' + d._idCategoría.nomCategoria + '">' + d._idCategoría.nomCategoria + '</option>');
-                              }
-
-                              if (i == 1&& !arrayTip.includes(d.nomPlato)) {
-                                 arrayTip.push(d.nomPlato);
-                                 select.append('<option value="' + d.nomPlato + '">' + d.nomPlato + '</option>');
-                              }
-                              
-                              if (i == 4 && !arrayEst.includes(d.estado)) {
-                                 arrayEst.push(d.estado);
-                                 select.append('<option value="' + d.estado + '">' + d.estado + '</option>');
-                              }
-                           });
-                     });
-               }
             });
+
          });
 
          var idioma = {
@@ -296,67 +190,26 @@
             }
          }
 
-         const dataCategoria = () => {
-            $.ajax({
-               url: "/c/allCategorias",
-               type: "GET",
-               datatype: "json",
-            })
-            .done(function(res) {
-               document.getElementById('categoria').innerHTML = `<option></option>`;
-
-               if(res.length > 0) {
-                  res.forEach(data => {
-                     document.getElementById('categoria').innerHTML += `
-                           <option value="${data._id}">
-                              ${data.nomCategoria}
-                           </option>
-                        `;
-                  });
-               }
-            })
-            .fail(function() {
-               console.log("Error");
-            });
-         }
-         
          const openModal = () => {
             document.querySelector('.modalHeader').innerHTML = `
                   <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
-                     Nuevo Producto
+                     Nueva Categoría
                   </h5>`;
 
             document.querySelector('.modalFooter').innerHTML = `
                   <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
-                  <button type="button" class="btn__Send" onclick="savePlato();">Guardar</button>`;
-            
-            $('#categoria').val('').trigger('change');
-            $('#tipoPlato').val('');
-            $('#acompañadoPlato').val('');
-            $('#precioPlato').val('');
-            $('#estado').val('').trigger('change');
+                  <button type="button" class="btn__Send" onclick="saveCategory();">Guardar</button>`;
 
-            dataCategoria();
-            $('#categoria').select2({
-               dropdownParent: $("#modalProducts"),
-               theme: "bootstrap",
-               placeholder: "Seleccionar...",
-               allowClear: true
-            });
-
-            $("#modalProducts").modal("show");
+            $("#nomCategoria").val("");
+            $("#modalCategorias").modal("show");
          }
 
-         const savePlato = () => {
-            categoria = $.trim($('#categoria').val());
-            tipoPlato = $.trim($('#tipoPlato').val());
-            acompañadoPlato = $.trim($('#acompañadoPlato').val());
-            precioPlato = $.trim($('#precioPlato').val());
-            estado = $.trim($('#estado').val());
-            
+         const saveCategory = () => {
+            nomCategoria = $.trim($('#nomCategoria').val());
+
             Swal.fire({
-               title: 'GUARDAR PLATO',
-               html: `<p style="font-size: 1rem;">¿Deseas añadir un nuevo plato?</p>`,
+               title: 'GUARDAR CATEGORÍA',
+               html: `<p style="font-size: 1rem;">¿Deseas añadir esta nueva categoría?</p>`,
                imageUrl: '/img/parilladaCOCON.png',
                imageWidth: 250,
                imageHeight: 140,
@@ -373,10 +226,7 @@
             }).then((result) => {
                if (result.value == true) {
                   if (
-                     categoria == '' ||
-                     tipoPlato == '' ||
-                     precioPlato == '' ||
-                     estado == ''
+                     nomCategoria == ''
                   ) {
                      Swal.fire({
                         position: 'top-end',
@@ -393,15 +243,11 @@
                      bloqueointerface();
 
                      $.ajax({
-                        url: `/c/savePlato`,
+                        url: `/g/saveCategory`,
                         type: 'POST',
                         dataType: 'json',
                         data: {
-                           categoria,
-                           tipoPlato,
-                           acompañadoPlato,
-                           precioPlato,
-                           estado
+                           nomCategoria
                         }
                      })
                      .done(function(res) {
@@ -420,8 +266,8 @@
                            }).then((result) => {
                               if (result.value == true) {
                                  if (res.res == 'true') {
-                                    listPlatos.ajax.reload(null, false);
-                                    $("#modalProducts").modal("hide");
+                                    listCategorias.ajax.reload(null, false);
+                                    $("#modalCategorias").modal("hide");
                                  }
                               }
                            })
@@ -470,14 +316,12 @@
             })
          }
 
-         const editPlato = (idPlato) => {
-            dataCategoria();
-            
-            idPlato = $.trim(idPlato);
+         const editCategory = (idCategory) => {
+            idCategory = $.trim(idCategory);
 
             Swal.fire({
-               title: 'EDITAR PLATO',
-               html: `<p style="font-size: 1rem;">¿Deseas editar este plato?</p>`,
+               title: 'EDITAR CATEGORÍA',
+               html: `<p style="font-size: 1rem;">¿Deseas editar esta categoría?</p>`,
                imageUrl: '/img/parilladaCOCON.png',
                imageWidth: 250,
                imageHeight: 140,
@@ -494,7 +338,7 @@
             }).then((result) => {
                if (result.value === true) {
                   if (
-                     idPlato === ''
+                     idCategory === ''
                   ) {
                      Swal.fire({
                         position: 'top-end',
@@ -511,40 +355,26 @@
                      bloqueointerface();
 
                      $.ajax({
-                        url: `/c/searchPlato`,
+                        url: `/g/searchCategory`,
                         type: 'GET',
                         dataType: 'json',
                         data: {
-                           idPlato
+                           idCategory
                         }
                      })
                      .done(function(res) {
                         if (res.res == 'true') {
-                           //dataCategoria();
-
                            document.querySelector('.modalHeader').innerHTML = `
                                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
-                                    Editar Plato
+                                    Editar Categoría
                                  </h5>`;
 
                            document.querySelector('.modalFooter').innerHTML = `
                                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
-                                 <button type="button" class="btn__Send" onclick="updatePlato('${res.data._id}');">Actualizar</button>`;
+                                 <button type="button" class="btn__Send" onclick="updateCategory('${res.data._id}');">Actualizar</button>`;
 
-                           $('#categoria').select2({
-                              dropdownParent: $("#modalProducts"),
-                              theme: "bootstrap",
-                              placeholder: "Seleccionar...",
-                              allowClear: true
-                           });
-
-                           $('#categoria').val(`${res.data._idCategoría}`).trigger('change');
-                           $('#tipoPlato').val(`${res.data.nomPlato}`);
-                           $('#acompañadoPlato').val(`${res.data.acompañado}`);
-                           $('#precioPlato').val(`${res.data.precio}`);
-                           $('#estado').val(`${res.data.estado}`).trigger('change');
-
-                           $("#modalProducts").modal("show");
+                           $("#nomCategoria").val(`${res.data.nomCategoria}`);
+                           $("#modalCategorias").modal("show");
 
                            desbloqueointerface();
                         }
@@ -592,17 +422,13 @@
             })
          }
 
-         const updatePlato = (idPlato) => {
-            idPlato = $.trim(idPlato);
-            categoria = $.trim($('#categoria').val());
-            tipoPlato = $.trim($('#tipoPlato').val());
-            acompañadoPlato = $.trim($('#acompañadoPlato').val());
-            precioPlato = $.trim($('#precioPlato').val());
-            estado = $.trim($('#estado').val());
+         const updateCategory = (idCategory) => {
+            idCategory = $.trim(idCategory);
+            nomCategoria = $.trim($('#nomCategoria').val());
 
             Swal.fire({
-               title: 'ACTUALIZAR PLATO',
-               html: `<p style="font-size: 1rem;">¿Deseas actualizar el plato?</p>`,
+               title: 'ACTUALIZAR CATEGORÍA',
+               html: `<p style="font-size: 1rem;">¿Deseas actualizar y guardar la categoría?</p>`,
                imageUrl: '/img/parilladaCOCON.png',
                imageWidth: 250,
                imageHeight: 140,
@@ -619,11 +445,8 @@
             }).then((result) => {
                if (result.value === true) {
                   if (
-                     idPlato === '' ||
-                     categoria === '' ||
-                     tipoPlato === '' ||
-                     precioPlato === '' ||
-                     estado === ''
+                     idCategory === '' ||
+                     nomCategoria === ''
                   ) {
                      Swal.fire({
                         position: 'top-end',
@@ -640,16 +463,12 @@
                      bloqueointerface();
 
                      $.ajax({
-                        url: `/c/updatePlato`,
+                        url: `/g/updateCategory`,
                         type: 'PUT',
                         dataType: 'json',
                         data: {
-                           idPlato,
-                           categoria,
-                           tipoPlato,
-                           acompañadoPlato,
-                           precioPlato,
-                           estado
+                           idCategory,
+                           nomCategoria
                         }
                      })
                      .done(function(res) {
@@ -668,8 +487,8 @@
                            }).then((result) => {
                               if (result.value == true) {
                                  if (res.res == 'true') {
-                                    listPlatos.ajax.reload(null, false);
-                                    $("#modalProducts").modal("hide");
+                                    listCategorias.ajax.reload(null, false);
+                                    $("#modalCategorias").modal("hide");
                                  }
                               }
                            })
@@ -718,12 +537,12 @@
             })
          }
 
-         const deletePlato = (idPlato) => {
-            idPlato = $.trim(idPlato);
+         const deleteCategory = (idCategory) => {
+            idCategory = $.trim(idCategory);
 
             Swal.fire({
-               title: 'ElIMINAR PLATO',
-               html: `<p style="font-size: 1rem;">¿Deseas eliminar el plato?</p>`,
+               title: 'ElIMINAR CATEGORÍA',
+               html: `<p style="font-size: 1rem;">¿Deseas eliminar la categoría? Esta opción es irreversible.</p>`,
                imageUrl: '/img/parilladaCOCON.png',
                imageWidth: 250,
                imageHeight: 140,
@@ -740,7 +559,7 @@
             }).then((result) => {
                if (result.value === true) {
                   if (
-                     idPlato === ''
+                     idCategory === ''
                   ) {
                      Swal.fire({
                         position: 'top-end',
@@ -757,11 +576,11 @@
                      bloqueointerface();
 
                      $.ajax({
-                        url: `/c/deletePlato`,
+                        url: `/g/deleteCategory`,
                         type: 'DELETE',
                         dataType: 'json',
                         data: {
-                           idPlato
+                           idCategory
                         }
                      })
                      .done(function(res) {
@@ -780,7 +599,8 @@
                            }).then((result) => {
                               if (result.value == true) {
                                  if (res.res == 'true') {
-                                    listPlatos.ajax.reload(null, false);
+                                    listCategorias.ajax.reload(null, false);
+                                    $("#modalCategorias").modal("hide");
                                  }
                               }
                            })

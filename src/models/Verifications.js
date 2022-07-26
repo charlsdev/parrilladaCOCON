@@ -9,7 +9,6 @@ const verificationSchema = new Schema ({
       type: String,
       required: true
       // changePassword
-      // recoveryAccount
    },
    estado: {
       type: String,

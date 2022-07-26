@@ -22,7 +22,7 @@
 
 	<body>
       {{> loader}}
-      {{> navbarA}}
+      {{> navbarG}}
 
       <div class="contentView">
          <div class="container justify-content-center">
@@ -102,34 +102,32 @@
             
                <div class="card-wrapper">
                   <div class="cardDash task-card">
-                     <div class="card-icon icon-box green">
-                        {{!-- <span class="material-symbols-rounded  icon">task_alt</span> --}}
-                        <i class='bx bx-desktop icon'></i>
+                     <div class="card-icon icon-box blue">
+                        <i class='bx bx-desktop icon' ></i>
                      </div>
             
                      <div>
-                        <data class="card-data" value="21">21</data>
-                        <p class="card-text">Tasks Completed</p>
+                        <data class="card-data">{{caj}}</data>
+                        <p class="card-text">Cajeros</p>
                      </div>
                   </div>
             
                   <div class="cardDash task-card">
-                     <div class="card-icon icon-box blue">
-                        {{!-- <span class="material-symbols-rounded  icon">drive_file_rename_outline</span> --}}
-                        <i class='bx bx-buildings icon'></i>
+                     <div class="card-icon icon-box orange">
+                        <i class='bx bx-check-shield icon' ></i>
                      </div>
             
                      <div>
-                        <data class="card-data" value="21">21</data>
-                        <p class="card-text">Tasks Inprogress</p>
+                        <data class="card-data">{{adm}}</data>
+                        <p class="card-text">Administradores</p>
                      </div>
                   </div>
                </div>
 
                <div class="cardDash revenue-card">
-                  <p class="card-title">Ventas Totales</p>
-                  <data class="card-price" >$2,100</data>
-                  <p class="card-text">Total de ventas en la actualidad*</p>
+                  <p class="card-title">Ganacias Totales</p>
+                  <data class="card-price" >$ {{tot}}</data>
+                  <p class="card-text">Total de ganancias</p>
 
                   <div class="divider card-divider"></div>
 
@@ -138,38 +136,21 @@
                         <i class='bx bx-stats icon green'></i>
 
                         <div>
-                           <data class="revenue-item-data" value="15">15%</data>
-                           <p class="revenue-item-text">Prev Week</p>
+                           <data class="revenue-item-data" >$ {{sumV}}</data>
+                           <p class="revenue-item-text">Tot. Vendido</p>
                         </div>
                      </li>
 
                      <li class="revenue-item icon-box">
                         <i class='bx bx-stats icon red'></i>
                         <div>
-                           <data class="revenue-item-data" value="10">10%</data>
-                           <p class="revenue-item-text">Prev Month</p>
+                           <data class="revenue-item-data" >$ {{sumG}}</data>
+                           <p class="revenue-item-text">Tot. Gastado</p>
                         </div>
                      </li>
                   </ul>
                </div>
             </section>
-
-            {{!-- <div class="row">
-               <div class="col-md-12 text-center">
-                  <img src="/img/atm.png" alt="Welcome ATM" class="img__welcome">
-               </div>
-            </div>
-
-            <div class="row">
-               <div class="col-md-12 text-center">
-                  <div class="text__name">
-                     {{apellidos}} {{nombres}}
-                  </div>
-                  <div class="text__privilegio">
-                     {{privilegio}}
-                  </div>
-               </div>
-            </div> --}}
          </div>
       </div>
 

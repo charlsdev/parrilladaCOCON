@@ -19,7 +19,7 @@
 
 	<body>
       {{> loader}}
-      {{> navbarC}}
+      {{> navbarG}}
 
       <div class="contentView">
          <div class="container">
@@ -162,7 +162,7 @@
             listPlatos = $('#listPlatos').DataTable({
                destroy: true,
                "ajax": {
-                  "url": '/c/allPlatos',
+                  "url": '/g/allPlatos',
                   "dataSrc":""
                },
                "columns": [
@@ -262,8 +262,11 @@
                               }
                            });
                      });
+
                }
+
             });
+
          });
 
          var idioma = {
@@ -298,7 +301,7 @@
 
          const dataCategoria = () => {
             $.ajax({
-               url: "/c/allCategorias",
+               url: "/g/allCategorias",
                type: "GET",
                datatype: "json",
             })
@@ -393,7 +396,7 @@
                      bloqueointerface();
 
                      $.ajax({
-                        url: `/c/savePlato`,
+                        url: `/g/savePlato`,
                         type: 'POST',
                         dataType: 'json',
                         data: {
@@ -511,7 +514,7 @@
                      bloqueointerface();
 
                      $.ajax({
-                        url: `/c/searchPlato`,
+                        url: `/g/searchPlato`,
                         type: 'GET',
                         dataType: 'json',
                         data: {
@@ -640,7 +643,7 @@
                      bloqueointerface();
 
                      $.ajax({
-                        url: `/c/updatePlato`,
+                        url: `/g/updatePlato`,
                         type: 'PUT',
                         dataType: 'json',
                         data: {
@@ -757,7 +760,7 @@
                      bloqueointerface();
 
                      $.ajax({
-                        url: `/c/deletePlato`,
+                        url: `/g/deletePlato`,
                         type: 'DELETE',
                         dataType: 'json',
                         data: {

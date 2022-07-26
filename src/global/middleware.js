@@ -1,3 +1,5 @@
+const ModelVerifications = require('../models/Verifications');
+
 const middlewareSession = {};
 
 middlewareSession.isAuthenticated = (req, res, next) => {
@@ -45,6 +47,26 @@ middlewareSession.isAuthenticatedAdmin = (req, res, next) => {
       return next();
    }
    res.redirect('/verification');
+};
+
+middlewareSession.verificationProcess = async (req, res, next) => {
+   try {
+      const verify = await ModelVerifications
+         .findOne({
+            _idUser: req.user.id
+         })
+         .select({
+            _idUser: 1,
+            motivo: 1,
+            estado: 1
+         });
+      
+      if(!verify) return next();
+
+      res.redirect('/verification');
+   } catch (e) {
+      console.log(e);
+   }
 };
 
 module.exports = middlewareSession;

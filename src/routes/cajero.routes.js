@@ -41,42 +41,43 @@ const {
 
 const {
    isAuthenticated,
-   isAuthenticatedCajero
+   isAuthenticatedCajero,
+   verificationProcess
 } = require('../global/middleware');
 
-router.get('/', isAuthenticated, isAuthenticatedCajero, welcome);
+router.get('/', isAuthenticated, isAuthenticatedCajero, verificationProcess, welcome);
 
-router.get('/category', isAuthenticated, isAuthenticatedCajero, renderCategorias);
-router.get('/allCategorias', isAuthenticated, isAuthenticatedCajero, getAllCategorias);
-router.post('/saveCategory', isAuthenticated, isAuthenticatedCajero, saveCategory);
-router.get('/searchCategory', isAuthenticated, isAuthenticatedCajero, searchCategory);
-router.put('/updateCategory', isAuthenticated, isAuthenticatedCajero, updateCategory);
-router.delete('/deleteCategory', isAuthenticated, isAuthenticatedCajero, deleteCategory);
+router.get('/category', isAuthenticated, isAuthenticatedCajero, verificationProcess, renderCategorias);
+router.get('/allCategorias', isAuthenticated, isAuthenticatedCajero, verificationProcess, getAllCategorias);
+router.post('/saveCategory', isAuthenticated, isAuthenticatedCajero, verificationProcess, saveCategory);
+router.get('/searchCategory', isAuthenticated, isAuthenticatedCajero, verificationProcess, searchCategory);
+router.put('/updateCategory', isAuthenticated, isAuthenticatedCajero, verificationProcess, updateCategory);
+router.delete('/deleteCategory', isAuthenticated, isAuthenticatedCajero, verificationProcess, deleteCategory);
 
-router.get('/platos', isAuthenticated, isAuthenticatedCajero, renderPlatos);
-router.get('/allPlatos', isAuthenticated, isAuthenticatedCajero, getAllPlatos);
-router.post('/savePlato', isAuthenticated, isAuthenticatedCajero, savePlato);
-router.get('/searchPlato', isAuthenticated, isAuthenticatedCajero, searchPlato);
-router.put('/updatePlato', isAuthenticated, isAuthenticatedCajero, updatePlato);
-router.delete('/deletePlato', isAuthenticated, isAuthenticatedCajero, deletePlato);
+router.get('/platos', isAuthenticated, isAuthenticatedCajero, verificationProcess, renderPlatos);
+router.get('/allPlatos', isAuthenticated, isAuthenticatedCajero, verificationProcess, getAllPlatos);
+router.post('/savePlato', isAuthenticated, isAuthenticatedCajero, verificationProcess, savePlato);
+router.get('/searchPlato', isAuthenticated, isAuthenticatedCajero, verificationProcess, searchPlato);
+router.put('/updatePlato', isAuthenticated, isAuthenticatedCajero, verificationProcess, updatePlato);
+router.delete('/deletePlato', isAuthenticated, isAuthenticatedCajero, verificationProcess, deletePlato);
 
-router.get('/mesa', isAuthenticated, isAuthenticatedCajero, renderMesas);
-router.get('/allMesas', isAuthenticated, isAuthenticatedCajero, getAllMesas);
-router.post('/saveMesa', isAuthenticated, isAuthenticatedCajero, saveMesa);
-router.delete('/deleteMesa', isAuthenticated, isAuthenticatedCajero, deleteMesa);
-router.put('/updateMesa', isAuthenticated, isAuthenticatedCajero, updateMesa);
+router.get('/mesa', isAuthenticated, isAuthenticatedCajero, verificationProcess, renderMesas);
+router.get('/allMesas', isAuthenticated, isAuthenticatedCajero, verificationProcess, getAllMesas);
+router.post('/saveMesa', isAuthenticated, isAuthenticatedCajero, verificationProcess, saveMesa);
+router.delete('/deleteMesa', isAuthenticated, isAuthenticatedCajero, verificationProcess, deleteMesa);
+router.put('/updateMesa', isAuthenticated, isAuthenticatedCajero, verificationProcess, updateMesa);
 
-router.get('/allPlatosList', isAuthenticated, isAuthenticatedCajero, allPlatosList);
-router.post('/saveItem', isAuthenticated, isAuthenticatedCajero, saveItem);
-router.get('/allSales', isAuthenticated, isAuthenticatedCajero, allSales);
-router.delete('/deleteItem', isAuthenticated, isAuthenticatedCajero, deleteItem);
-router.put('/updateItem', isAuthenticated, isAuthenticatedCajero, updateItem);
+router.get('/allPlatosList', isAuthenticated, isAuthenticatedCajero, verificationProcess, allPlatosList);
+router.post('/saveItem', isAuthenticated, isAuthenticatedCajero, verificationProcess, saveItem);
+router.get('/allSales', isAuthenticated, isAuthenticatedCajero, verificationProcess, allSales);
+router.delete('/deleteItem', isAuthenticated, isAuthenticatedCajero, verificationProcess, deleteItem);
+router.put('/updateItem', isAuthenticated, isAuthenticatedCajero, verificationProcess, updateItem);
 
-router.get('/generateInvoce', isAuthenticated, isAuthenticatedCajero, generateInvoce);
-router.get('/pdf/:file', isAuthenticated, isAuthenticatedCajero, viewPDF);
+router.get('/generateInvoce', isAuthenticated, isAuthenticatedCajero, verificationProcess, generateInvoce);
+router.get('/pdf/:file', isAuthenticated, isAuthenticatedCajero, verificationProcess, viewPDF);
 
-router.get('/invoice', isAuthenticated, isAuthenticatedCajero, renderFacturas);
-router.get('/allInvoices', isAuthenticated, isAuthenticatedCajero, getAllInvoice);
-router.get('/reGenerateInvoice', isAuthenticated, isAuthenticatedCajero, reGenerateInvoice);
+router.get('/invoice', isAuthenticated, isAuthenticatedCajero, verificationProcess, renderFacturas);
+router.get('/allInvoices', isAuthenticated, isAuthenticatedCajero, verificationProcess, getAllInvoice);
+router.get('/reGenerateInvoice', isAuthenticated, isAuthenticatedCajero, verificationProcess, reGenerateInvoice);
 
 module.exports = router;

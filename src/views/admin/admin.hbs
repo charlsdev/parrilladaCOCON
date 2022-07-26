@@ -23,12 +23,20 @@
             <div class="row">
                <div class="col-md-12 text-center">
                   <div class="lettersTittle">
-                     <span>C</span>
                      <span>A</span>
-                     <span>J</span>
-                     <span>E</span>
+                     <span>D</span>
+                     <span>M</span>
+                     <span>I</span>
+                     <span>N</span>
+                     <span>I</span>
+                     <span>S</span>
+                     <span>T</span>
                      <span>R</span>
+                     <span>A</span>
+                     <span>D</span>
                      <span>O</span>
+                     <span>R</span>
+                     <span>E</span>
                      <span>S</span>
                   </div>
                </div>
@@ -44,7 +52,7 @@
 
             <div class="row">
                <div class="col-md-12">
-                  <table id="listCajeros" class="table is-striped table-striped table-bordered table-sm">
+                  <table id="listAdmins" class="table is-striped table-striped table-bordered table-sm">
                      <thead class="table-danger">
                         <tr>
                            <th nowrap scope="col">Cédula</th>
@@ -165,10 +173,10 @@
          );
 
          $(document).ready(function() {
-            listCajeros = $('#listCajeros').DataTable({
+            listAdmins = $('#listAdmins').DataTable({
                destroy: true,
                "ajax": {
-                  "url": '/a/allCajero',
+                  "url": '/a/allAdmin',
                   "dataSrc":""
                },
                "columns": [
@@ -273,7 +281,7 @@
 
             document.querySelector('.modalHeader').innerHTML = `
                   <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
-                     Agregar Cajero
+                     Agregar Administrador
                   </h5>`;
 
             document.querySelector('.imgPhoto').innerHTML = `
@@ -321,8 +329,8 @@
                })
             } else {
                Swal.fire({
-                  title: 'REGISTRAR CAJERO',
-                  html: `<p style="font-size: 1rem;">¿Deseas añadir el nuevo cajero?</p>`,
+                  title: 'REGISTRAR ADMNISTRADOR',
+                  html: `<p style="font-size: 1rem;">¿Deseas añadir un nuevo administrador?</p>`,
                   imageUrl: '/img/parilladaCOCON.png',
                   imageWidth: 250,
                   imageHeight: 140,
@@ -371,7 +379,7 @@
                               allowOutsideClick: false
                            }).then((result) => {
                               if (result.value == true) {
-                                 listCajeros.ajax.reload(null, false);
+                                 listAdmins.ajax.reload(null, false);
                                  $("#modalR").modal("hide");
                               }
                            })
@@ -442,7 +450,7 @@
 
             document.querySelector('.modalHeader').innerHTML = `
                   <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
-                     Editar Cajero
+                     Editar Administrador
                   </h5>`;
 
             document.querySelector('.imgPhoto').innerHTML = `
@@ -490,8 +498,8 @@
                })
             } else {
                Swal.fire({
-                  title: 'ACTUALIZAR CAJERO',
-                  html: `<p style="font-size: 1rem;">¿Deseas actualizar los datos del cajero <b>${apellidos} ${nombres}</b>?</p>`,
+                  title: 'ACTUALIZAR ADMINISTRADOR',
+                  html: `<p style="font-size: 1rem;">¿Deseas actualizar los datos del administrador <b>${apellidos} ${nombres}</b>?</p>`,
                   imageUrl: '/img/parilladaCOCON.png',
                   imageWidth: 250,
                   imageHeight: 140,
@@ -540,7 +548,7 @@
                               allowOutsideClick: false
                            }).then((result) => {
                               if (result.value == true) {
-                                 listCajeros.ajax.reload(null, false);
+                                 listAdmins.ajax.reload(null, false);
                                  $("#modalR").modal("hide");
                               }
                            })
@@ -661,7 +669,7 @@
                                  allowOutsideClick: false
                               }).then((result) => {
                                  if (result.value == true) {
-                                    listCajeros.ajax.reload(null, false);
+                                    listAdmins.ajax.reload(null, false);
                                  }
                               })
                            }
@@ -784,7 +792,7 @@
                                  confirmButtonColor: '#049947'
                               }).then((result) => {
                                  if (result.value == true) {
-                                    listCajeros.ajax.reload(null, false);
+                                    listAdmins.ajax.reload(null, false);
                                  }
                               })
                            }
