@@ -77,14 +77,14 @@ gerenteControllers.welcome = async (req, res) => {
    }
 
    try {
-      ventas = await ExpensesModel
+      gastos = await ExpensesModel
          .find()
          .select({
             total: 1
          })
          .lean();
       
-      ventas.forEach(item => {
+      gastos.forEach(item => {
          sumG += +(item.total);
       });
    } catch (e) {
