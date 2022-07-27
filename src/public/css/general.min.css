@@ -48,48 +48,31 @@ a {
 }
 
 .colored-toast.swal2-icon-success {
-   /* background-color: #a5dc86 !important; */
    border: 2px solid #a5dc86;
 }
 
 .colored-toast.swal2-icon-error {
-   /* background-color: #f27474 !important; */
    border: 2px solid #f27474;
 }
 
 .colored-toast.swal2-icon-warning {
-   /* background-color: #f8bb86 !important; */
    border: 2px solid #f8bb86;
 }
 
 .colored-toast.swal2-icon-info {
-   /* background-color: #3fc3ee !important; */
    border: 2px solid #3fc3ee;
 }
 
 .colored-toast.swal2-icon-question {
-   /* background-color: #87adbd !important; */
    border: 2px solid #87adbd;
 }
-
-/* .colored-toast .swal2-title {
-   color: white;
-}
-
-.colored-toast .swal2-close {
-   color: white;
-}
-
-.colored-toast .swal2-html-container {
-   color: white;
-} */
 
 .btnGeneral {
    font-size: .825rem;
    font-weight: 600;
    /* margin: .5rem auto 1.3rem; */
    padding: 5px 35px;
-   border: 1px solid var(--color-negro);
+   border: 1px solid var(--success);
    border-radius: .5rem;
    text-transform: uppercase;
    background: transparent;
@@ -98,7 +81,25 @@ a {
 }
 
 .btnGeneral:hover {
-   background: var(--color-rgb-celeste);
+   background: var(--success);
    transition: .5s;
-   color: var(--negro);
+   color: var(--blanco);
+}
+
+.btnReporte {
+   font-size: .825rem;
+   font-weight: 600;
+   padding: 5px 35px;
+   border: 1px solid var(--primary);
+   border-radius: .5rem;
+   text-transform: uppercase;
+   background: transparent;
+   cursor: pointer;
+   transition: .5s;
+}
+
+.btnReporte:hover {
+   background: var(--primary);
+   transition: .5s;
+   color: var(--blanco);
 }

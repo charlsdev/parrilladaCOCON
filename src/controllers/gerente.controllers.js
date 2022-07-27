@@ -14,14 +14,9 @@ const ExpensesModel = require('../models/Expenses');
 const PlatosModel = require('../models/Platos');
 const CategoryModel = require('../models/Categoria');
 
-// const { 
-//    validate_letras,
-//    validate_telefono,
-//    validate_cedula,
-//    validate_letrasSpace,
-//    validate_email,
-//    validate_fecha
-// } = require('../validations/validations');
+const { 
+   validate_decimal
+} = require('../validations/validations');
 
 gerenteControllers.welcome = async (req, res) => {
    let adm = 0, caj = 0, ventas, sumV = 0, gastos, sumG = 0;
@@ -653,5 +648,316 @@ gerenteControllers.deletePlato = async (req, res) => {
    }
 };
 
+gerenteControllers.renderGastos = (req, res) => {
+   const {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      privilegio,
+      estado,
+      profile
+   } = req.user;
+
+   res.render('gerente/gastos', {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      privilegio,
+      estado,
+      profile
+   });
+};
+
+gerenteControllers.allGastos = async (req, res) => {
+   let allGastos;
+
+   try {
+      allGastos = await ExpensesModel
+         .find()
+         .select({
+            _idUsuario: 1,
+            fechaSave: 1,
+            fechaUpdate: 1,
+            descripcion: 1,
+            total: 1
+         })
+         .lean()
+         .populate({
+            path: '_idUsuario',
+            select: 'nombres apellidos'
+         });
+         
+      // console.log(allGastos);
+      res.send(allGastos);
+   } catch (e) {
+      console.log(e);
+   }
+};
+
+gerenteControllers.saveGasto = async (req, res) => {
+   const toast = [];
+
+   const {
+      descripcionGastos,
+      totalGastos
+   } = req.body;
+
+   let descripcion = descripcionGastos.trim(),
+      total = totalGastos.trim();
+
+   if (
+      descripcion === '' ||
+      total === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      if (!validate_decimal(total)) {
+         toast.push({
+            tittle: 'Precio incorrecta',
+            description: 'El precio ingresado es incorrecto...',
+            icon: 'error'
+         });
+      }
+
+      if (toast.length > 0) {
+         res.json({
+            toast,
+            res: 'toast'
+         });
+      } else {
+         try {
+            total = parseFloat(total).toFixed(2);
+
+            const newGasto = new ExpensesModel({
+               _idUsuario: req.user.id,
+               fechaSave: moment().format('DD-MM-YYYY'),
+               fechaUpdate: moment().format('DD-MM-YYYY'),
+               descripcion,
+               total
+            });
+
+            const saveGasto = await newGasto.save();
+
+            if (saveGasto) {
+               res.json({
+                  tittle: 'Gasto registrado',
+                  description: 'Se ha registrado el gasto con exito!!!',
+                  icon: 'success',
+                  res: 'true'
+               });
+            } else {
+               res.json({
+                  tittle: 'Gasto no registrado',
+                  description: 'No se ha podido registrar el gasto!!!',
+                  icon: 'error',
+                  res: 'false'
+               });
+            }
+         } catch (e) {
+            console.log(e);
+
+            res.json({
+               tittle: 'Problemas',
+               description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+               icon: 'error',
+               res: 'error'
+            });
+         }
+      }
+   }
+};
+
+gerenteControllers.updateGasto = async (req, res) => {
+   let toast = [];
+   
+   const {
+      id,
+      descripcionGastos,
+      totalGastos
+   } = req.body;
+
+   let idN = id.trim(),
+      descripcion = descripcionGastos.trim(),
+      total = totalGastos.trim();
+
+   if (
+      idN === '' ||
+      descripcion === '' ||
+      total === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      if (!validate_decimal(total)) {
+         toast.push({
+            tittle: 'Precio incorrecta',
+            description: 'El precio ingresado es incorrecto...',
+            icon: 'error'
+         });
+      }
+
+      if (toast.length > 0) {
+         res.json({
+            toast,
+            res: 'toast'
+         });
+      } else {
+         try {
+            const searchG = await ExpensesModel
+               .find({
+                  _id: idN
+               })
+               .lean();
+            
+            if (searchG.length > 0) {
+               total = parseFloat(total).toFixed(2);
+
+               const updateG = await ExpensesModel
+                  .updateOne({
+                     _id: idN
+                  }, {
+                     $set: {
+                        _idUsuario: req.user.id,
+                        fechaUpdate: moment().format('DD-MM-YYYY'),
+                        descripcion,
+                        total
+                     }
+                  });
+               
+               if (updateG.modifiedCount >= 1) {
+                  res.json({
+                     tittle: 'Gasto actualizado',
+                     description: 'Se ha actualizado el registro con éxito!',
+                     icon: 'success',
+                     res: 'true'
+                  });
+               } else {
+                  res.json({
+                     tittle: 'Gasto no actualizado',
+                     description: 'El registro no se ha podido actualizar!',
+                     icon: 'error',
+                     res: 'false'
+                  });
+               }
+            } else {
+               res.json({
+                  tittle: 'Gasto no encontrado',
+                  description: 'Opss! El registro a modificar no se encuentra registrado!',
+                  icon: 'warning',
+                  res: 'false'
+               });
+            }
+         } catch (e) {
+            console.log(e);
+
+            res.json({
+               tittle: 'Problemas',
+               description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+               icon: 'error',
+               res: 'error'
+            });
+         }
+      }
+   }
+};
+
+gerenteControllers.deleteGasto = async (req, res) => {
+   const {
+      idG
+   } = req.body;
+
+   let id = idG.trim();
+
+   if (
+      id === ''
+   ) {
+      res.json({
+         tittle: 'Campos Vacíos',
+         description: 'Los campos no pueden ir vacíos o con espacios!',
+         icon: 'warning',
+         res: 'false'
+      });
+   } else {
+      try {
+         const searchG = await ExpensesModel
+            .find({
+               _id: id
+            })
+            .lean();
+            
+         if (searchG.length > 0) {
+            const deleteG = await ExpensesModel
+               .deleteOne({
+                  _id: id
+               });
+               
+            if (deleteG.deletedCount >= 1) {
+               res.json({
+                  tittle: 'Gasto eliminado',
+                  description: 'Se ha eliminado el registro con éxito!',
+                  icon: 'success',
+                  res: 'true'
+               });
+            } else {
+               res.json({
+                  tittle: 'Gasto no eliminado',
+                  description: 'El registro no se ha podido eliminar!',
+                  icon: 'error',
+                  res: 'false'
+               });
+            }
+         } else {
+            res.json({
+               tittle: 'Gasto no encontrado',
+               description: 'Opss! El registro a modificar no se encuentra registrado!',
+               icon: 'warning',
+               res: 'false'
+            });
+         }
+      } catch (e) {
+         console.log(e);
+
+         res.json({
+            tittle: 'Problemas',
+            description: 'Opss! Error 500 x_x. ¡Intentelo más luego!',
+            icon: 'error',
+            res: 'error'
+         });
+      }
+   }
+};
+
+gerenteControllers.renderReportes = (req, res) => {
+   const {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      privilegio,
+      estado,
+      profile
+   } = req.user;
+
+   res.render('gerente/reportes', {
+      _id,
+      cedula,
+      apellidos,
+      nombres,
+      privilegio,
+      estado,
+      profile
+   });
+};
 
 module.exports = gerenteControllers;

@@ -176,6 +176,7 @@ indexControllers.changePhotoProfile = async (req, res) => {
                   }
                }
             };
+            
             imgID();
             await fse.unlink(tempPathFiles);
          } else {
@@ -193,6 +194,7 @@ indexControllers.changePhotoProfile = async (req, res) => {
          }
       } catch (e) {
          console.log(e);
+
          if (req.file) {
             const tempPathFiles = req.file.path;
             await fse.unlink(tempPathFiles);

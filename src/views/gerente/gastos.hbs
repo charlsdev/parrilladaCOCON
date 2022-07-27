@@ -1,0 +1,601 @@
+      <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css">
+      <link rel="stylesheet" href="/boxicons/boxicons.min.css" type="text/css">
+      <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
+      <link rel="stylesheet" href="/toastJS/jquery.toast.min.css" type="text/css">
+
+      <link rel="stylesheet" href="/dataTables/dataTable.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/datatables.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/theme/dataTables.bootstrap4.min.css" type="text/css"/>
+
+      <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/products.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/modal.min.css" type="text/css">
+
+   </head>
+
+	<body>
+      {{> loader}}
+      {{> navbarG}}
+
+      <div class="contentView">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12 text-center">
+                  <div class="lettersTittle">
+                     <span>G</span>
+                     <span>A</span>
+                     <span>S</span>
+                     <span>T</span>
+                     <span>O</span>
+                     <span>S</span>
+                     <span>&nbsp;</span>
+                     <span>D</span>
+                     <span>I</span>
+                     <span>A</span>
+                     <span>R</span>
+                     <span>I</span>
+                     <span>O</span>
+                     <span>S</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row mb-4">
+               <div class="col-md-12">
+                  <button type="button" class="btnGeneral btnRModal" onclick="openModal();">
+                     <i class='bx bx-add-to-queue bx-tada' ></i> Registrar
+                  </button>
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-12">
+                  <table id="listGastos" class="table is-striped table-striped table-bordered table-sm">
+                     <thead class="table-danger">
+                        <tr>
+                           <th nowrap scope="col">Personal</th>
+                           <th nowrap scope="col">Guardado</th>
+                           <th nowrap scope="col">Actualizado</th>
+                           <th nowrap scope="col">Descripción</th>
+                           <th nowrap scope="col">Total</th>
+                           <th nowrap scope="col">Editar</th>
+                           <th nowrap scope="col">Eliminar</th>
+                        </tr>
+                     </thead>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <br>
+
+      <script src="/JQuery/jquery.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/bootstrap/js/bootstrap.min.js"></script>
+      <script src="/sweetalert2/sweetalert2.min.js"></script>
+      <script src="/imaskJS/imask.min.js"></script>
+      <script src="/toastJS/jquery.toast.min.js"></script>
+
+      <script src="/dataTables/jquery.dataTables.min.js"></script>
+      <script src="/dataTables/datatables.min.js"></script>
+      <script src="/dataTables/theme/dataTables.bootstrap4.min.js"></script>
+
+      <script src="/js/navbar.min.js"></script>
+
+      <div class="modal fade" id="modalG" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header modalHeader"> </div>
+
+               <div class="modal-body body__modal">
+                  <div class="row">
+                     <div class="col-md-12 mx-auto text-center imgPhoto"> </div>
+                     
+                     <div class="form-group col-md-12">
+                        <label for="" class="">Descripción</label>
+                        <textarea class="form-control textarea" name="descripcionGastos" id="descripcionGastos" placeholder="Escribir de manera detallada los gastos..."></textarea>
+                     </div>
+                     
+                     <div class="form-group col-md-12">
+                        <label for="" class="required">Total</label>
+                        <input type="text" class="form-control" id="totalGastos" name="totalGastos" placeholder="Ingreses el precio del plato: Ej. 4,50" >
+                     </div>
+                  </div>
+               </div>
+
+               <div class="modal-footer modalFooter"> </div>
+               
+            </div>
+         </div>
+      </div>
+
+      <script src="/js/validationsFront.min.js"></script>
+
+      <script>
+         {{> notifications}}
+
+         const textarea = document.querySelector("textarea");
+         textarea.addEventListener("keyup", e => {
+            textarea.style.height = "35px";
+            let scHeight = e.target.scrollHeight;
+            textarea.style.height = `${scHeight}px`;
+         });
+
+         $(document).ready(function() {
+            listGastos = $('#listGastos').DataTable({
+               destroy: true,
+               "ajax": {
+                  "url": '/g/allGastos',
+                  "dataSrc":""
+               },
+               "columns": [
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `${row._idUsuario.nombres} ${row._idUsuario.apellidos}`;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.fechaSave;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.fechaUpdate;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.descripcion;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.total;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<button type="button" class="btnBootstrap btn btn-outline-info" onclick="openModalEdit('${row._id}', '${row.descripcion}', '${row.total}')">
+                              <i class='bx bx-edit-alt' ></i>
+                              Editar
+                           </button>`;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<button type="button" class="btnBootstrap btn btn-outline-danger" onclick="deleteGasto('${row._id}')">
+                              <i class='bx bx-trash' ></i>
+                              Eliminar
+                           </button>`;
+                        }
+                  },
+               ],
+               responsive: true,
+               language: idioma,
+            });
+         });
+
+         var idioma = {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+               "sFirst":    "Primero",
+               "sLast":     "Último",
+               "sNext":     "Siguiente",
+               "sPrevious": "Anterior"
+            },
+            "oAria": {
+               "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+               "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+               "copy": "Copiar",
+               "colvis": "Visibilidad"
+
+            }
+         }
+
+         const openModal = () => {
+            $('#descripcionGastos').val('');
+            $('#descripcionGastos').height(35);
+            $('#totalGastos').val('');
+
+            document.querySelector('.modalHeader').innerHTML = `
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Registrar Gastos
+                  </h5>`;
+
+            document.querySelector('.modalFooter').innerHTML = `
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn__Send" onclick="saveGasto();">Registrar</button>`;
+
+            $('#modalG').modal('show');
+         }
+
+         const saveGasto = () => {
+            descripcionGastos = $.trim($('#descripcionGastos').val());
+            totalGastos = $.trim($('#totalGastos').val());
+
+            if (
+               descripcionGastos == '' || 
+               totalGastos == ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: 'REGISTRAR GASTO',
+                  html: `<p style="font-size: 1rem;">¿Deseas añadir un nuevo gasto?</p>`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: 'Sí, registrar!',
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  focusConfirm: false,
+                  focusCancel: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value == true) {
+                     bloqueointerface();
+                        
+                     $.ajax({
+                        url: "/g/saveGasto",
+                        type: "POST",
+                        datatype: "json",
+                        data: {
+                           descripcionGastos,
+                           totalGastos
+                        },
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrillada del COCO',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 listGastos.ajax.reload(null, false);
+                                 $("#modalG").modal("hide");
+                              }
+                           })
+                        }
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+                           toastList.forEach(toast => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toast.tittle}`,
+                                    text: `${toast.description}`,
+                                    icon: `${toast.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              });
+                           });
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+                     })
+                     .fail(function(e) {
+                        desbloqueointerface();
+
+                        console.log("Error");
+                     });                     
+                  } else {
+                     desbloqueointerface();
+                  }
+               })
+            }
+         }
+
+         const openModalEdit = (id, desc, tot) => {
+            $('#descripcionGastos').val(`${desc}`);
+            $('#totalGastos').val(`${tot}`);
+
+            document.querySelector('.modalHeader').innerHTML = `
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Editar Gasto
+                  </h5>`;
+
+            document.querySelector('.modalFooter').innerHTML = `
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn__Send" onclick="updteGasto('${id}');">Actualizar</button>`;
+
+            $('#modalG').modal('show');
+         }
+
+         const updteGasto = (id) => {
+            id = $.trim(id);
+            descripcionGastos = $.trim($('#descripcionGastos').val());
+            totalGastos = $.trim($('#totalGastos').val());
+
+            if (
+               id === '' || 
+               descripcionGastos === '' || 
+               totalGastos === ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: 'ACTUALIZAR GASTO',
+                  html: `<p style="font-size: 1rem;">¿Deseas actualizar el gasto?</p>`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: 'Sí, actualizar!',
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  focusConfirm: false,
+                  focusCancel: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value == true) {
+                     bloqueointerface();
+                     
+                     $.ajax({
+                        url: "/g/updateGasto",
+                        type: "PUT",
+                        datatype: "json",
+                        data: {
+                           id,
+                           descripcionGastos,
+                           totalGastos
+                        },
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrillada del COCO',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 listGastos.ajax.reload(null, false);
+                                 $("#modalG").modal("hide");
+                              }
+                           })
+                        }
+
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+                           toastList.forEach(toast => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toast.tittle}`,
+                                    text: `${toast.description}`,
+                                    icon: `${toast.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              });
+                           });
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+                     })
+                     .fail(function(e) {
+                        desbloqueointerface();
+
+                        console.log("Error");
+                     });                     
+                  } else {
+                     desbloqueointerface();
+                  }
+               })
+            }
+         }
+
+         const deleteGasto = (id) => {
+            idG = $.trim(id);
+
+            if (
+               id === ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: 'ElIMINAR GASTO',
+                  html: `<p style="font-size: 1rem;">¿Deseas eliminar el gasto?</p>`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: 'Sí, eliminar!',
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  focusConfirm: false,
+                  focusCancel: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value === true) {
+                     bloqueointerface();
+
+                     $.ajax({
+                        url: `/g/deleteGasto`,
+                        type: 'DELETE',
+                        dataType: 'json',
+                        data: {
+                           idG
+                        }
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrillada del COCO',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    listGastos.ajax.reload(null, false);
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 if (res.res == 'true') {
+                                    location.reload();
+                                 }
+                              }
+                           })
+                        }
+                     })
+                     .fail(function() {
+                        desbloqueointerface();
+                        console.log("Error");
+                     });
+                  }
+               })
+            }
+         }
+         
+      </script>

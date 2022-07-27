@@ -18,6 +18,14 @@ const {
    updatePlato,
    deletePlato,
 
+   renderGastos,
+   allGastos,
+   saveGasto,
+   updateGasto,
+   deleteGasto,
+
+   renderReportes,
+
 } = require('../controllers/gerente.controllers');
 
 const {
@@ -42,17 +50,12 @@ router.get('/searchPlato', isAuthenticated, isAuthenticatedGerente, verification
 router.put('/updatePlato', isAuthenticated, isAuthenticatedGerente, verificationProcess, updatePlato);
 router.delete('/deletePlato', isAuthenticated, isAuthenticatedGerente, verificationProcess, deletePlato);
 
-// router.get('/cajeros', isAuthenticated, isAuthenticatedGerente, verificationProcess,renderCajero);
-// router.get('/allCajero', isAuthenticated, isAuthenticatedGerente, verificationProcess,allCajero);
-// router.get('/gerentes', isAuthenticated, isAuthenticatedGerente, verificationProcess,renderGerente);
-// router.get('/allGerente', isAuthenticated, isAuthenticatedGerente, verificationProcess,allGerente);
-// router.get('/admin', isAuthenticated, isAuthenticatedGerente, verificationProcess,renderAdmin);
-// router.get('/allAdmin', isAuthenticated, isAuthenticatedGerente, verificationProcess,allAdmin);
+router.get('/gastos', isAuthenticated, isAuthenticatedGerente, verificationProcess, renderGastos);
+router.get('/allGastos', isAuthenticated, isAuthenticatedGerente, verificationProcess, allGastos);
+router.post('/saveGasto', isAuthenticated, isAuthenticatedGerente, verificationProcess, saveGasto);
+router.put('/updateGasto', isAuthenticated, isAuthenticatedGerente, verificationProcess, updateGasto);
+router.delete('/deleteGasto', isAuthenticated, isAuthenticatedGerente, verificationProcess, deleteGasto);
 
-
-// router.post('/newUser', isAuthenticated, isAuthenticatedGerente, verificationProcess,newUser);
-// router.put('/updateUser', isAuthenticated, isAuthenticatedGerente, verificationProcess,updateUser);
-// router.post('/newPass', isAuthenticated, isAuthenticatedGerente, verificationProcess,newPass);
-// router.post('/changeEst', isAuthenticated, isAuthenticatedGerente, verificationProcess,changeEstado);
+router.get('/reportes', isAuthenticated, isAuthenticatedGerente, verificationProcess, renderReportes);
 
 module.exports = router;

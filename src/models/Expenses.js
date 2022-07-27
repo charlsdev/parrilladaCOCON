@@ -5,7 +5,12 @@ const gastosSchema = new Schema ({
       type: Schema.Types.ObjectId,
       ref: 'Usuarios'
    },
-   fecha: {
+   fechaSave: {
+      type: String,
+      require: true,
+      maxlength: 10
+   },
+   fechaUpdate: {
       type: String,
       require: true,
       maxlength: 10
