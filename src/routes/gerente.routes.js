@@ -25,6 +25,8 @@ const {
    deleteGasto,
 
    renderReportes,
+   allVentasAnuales,
+   allGastosAnuales,
 
 } = require('../controllers/gerente.controllers');
 
@@ -57,5 +59,7 @@ router.put('/updateGasto', isAuthenticated, isAuthenticatedGerente, verification
 router.delete('/deleteGasto', isAuthenticated, isAuthenticatedGerente, verificationProcess, deleteGasto);
 
 router.get('/reportes', isAuthenticated, isAuthenticatedGerente, verificationProcess, renderReportes);
+router.get('/allVentasAnuales', isAuthenticated, isAuthenticatedGerente, verificationProcess, allVentasAnuales);
+router.get('/allGastosAnuales', isAuthenticated, isAuthenticatedGerente, verificationProcess, allGastosAnuales);
 
 module.exports = router;

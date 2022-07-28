@@ -739,6 +739,7 @@ gerenteControllers.saveGasto = async (req, res) => {
                _idUsuario: req.user.id,
                fechaSave: moment().format('DD-MM-YYYY'),
                fechaUpdate: moment().format('DD-MM-YYYY'),
+               anio: moment().format('yyyy'),
                descripcion,
                total
             });
@@ -959,5 +960,64 @@ gerenteControllers.renderReportes = (req, res) => {
       profile
    });
 };
+
+gerenteControllers.allVentasAnuales = async (req, res) => {
+   const {
+      anio
+   } = req.query;
+
+   let anioN, 
+      allVentas;
+
+   (anio !== undefined) 
+      ? anioN = anio.trim() 
+      : anioN = moment().format('yyyy');
+
+   try {
+      allVentas = await InvoiceModel
+         .find({
+            anio: anioN
+         })
+         .select({
+            fecha: 1,
+            total: 1
+         })
+         .lean();
+         
+      res.json(allVentas);
+   } catch (e) {
+      console.log(e);
+   }
+};
+
+gerenteControllers.allGastosAnuales = async (req, res) => {
+   const {
+      anio
+   } = req.query;
+
+   let anioN, 
+      allGastosAnuales;
+
+   (anio !== undefined) 
+      ? anioN = anio.trim() 
+      : anioN = moment().format('yyyy');
+
+   try {
+      allGastosAnuales = await ExpensesModel
+         .find({
+            anio: anioN
+         })
+         .select({
+            fechaSave: 1,
+            total: 1
+         })
+         .lean();
+         
+      res.json(allGastosAnuales);
+   } catch (e) {
+      console.log(e);
+   }
+};
+
 
 module.exports = gerenteControllers;

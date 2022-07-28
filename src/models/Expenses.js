@@ -15,6 +15,11 @@ const gastosSchema = new Schema ({
       require: true,
       maxlength: 10
    },
+   anio: {
+      type: Number,
+      require: true,
+      maxlength: 4
+   },
    descripcion: {
       type: String,
       require: true

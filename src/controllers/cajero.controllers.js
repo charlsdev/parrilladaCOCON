@@ -1565,6 +1565,7 @@ cajeroControllers.generateInvoce = async (req, res) => {
                         cedula: cedulaClienteN,
                         nomCliente: nameClienteN,
                         fecha: moment().format('L'),
+                        anio: moment().format('yyyy'),
                         email: emailClienteN,
                         subtotal: precioPar,
                         iva: iva,

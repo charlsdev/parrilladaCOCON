@@ -23,6 +23,11 @@ const facturaSchema = new Schema ({
       require: true,
       maxlength: 10
    },
+   anio: {
+      type: Number,
+      require: true,
+      maxlength: 4
+   },
    email: {
       type: String,
    },
