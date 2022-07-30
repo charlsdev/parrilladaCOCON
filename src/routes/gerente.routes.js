@@ -4,6 +4,12 @@ const router = Router();
 const {
    welcome,
 
+   renderCajero,
+   allCajero,
+   newUser,
+   updateUser,
+   changeEstado,
+
    renderCategorias,
    getAllCategorias,
    saveCategory,
@@ -28,6 +34,9 @@ const {
    allVentasAnuales,
    allGastosAnuales,
 
+   renderMensuales,
+   allGanancias,
+
 } = require('../controllers/gerente.controllers');
 
 const {
@@ -37,6 +46,12 @@ const {
 } = require('../global/middleware');
 
 router.get('/', isAuthenticated, isAuthenticatedGerente, verificationProcess, welcome);
+
+router.get('/cajeros', isAuthenticated, isAuthenticatedGerente, verificationProcess, renderCajero);
+router.get('/allCajero', isAuthenticated, isAuthenticatedGerente, verificationProcess, allCajero);
+router.post('/newUser', isAuthenticated, isAuthenticatedGerente, verificationProcess, newUser);
+router.put('/updateUser', isAuthenticated, isAuthenticatedGerente, verificationProcess, updateUser);
+router.post('/changeEst', isAuthenticated, isAuthenticatedGerente, verificationProcess, changeEstado);
 
 router.get('/category', isAuthenticated, isAuthenticatedGerente, verificationProcess, renderCategorias);
 router.get('/allCategorias', isAuthenticated, isAuthenticatedGerente, verificationProcess, getAllCategorias);
@@ -61,5 +76,8 @@ router.delete('/deleteGasto', isAuthenticated, isAuthenticatedGerente, verificat
 router.get('/reportes', isAuthenticated, isAuthenticatedGerente, verificationProcess, renderReportes);
 router.get('/allVentasAnuales', isAuthenticated, isAuthenticatedGerente, verificationProcess, allVentasAnuales);
 router.get('/allGastosAnuales', isAuthenticated, isAuthenticatedGerente, verificationProcess, allGastosAnuales);
+
+router.get('/mensuales', isAuthenticated, isAuthenticatedGerente, verificationProcess, renderMensuales);
+router.get('/allGanancias/:inicio/:fin', isAuthenticated, isAuthenticatedGerente, verificationProcess, allGanancias);
 
 module.exports = router;

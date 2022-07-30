@@ -103,3 +103,43 @@ a {
    transition: .5s;
    color: var(--blanco);
 }
+
+.dateLbl {
+   font-size: 1rem !important;
+   margin-right: 15px;
+}
+
+.dateLbl i {
+   font-size: 1.3rem;
+   margin-right: 7px;
+}
+
+.dateLbl i.green {
+   color: hsl(144, 76%, 48%);
+}
+
+.dateLbl i.red {
+   color: hsl(357, 86%, 57%);
+}
+
+.date {
+   appearance: none;
+   background-color: #fff;
+   border: 1px solid #94b7ff !important;
+   border-width: 1px;
+   border-radius: .5rem;
+   padding: .25rem 1rem;
+   font-size: .85rem !important;
+   line-height: 1.5rem;
+   font-weight: 600;
+}
+
+.OBS {
+   width: 60%;
+   border-radius: .5rem;
+   border: 1px solid #6b7280;
+   padding: 10px;
+   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+   /* box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px; */
+   /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; */
+}

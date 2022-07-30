@@ -1,0 +1,701 @@
+      <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css">
+      <link rel="stylesheet" href="/boxicons/boxicons.min.css" type="text/css">
+      <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
+      <link rel="stylesheet" href="/toastJS/jquery.toast.min.css" type="text/css">
+
+      <link rel="stylesheet" href="/dataTables/dataTable.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/datatables.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/theme/dataTables.bootstrap4.min.css" type="text/css"/>
+
+      <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/products.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/modal.min.css" type="text/css">
+
+   </head>
+
+	<body>
+      {{> loader}}
+      {{> navbarG}}
+
+      <div class="contentView">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12 text-center">
+                  <div class="lettersTittle">
+                     <span>C</span>
+                     <span>A</span>
+                     <span>J</span>
+                     <span>E</span>
+                     <span>R</span>
+                     <span>O</span>
+                     <span>S</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row mb-4">
+               <div class="col-md-12">
+                  <button type="button" class="btnGeneral btnRModal" onclick="openModal();">
+                     <i class='bx bx-add-to-queue bx-tada' ></i> Añadir
+                  </button>
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-12">
+                  <table id="listCajeros" class="table is-striped table-striped table-bordered table-sm">
+                     <thead class="table-danger">
+                        <tr>
+                           <th nowrap scope="col">Cédula</th>
+                           <th nowrap scope="col">Perfil</th>
+                           <th nowrap scope="col">Nombres Completos</th>
+                           <th nowrap scope="col">Email</th>
+                           <th nowrap scope="col">Estado</th>
+                           <th nowrap scope="col">Telefono</th>
+                           <th nowrap scope="col">Acciones</th>
+                        </tr>
+                     </thead>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <br>
+
+      <script src="/JQuery/jquery.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/bootstrap/js/bootstrap.min.js"></script>
+      <script src="/sweetalert2/sweetalert2.min.js"></script>
+      <script src="/imaskJS/imask.min.js"></script>
+      <script src="/toastJS/jquery.toast.min.js"></script>
+
+      <script src="/dataTables/jquery.dataTables.min.js"></script>
+      <script src="/dataTables/datatables.min.js"></script>
+      <script src="/dataTables/theme/dataTables.bootstrap4.min.js"></script>
+
+      <script src="/js/navbar.min.js"></script>
+
+      <div class="modal fade" id="modalR" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+               <div class="modal-header modalHeader"> </div>
+
+               <div class="modal-body body__modal">
+                  <div class="row">
+                     <div class="col-md-12 mx-auto text-center imgPhoto"> </div>
+                     
+                     <div class="form-group col-md-12">
+                        <label for="cedula" class="required">Cédula</label>
+                        <input type="text" class="form-control" id="cedula" onkeyUp="return Cedula(this);" placeholder="Ej.: 1315******" disabled>
+                     </div>
+                     
+                     <div class="form-group col-md-12">
+                        <label for="apellidos" class="required">Apellidos</label>
+                        <input type="text" class="form-control" id="apellidos" placeholder="García" >
+                     </div>
+                     
+                     <div class="form-group col-md-12">
+                        <label for="nombres" class="required">Nombres</label>
+                        <input type="text" class="form-control" id="nombres" placeholder="María" >
+                     </div>
+                     
+                     <div class="form-group col-md-12">
+                        <label for="genero" class="required">Género</label>
+                        <select id="genero" class="form-control" >
+                           <option value="" selected disabled>Seleccionar...</option>
+                           <option value="Masculino">Masculino</option>
+                           <option value="Femenino">Femenino</option>
+                           <option value="No definido">No definido</option>
+                        </select>
+                     </div>
+                     
+                     <div class="form-group col-md-12">
+                        <label for="email" class="required">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="example@example.com" >
+                     </div>
+                     
+                     <div class="form-group col-md-12">
+                        <label for="fech_nacimiento" class="required">Fecha de Nacimiento</label>
+                        <input type="text" class="form-control" id="fech_nacimiento" placeholder="25/09/1998" >
+                     </div>
+                     
+                     <div class="form-group col-md-12">
+                        <label for="telefono" class="required">Teléfono</label>
+                        <input type="text" class="form-control" id="telefono" placeholder="096*******" >
+                     </div>
+
+                     <div class="form-group col-md-12">
+                        <label for="direccion" class="required">Dirección</label>
+                        <input type="text" class="form-control" id="direccion" placeholder="Avenida del Café" >
+                     </div>
+                  </div>
+               </div>
+
+               <div class="modal-footer modalFooter"> </div>
+               
+            </div>
+         </div>
+      </div>
+
+      <script src="/js/validationsFront.min.js"></script>
+
+      <script>
+         {{> notifications}}
+
+         IMask(
+            document.getElementById('fech_nacimiento'),
+            {
+               mask: Date,
+               min: new Date(1925, 0, 1),
+               max: new Date({{a}}, {{m}}, {{d}}),
+               lazy: false
+            }
+         );
+
+         $(document).ready(function() {
+            listCajeros = $('#listCajeros').DataTable({
+               destroy: true,
+               "ajax": {
+                  "url": '/g/allCajero',
+                  "dataSrc":""
+               },
+               "columns": [
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.cedula;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<img src="/profile/${row.profile}" alt="Photo ${row.apellidos} ${row.nombres}">`;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.apellidos + ' ' + row.nombres;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.email;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return result = (row.estado === 'Enabled') 
+                              ? '<span class="mode badge badge-pill badge-success">Activo</span>' 
+                              : '<span class="mode badge badge-pill badge-danger">Desactivado</span>' ;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.telefono;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `<button type="button" class="btnPoint btn btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false"> <i class='bx bx-dots-vertical ' ></i> </button> 
+                           <div class="dropdown-menu 1 menuD">
+                              <a class="dropdown-item" onclick="openModalEdit('${row._id}', '${row.cedula}', '${row.apellidos}', '${row.nombres}', '${row.fechaNacimiento}', '${row.genero}', '${row.direccion}', '${row.telefono}', '${row.email}', '${row.privilegio}', '${row.profile}')"> 
+                                 <i class='bx bx-edit-alt bx-tada' ></i> 
+                                 Actualizar datos
+                              </a>
+                              <a class="dropdown-item" onclick="changeEstado('${row._id}', '${row.apellidos}', '${row.nombres}', '${row.privilegio}', '${row.estado}')"> 
+                                 <i class='bx bx-refresh bx-tada' ></i>
+                                 ${row.estado === 'Enabled' ? 'Desactivar' : 'Activar' } cuenta 
+                              </a>
+                           </div>`;
+                        }
+                  },
+               ],
+               responsive: true,
+               language: idioma,
+            });
+         });
+
+         var idioma = {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+               "sFirst":    "Primero",
+               "sLast":     "Último",
+               "sNext":     "Siguiente",
+               "sPrevious": "Anterior"
+            },
+            "oAria": {
+               "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+               "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+               "copy": "Copiar",
+               "colvis": "Visibilidad"
+
+            }
+         }
+
+         const openModal = () => {
+            $('#cedula').val('');
+            $('#cedula').prop('disabled', false);
+            $('#apellidos').val('');
+            $('#nombres').val('');
+            $('#genero').val('');
+            $('#email').val('');
+            $('#fech_nacimiento').val('');
+            $('#telefono').val('');
+            $('#direccion').val('');
+
+            document.querySelector('.modalHeader').innerHTML = `
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Agregar Cajero
+                  </h5>`;
+
+            document.querySelector('.imgPhoto').innerHTML = `
+                  <img class="form-imgP" src="/profile/profile.svg" alt="Imagen Perfil">`;
+
+            document.querySelector('.modalFooter').innerHTML = `
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn__Send" onclick="saveProfile();">Registrar</button>`;
+
+            $('#modalR').modal('show');
+         }
+
+         const saveProfile = () => {
+            cedula = $.trim($('#cedula').val());
+            apellidos = $.trim($('#apellidos').val());
+            nombres = $.trim($('#nombres').val());
+            genero = $.trim($('#genero').val());
+            email = $.trim($('#email').val());
+            fech_nacimiento = $.trim($('#fech_nacimiento').val());
+            telefono = $.trim($('#telefono').val());
+            direccion = $.trim($('#direccion').val());
+
+            if (
+               cedula == '' || 
+               apellidos == '' || 
+               nombres == '' || 
+               genero == '' || 
+               email == '' || 
+               fech_nacimiento == '' || 
+               telefono == '' || 
+               direccion == ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: 'REGISTRAR CAJERO',
+                  html: `<p style="font-size: 1rem;">¿Deseas añadir el nuevo cajero?</p>`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: 'Sí, guardar!',
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  focusConfirm: false,
+                  focusCancel: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value == true) {
+                     bloqueointerface();
+                        
+                     $.ajax({
+                        url: "/g/newUser",
+                        type: "POST",
+                        datatype: "json",
+                        data: {
+                           cedula,
+                           apellidos,
+                           nombres,
+                           genero,
+                           email,
+                           fech_nacimiento,
+                           telefono,
+                           direccion
+                        },
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrillada del COCO',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 listCajeros.ajax.reload(null, false);
+                                 $("#modalR").modal("hide");
+                              }
+                           })
+                        }
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+                           toastList.forEach(toast => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toast.tittle}`,
+                                    text: `${toast.description}`,
+                                    icon: `${toast.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              });
+                           });
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+                     })
+                     .fail(function(e) {
+                        desbloqueointerface();
+
+                        console.log("Error");
+                     });                     
+                  } else {
+                     desbloqueointerface();
+                  }
+               })
+            }
+         }
+
+         const openModalEdit = (id, cedula, apellidos, nombres, fechaNacimiento, genero, direccion, telefono, email, privilegio, profile) => {
+            $('#cedula').val(`${cedula}`);
+            $('#cedula').prop('disabled', true);
+            $('#apellidos').val(`${apellidos}`);
+            $('#nombres').val(`${nombres}`);
+            $('#genero').val(`${genero}`);
+            $('#email').val(`${email}`);
+            $('#fech_nacimiento').val(`${fechaNacimiento}`);
+            $('#telefono').val(`${telefono}`);
+            $('#direccion').val(`${direccion}`);
+
+            document.querySelector('.modalHeader').innerHTML = `
+                  <h5 class="modal-title tittle__modal" id="staticBackdropLabel">
+                     Editar Cajero
+                  </h5>`;
+
+            document.querySelector('.imgPhoto').innerHTML = `
+                  <img class="form-imgP" src="/profile/${profile}" alt="${id}">`;
+
+            document.querySelector('.modalFooter').innerHTML = `
+                  <button type="button" class="btn__Close" data-dismiss="modal">Cerrar</button>
+                  <button type="button" class="btn__Send" onclick="updateProfile('${id}');">Actualizar</button>`;
+
+            $('#modalR').modal('show');
+         }
+
+         const updateProfile = (id) => {
+            id = $.trim(id);
+            apellidos = $.trim($('#apellidos').val());
+            nombres = $.trim($('#nombres').val());
+            genero = $.trim($('#genero').val());
+            email = $.trim($('#email').val());
+            fech_nacimiento = $.trim($('#fech_nacimiento').val());
+            telefono = $.trim($('#telefono').val());
+            direccion = $.trim($('#direccion').val());
+
+            if (
+               id == '' || 
+               apellidos == '' || 
+               nombres == '' || 
+               genero == '' || 
+               email == '' || 
+               fech_nacimiento == '' || 
+               telefono == '' || 
+               direccion == ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: 'ACTUALIZAR CAJERO',
+                  html: `<p style="font-size: 1rem;">¿Deseas actualizar los datos del cajero <b>${apellidos} ${nombres}</b>?</p>`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: 'Sí, actualizar!',
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  focusConfirm: false,
+                  focusCancel: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value == true) {
+                     bloqueointerface();
+                        
+                     $.ajax({
+                        url: "/g/updateUser",
+                        type: "PUT",
+                        datatype: "json",
+                        data: {
+                           id,
+                           apellidos,
+                           nombres,
+                           genero,
+                           email,
+                           fech_nacimiento,
+                           telefono,
+                           direccion
+                        },
+                     })
+                     .done(function(res) {
+                        if (res.res == 'true') {
+                           desbloqueointerface();
+
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              imageUrl: '/img/parilladaCOCON.png',
+                              imageWidth: 250,
+                              imageHeight: 140,
+                              imageAlt: 'Parrillada del COCO',
+                              confirmButtonColor: '#049947',
+                              allowOutsideClick: false
+                           }).then((result) => {
+                              if (result.value == true) {
+                                 listCajeros.ajax.reload(null, false);
+                                 $("#modalR").modal("hide");
+                              }
+                           })
+                        }
+                        if (res.res == 'toast') {
+                           desbloqueointerface();
+                           
+                           const toastList = res.toast;
+                           toastList.forEach(toast => {
+                              $(document).ready(function() {
+                                 $.toast({
+                                    position: 'top-right',
+                                    heading: `${toast.tittle}`,
+                                    text: `${toast.description}`,
+                                    icon: `${toast.icon}`,
+                                    showHideTransition: 'plain',
+                                    hideAfter: 5000
+                                 })
+                              });
+                           });
+                        }
+
+                        if (res.res == 'false') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+
+                        if (res.res == 'error') {
+                           desbloqueointerface();
+                           
+                           Swal.fire({
+                              title: res.tittle,
+                              html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                              icon: res.icon,
+                              allowOutsideClick: false
+                           })
+                        }
+                     })
+                     .fail(function(e) {
+                        desbloqueointerface();
+
+                        console.log("Error");
+                     });                     
+                  } else {
+                     desbloqueointerface();
+                  }
+               })
+            }
+         }
+
+         const changeEstado = (id, nom, ape, pri, est) => {
+            id = $.trim(id);
+            estado = $.trim(est);
+
+            if (
+               id === '' ||
+               estado === ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  title: 'CAMPOS VACÍOS',
+                  html: `<p style="font-size: 1rem;">Los campos no pueden ir vacíos o con espacios.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               Swal.fire({
+                  title: `${estado === 'Enabled' ? 'Desactivar' : 'Activar' } Cuenta!`,
+                  html: `Deseas ${estado === 'Enabled' ? 'desactivar' : 'activar' } la cuenta del ${pri.toLowerCase()} <b>${ape} ${nom}</b>.`,
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  showCancelButton: true,
+                  confirmButtonColor: '#049947',
+                  cancelButtonColor: '#f34943',
+                  confirmButtonText: `Sí, ${estado === 'Enabled' ? 'desactivar' : 'activar' }!`,
+                  cancelButtonText: 'No, cancelar!',
+                  reverseButtons: true,
+                  allowOutsideClick: false
+               }).then((result) => {
+                  if (result.value == true) {
+                        bloqueointerface();
+
+                        $.ajax({
+                           url: "/g/changeEst",
+                           type: "POST",
+                           datatype: "json",
+                           data: {
+                              id,
+                              estado
+                           },
+                        })
+                        .done(function(res) {
+                           if (res.res == 'true') {
+                              desbloqueointerface();
+
+                              Swal.fire({
+                                 title: res.tittle,
+                                 html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                                 imageUrl: '/img/parilladaCOCON.png',
+                                 imageWidth: 250,
+                                 imageHeight: 140,
+                                 imageAlt: 'Parrillada del COCO',
+                                 allowOutsideClick: false,
+                                 confirmButtonColor: '#049947'
+                              }).then((result) => {
+                                 if (result.value == true) {
+                                    listCajeros.ajax.reload(null, false);
+                                 }
+                              })
+                           }
+
+                           if (res.res == 'toast') {
+                              desbloqueointerface();
+                              
+                              const toastList = res.toast;
+                              toastList.forEach(toast => {
+                                 $(document).ready(function() {
+                                    $.toast({
+                                       position: 'top-right',
+                                       heading: `${toast.tittle}`,
+                                       text: `${toast.description}`,
+                                       icon: `${toast.icon}`,
+                                       showHideTransition: 'plain',
+                                       hideAfter: 5000
+                                    })
+                                 });
+                              });
+                           }
+
+                           if (res.res == 'false') {
+                              desbloqueointerface();
+                              
+                              Swal.fire({
+                                 title: res.tittle,
+                                 html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                                 icon: res.icon,
+                                 allowOutsideClick: false
+                              })
+                           }
+
+                           if (res.res == 'error') {
+                              desbloqueointerface();
+                              
+                              Swal.fire({
+                                 title: res.tittle,
+                                 html: '<p style="font-size: 1rem;">'+res.description+'</p>',
+                                 icon: res.icon,
+                                 allowOutsideClick: false
+                              }).then((result) => {
+                                 if (result.value == true) {
+                                    location.reload();
+                                 }
+                              })
+                           }
+                        })
+                        .fail(function(e) {
+                           desbloqueointerface();
+
+                           console.log("Error");
+                        });
+                  } else {
+                     desbloqueointerface();
+                  }
+               })
+            }
+         }
+
+      </script>

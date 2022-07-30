@@ -1559,6 +1559,10 @@ cajeroControllers.generateInvoce = async (req, res) => {
                      iva = total.toFixed(2) * 0.12;
                      precioPar = total.toFixed(2) - iva.toFixed(2);
 
+                     iva = iva.toFixed(2);
+                     precioPar = precioPar.toFixed(2);
+                     total = total.toFixed(2);
+
                      const newInvoce = new InvoiceModel({
                         _idVendedor: req.user._id,
                         _codeMesa: searchDesk.codigo,

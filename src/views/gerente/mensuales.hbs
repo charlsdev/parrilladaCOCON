@@ -1,0 +1,284 @@
+      <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" type="text/css">
+      <link rel="stylesheet" href="/boxicons/boxicons.min.css" type="text/css">
+      <link rel="stylesheet" href="/sweetalert2/sweetalert2.min.css" type="text/css">
+      <link rel="stylesheet" href="/toastJS/jquery.toast.min.css" type="text/css">
+
+      <link rel="stylesheet" href="/dataTables/dataTable.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/datatables.min.css" type="text/css"/>
+      <link rel="stylesheet" href="/dataTables/theme/dataTables.bootstrap4.min.css" type="text/css"/>
+
+      <link rel="stylesheet" href="/css/navbar.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/letra.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/products.min.css" type="text/css">
+      <link rel="stylesheet" href="/css/modal.min.css" type="text/css">
+
+   </head>
+
+	<body>
+      {{> loader}}
+      {{> navbarG}}
+
+      <div class="contentView">
+         <div class="container">
+            <div class="row mb-2">
+               <div class="col-md-12 text-center">
+                  <div class="lettersTittle">
+                     <span>G</span>
+                     <span>A</span>
+                     <span>N</span>
+                     <span>A</span>
+                     <span>N</span>
+                     <span>C</span>
+                     <span>I</span>
+                     <span>A</span>
+                     <span>S</span>
+                     <span>&nbsp;</span>
+                     <span>M</span>
+                     <span>E</span>
+                     <span>N</span>
+                     <span>S</span>
+                     <span>U</span>
+                     <span>A</span>
+                     <span>L</span>
+                     <span>E</span>
+                     <span>S</span>
+                  </div>
+               </div>
+            </div>
+
+            <div class="row mb-4 mx-auto OBS" >
+               <div class="col-md-4 text-center mb-2">
+                  <label for="" class="dateLbl d-flex justify-content-center align-items-center">
+                     <i class='bx bx-calendar-check green'></i>
+                     Inicio
+                  </label>
+                  <input type="date" class="date" name="inicio" id="inicio" min="2022-05-01" max="{{a}}-{{m}}-{{d}}" value="{{a}}-{{m}}-{{d}}" />
+               </div>
+
+               <div class="col-md-4 text-center mb-2">
+                  <label for="" class="dateLbl d-flex justify-content-center align-items-center">
+                     <i class='bx bx-calendar-minus red' ></i>
+                     Fin
+                  </label>
+                  <input type="date" class="date" name="fin" id="fin" min="2022-05-01" max="{{a}}-{{m}}-{{d}}" value="{{a}}-{{m}}-{{d}}" />
+               </div>
+
+               <div class="col-md-4 d-flex justify-content-center align-items-center mb-2">
+                  <button type="button" class="btnGeneral btnRModal" onclick="searchGanancias();">
+                     <i class='bx bx-stats' ></i> Listar
+                  </button>
+               </div>
+            </div>
+
+            <div class="row">
+               <div class="col-md-12">
+                  <table id="listGanancias" class="table is-striped table-striped table-bordered table-sm">
+                     <thead class="table-danger">
+                        <tr>
+                           <th nowrap scope="col">Vendedor</th>
+                           <th nowrap scope="col">Fecha</th>
+                           <th nowrap scope="col">Ganancia</th>
+                        </tr>
+                     </thead>
+
+                     <tfoot>
+                        <tr>
+                           <th colspan="2" class="table-success" style="text-align: right;">Total Ganancia: </th>
+                           <th class="table-success" style="text-align: center;"></th>
+                        </tr>
+                     </tfoot>
+                  </table>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <br>
+
+      <script src="/JQuery/jquery.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/bootstrap/js/bootstrap.min.js"></script>
+      <script src="/sweetalert2/sweetalert2.min.js"></script>
+      <script src="/imaskJS/imask.min.js"></script>
+      <script src="/toastJS/jquery.toast.min.js"></script>
+
+      <script src="/dataTables/jquery.dataTables.min.js"></script>
+      <script src="/dataTables/datatables.min.js"></script>
+      <script src="/dataTables/theme/dataTables.bootstrap4.min.js"></script>
+
+      <script src="/js/navbar.min.js"></script>
+
+      <script src="/js/validationsFront.min.js"></script>
+
+      <script>
+         {{> notifications}}
+
+         $(document).ready(function() {
+            inicio = $('#inicio').val();
+            fin = $('#fin').val();
+
+            if (
+               inicio === '' ||
+               fin === ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  title: 'FECHAS NO SELECCIONADAS',
+                  html: `<p style="font-size: 1rem;">La fecha de inicio y de fin no han sido seleccionadas.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               if (inicio > fin) {
+                  Swal.fire({
+                     position: 'top-end',
+                     imageUrl: '/img/parilladaCOCON.png',
+                     imageWidth: 250,
+                     imageHeight: 140,
+                     imageAlt: 'Parrillada del COCO',
+                     title: 'RANGOS DE FECHAS INVÁLIDAS',
+                     html: `<p style="font-size: 1rem;">La fecha de inicio debe de ser menor a la fecha de fin.</p>`,
+                     showConfirmButton: false,
+                     timer: 1500
+                  })
+               } else {
+                  dataTable(inicio, fin);
+               }
+            }
+         });
+
+         const dataTable = (inicio, fin) => {
+            bloqueointerface();
+
+            listGanancias = $('#listGanancias').DataTable({
+               destroy: true,
+               "ajax": {
+                  "url": `/g/allGanancias/${inicio}/${fin}`,
+                  "dataSrc":""
+               },
+               "columns": [
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return `${row._idVendedor.nombres} ${row._idVendedor.apellidos}`;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.fecha;
+                        }
+                  },
+                  {"data": null,
+                        render: function ( data, type, row ) {
+                           return row.total;
+                        }
+                  }
+               ],
+               responsive: true,
+               language: idioma,
+               "footerCallback": function (row, data, start, end, display) {
+                  var api = this.api();
+                  
+                  var intVal = function (i) {
+                     return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                  };
+                  
+                  // Total de todos las filas
+                  total = api
+                     .column(2)
+                     .data()
+                     .reduce(function (a, b) {
+                        return intVal(a) + intVal(b.total);
+                     }, 0);
+                     
+                  // Total de las filas buscadas
+                  pageTotal = api
+                     .column(2, { page: 'current' })
+                     .data()
+                     .reduce(function (a, b) {
+                        return intVal(a) + intVal(b.total);
+                     }, 0);
+                     
+                  $(api
+                     .column(2)
+                     .footer())
+                     .html('$' + pageTotal + ' ( $' + total + ' total)'
+                  );
+               },
+            });
+
+            desbloqueointerface();
+         }
+
+         var idioma = {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+               "sFirst":    "Primero",
+               "sLast":     "Último",
+               "sNext":     "Siguiente",
+               "sPrevious": "Anterior"
+            },
+            "oAria": {
+               "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+               "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            },
+            "buttons": {
+               "copy": "Copiar",
+               "colvis": "Visibilidad"
+
+            }
+         }
+
+         const searchGanancias = () => {
+            inicio = $('#inicio').val();
+            fin = $('#fin').val();
+            
+            if (
+               inicio === '' ||
+               fin === ''
+            ) {
+               Swal.fire({
+                  position: 'top-end',
+                  imageUrl: '/img/parilladaCOCON.png',
+                  imageWidth: 250,
+                  imageHeight: 140,
+                  imageAlt: 'Parrillada del COCO',
+                  title: 'FECHAS NO SELECCIONADAS',
+                  html: `<p style="font-size: 1rem;">La fecha de inicio y de fin no han sido seleccionadas.</p>`,
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+            } else {
+               if (inicio > fin) {
+                  Swal.fire({
+                     position: 'top-end',
+                     imageUrl: '/img/parilladaCOCON.png',
+                     imageWidth: 250,
+                     imageHeight: 140,
+                     imageAlt: 'Parrillada del COCO',
+                     title: 'RANGOS DE FECHAS INVÁLIDAS',
+                     html: `<p style="font-size: 1rem;">La fecha de inicio debe de ser menor a la fecha de fin.</p>`,
+                     showConfirmButton: false,
+                     timer: 1500
+                  })
+               } else {
+                  dataTable(inicio, fin);
+               }
+            }
+         }
+
+      </script>
