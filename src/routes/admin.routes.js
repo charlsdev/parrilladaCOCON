@@ -33,7 +33,6 @@ router.get('/allGerente', isAuthenticated, isAuthenticatedAdmin, verificationPro
 router.get('/admin', isAuthenticated, isAuthenticatedAdmin, verificationProcess, renderAdmin);
 router.get('/allAdmin', isAuthenticated, isAuthenticatedAdmin, verificationProcess, allAdmin);
 
-
 router.post('/newUser', isAuthenticated, isAuthenticatedAdmin, verificationProcess, newUser);
 router.put('/updateUser', isAuthenticated, isAuthenticatedAdmin, verificationProcess, updateUser);
 router.post('/newPass', isAuthenticated, isAuthenticatedAdmin, verificationProcess, newPass);

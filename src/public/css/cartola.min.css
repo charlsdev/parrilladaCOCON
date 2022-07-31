@@ -1,0 +1,79 @@
+body {
+   background: var(--bodyColor);
+}
+
+:is(.imageBG) {
+   position: fixed;
+   bottom: 0;
+   height: 100vh;
+   z-index: -1;
+   opacity: 0.25;
+   margin: auto;
+   left: 0;
+   right: 0;
+}
+
+.cartola {
+   border-radius: .5rem;
+   border: 1px solid #6b7280;
+   padding: 10px 10px 15px;
+   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+   margin: 10px 8px;
+   background: var(--enabledCartola);
+}
+
+.tittle {
+   font-weight: 600;
+   font-size: 1.2rem;
+   text-transform: uppercase;
+}
+
+.tipoPlato {
+   margin-left: 20px;
+   margin-right: 10px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-top: 5px;
+}
+
+.plato {
+   font-size: 1rem;
+   font-style: italic;
+   line-height: 1;
+   text-transform: uppercase;
+   width: 60%;
+}
+
+.plato .nombre {
+   font-weight: 600;
+   margin-top: 5px;
+}
+
+.plato .acompañado {
+   margin-left: 15px;
+}
+
+.precio, .estado {
+   width: 20%;
+   text-align: center;
+}
+
+.acompañado::before {
+   content: "+ ";
+   color: var(--red);
+   font-weight: 600;
+   font-size: 1.2rem;
+}
+
+.mode {
+   padding: 4px 10px;
+   line-height: 13px;
+   color: #fff;
+   font-weight: 600 !important;
+   border-radius: 1rem;
+   -webkit-border-radius: 1rem;
+   font-size: 11px;
+   letter-spacing: 0.4px;
+   width: 75px;
+}

@@ -3,8 +3,6 @@ const gerenteControllers = {};
 require('dotenv').config();
 
 const nodemailer = require('nodemailer');
-// const { customAlphabet } = require('nanoid');
-// const nanoidAl = customAlphabet('1234567890_-abcdefghijklmnopqrstuvwxyz', 8);
 const moment = require('moment');
 moment.locale('es');
 

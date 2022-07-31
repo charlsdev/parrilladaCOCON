@@ -42,4 +42,8 @@ helpersHandlebars.isAdmin = (priv, opts) => {
    return priv == 'Administrador' ? opts.fn(this) : opts.inverse(this);
 };
 
+helpersHandlebars.status = (a, opts) => {
+   return a == 'Stock' ? opts.fn(this) : opts.inverse(this);
+};
+
 module.exports = helpersHandlebars;

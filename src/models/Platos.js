@@ -10,8 +10,7 @@ const platosSchema = new Schema ({
       required: true
    },
    acompañado: {
-      type: String,
-      // required: true
+      type: String
    },
    precio: {
       type: String,

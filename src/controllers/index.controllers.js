@@ -12,6 +12,7 @@ const nodemailer = require('nodemailer');
 
 const VerificationModel = require('../models/Verifications');
 const UsersModel = require('../models/Users');
+const CategoryModel = require('../models/Categoria');
 
 const {
    validate_letrasSpace,
@@ -532,6 +533,85 @@ indexControllers.changePassword = async (req, res, next) => {
          }
       }
    }
+};
+
+indexControllers.renderPlatos = async (req, res) => {
+   let allPlatos, errors = [];
+
+   try {
+      // Inner Join in the document the MongoDB
+      allPlatos = await CategoryModel
+         .aggregate([
+            {
+               $lookup: {
+                  // Documento a extraer en minuscula
+                  from: 'platos',
+                  // Campo local a buscar en el otro doc
+                  localField: '_id',
+                  // Campo relacionado del doc a extraer
+                  foreignField: '_idCategoría',
+                  // Creamos una variable de tipo ObjectID (String: Quitar ObjectID y parentesis // id: '$_id')
+                  let: { 
+                     id: { $toObjectId: '$_id' }
+                  },
+                  // Creamos la relacion a buscar
+                  pipeline: [
+                     {
+                        // Colocamos el campo del doc a extaer : campo del doc a rellenar
+                        $match: {
+                           $expr: {
+                              $and: [
+                                 { 
+                                    'idCategoría': '$$id',
+                                 }, {
+                                    $or: [{ 
+                                       $eq: [ '$estado', 'Stock']
+                                    }, {
+                                       $eq: [ '$estado', 'Sin Stock']
+                                    }]
+                                 }                                
+                              ]
+                           }
+                        }
+                     }, { 
+                        // Seleccionar los campos del documento a extraer
+                        $project: {
+                           '_id': 0,
+                           'nomPlato': 1,
+                           'acompañado': 1,
+                           'precio': 1,
+                           'estado': 1,
+                        } 
+                     }
+                  ],
+                  // Colocamos un nombre al array de subdocumento
+                  as: 'platos'
+               }
+            }, {
+               // Seleccionar los campos del documento a principal
+               $project: {
+                  '_id': 0,
+                  'nomCategoria': 1,
+                  'platos': 1
+               }
+            }, {
+               // Ordenar 1 Ascendete && -1 Descendente
+               $sort: {
+                  nomCategoria: 1
+               }
+            }
+         ]);
+         
+      errors.push({title: '¡Bienvenido!', info: 'info', text: 'Disfruta del menú...'});
+   } catch (e) {
+      console.log(e);
+      errors.push({title: 'Error 500!', info: 'warning', text: 'Error del server x_x. ¡Intentalo más luego!...'});
+   }
+
+   res.render('cartola', {
+      allPlatos,
+      errors
+   });
 };
 
 indexControllers.exitLogout = (req, res, next) => {

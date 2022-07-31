@@ -11,9 +11,7 @@
       {{> loader}}
 
       <div class="contenedor-login">
-         <!--Slider-->
          <div class="contenedor-slider">
-            <!--Slide-->
             <div class="slider">
                <div class="slide fades">
                   <img src="/img/combo.jpg" alt="">
@@ -23,12 +21,10 @@
                   <img src="img/combo.jpg" alt="">
                </div>
             </div>
-      
-            <!--Botones next y prev-->
+            
             <div class="prev"><i class='bx bxs-chevron-left' ></i></div>
             <div class="next"><i class='bx bxs-chevron-right' ></i></div>
-      
-            <!--dots-->
+            
             <div class="dots">
                <!--<span class="dot active"></span>-->
             </div>
@@ -41,17 +37,13 @@
                <p class="descripcion">
                   Disfrute de la mejor parrilla dentro de nuestro local, echa con amor y de buena calidad en Parrillada del COCO.
                </p>
-      
-               <!--Tabs-->
+               
                <ul class="tabs-links">
                   <li class="tab-link active">Iniciar Sesión</li>
                   {{!-- <li class="tab-link ">Registrate</li> --}}
                </ul>
-      
-               <!--Formulario de login-->
+               
                <form action="/login" method="POST" id="formLogin" class="formulario active">
-                  {{!-- {{> notifications}} --}}
-
                   <div class="error-text">
                      <p>aqui los errores del formulario</p>
                   </div>
@@ -62,9 +54,8 @@
                      <input type="password" placeholder="Contraseña" name="password" class="input-text clave">
                      <button type="button" class="icono bx bx-show-alt mostrarClave"></button>
                   </div>
-      
                   {{!-- <a href="#" class="link">¿Olvidaste la Contraseña?</a> --}}
-
+                  
                   <button class="btn" id="btnLogin" type="submit">Iniciar Sesión</button>
                </form>     
             </div>

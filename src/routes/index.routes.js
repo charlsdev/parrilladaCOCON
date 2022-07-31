@@ -18,6 +18,8 @@ const {
    renderChangePassword,
    changePassword,
 
+   renderPlatos,
+
    exitLogout,
 } = require('../controllers/index.controllers');
 
@@ -39,6 +41,8 @@ router.post('/photoProfile', isAuthenticated, isAuthenticatedAllPriv, verificati
 
 router.get('/password', isAuthenticated, isAuthenticatedAllPriv, renderChangePassword);
 router.post('/password', isAuthenticated, isAuthenticatedAllPriv, changePassword);
+
+router.get('/cartola', renderPlatos);
 
 router.get('/exit', isAuthenticated, isAuthenticatedAllPriv, exitLogout);
 
