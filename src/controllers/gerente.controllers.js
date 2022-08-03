@@ -1629,11 +1629,11 @@ gerenteControllers.allGanancias = async (req, res) => {
    try {
       allGanancias = await InvoiceModel
          .find({
-            fecha: {
+            createdAt: {
                // Mayor o igual
-               $gte: moment(inicio).format('DD/MM/YYYY'),
+               $gte: new Date(inicio),
                // Menor o igual
-               $lte: moment(fin).format('DD/MM/YYYY')
+               $lte: new Date(fin),
             }
          })
          .select({
